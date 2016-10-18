@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html ng-app="TRAExt">
+	<head>
+		<meta charset="utf-8">
+		<title></title>
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
+		<script src="js/semantic.min.js"></script>
+		<script src="js/data.js"></script>
+		<script src="js/angular-ui-router.js"></script>
+		<script src="js/app.js"></script>
+		<script src="js/controller.js"></script>
+
+		<link rel="stylesheet" href="css/semantic.min.css" media="screen" title="no title">
+		<link rel="stylesheet" href="css/style.css" media="screen" title="no title">
+		<base href="/tra-station/" />
+
+	</head>
+	<body>
+
+		<div class="ui grid stackable container">
+			<h2 class="row">
+				<div class="ui sixteen wide column">
+
+					<h2 class="ui header">
+						臺鐵資訊查詢
+						<div class="ui sub header">
+							TRA Information
+						</div>
+					</h2>
+
+				</div>
+			</h2>
+
+			<div class="row">
+				<div class="ui secondary menu">
+					<a class="item" href="#/timetable">時刻表查詢</a>
+					<a class="item" href="#/station">車站資訊查詢</a>
+				</div>
+			</div>
+
+		</div>
+
+		<div class="ui grid stackable container" ui-view></div>
+
+	</body>
+</html>
