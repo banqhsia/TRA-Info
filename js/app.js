@@ -17,7 +17,20 @@ TRAExt.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, 
 		controller: 'TimetableCtrl'
 	})
 
-	// if none of the above states are matched, use this as the fallback
+
 	$urlRouterProvider.otherwise('/station');
 
-}]);
+}])
+.directive('onEnter', function () {
+    return function (scope, element, attrs) {
+        element.bind("keydown keypress", function (event) {
+            if(event.which === 13) {
+                scope.$apply(function (){
+                    scope.$eval(attrs.onEnter);
+                });
+
+                event.preventDefault();
+            }
+        });
+    };
+});
