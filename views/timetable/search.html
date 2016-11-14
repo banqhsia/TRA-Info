@@ -12,14 +12,31 @@
 
 </div>
 
-<div class="row">
+<div class="row" ng-if="timeTables">
+
+	<div class="ui sixteen wide column">
+
+		<div class="ui message">
+			<div class="header">{{ keywordArray[0] }} 到 {{ keywordArray[1] }} 的列車</div>
+			<p>共找到 {{ timeTables.length }} 班列車</p>
+		</div>
+
+	</div>
+
+</div>
+
+<div class="row" ng-if="timeTables">
 
 	<div class="ui sixteen wide column">
 
 		<table class="ui definition table">
 			<thead>
 				<th class="two wide"></th>
-				<th class="one wide center aligned">經由</th>
+				<th class="one wide center aligned">
+					<h4 class="ui header">經由
+						<div class="sub header">Via</div>
+					</h4>
+				</th>
 				<th class="two wide center aligned">
 					<h4 class="ui header">開車時間
 						<div class="sub header">Departure</div>
@@ -31,9 +48,9 @@
 						<div class="sub header">Arrival</div>
 					</h4>
 				</th>
-				<th class="seven wide center aligned">
+				<th class="seven wide">
 					<h4 class="ui header">其他
-						<div class="sub header">Address</div>
+						<div class="sub header">Information</div>
 					</h4>
 				</th>
 			</thead>
@@ -57,7 +74,7 @@
 						<h5 class="ui trip icon header">
 							<i class="arrow right icon"></i>
 							<div class="sub header">
-								00小時45分
+								{{ item.OriginStopTime.DepartureTime | timeDiff: item.DestinationStopTime.ArrivalTime }}
 							</div>
 						</h5>
 					</td>
