@@ -28,13 +28,13 @@ TRAExt
 // Transform `TrainClassificationID` into train class
 .filter('trainClass', function($filter){
 	return function(c){
-		return $filter('filter')( trainClass , { classNo: c } )[0].classDesc;
+		return $filter('filter')( trainClass, { classNo: c }, true )[0].classDesc;
 	}
 })
 // Transform `TripLine` into trip line description
 .filter('tripLine', function($filter){
 	return function(l){
-		return $filter('filter')( tripLine , { lineNo: l } )[0].lineDesc;
+		return $filter('filter')( tripLine, { lineNo: l } )[0].lineDesc;
 	}
 })
 // Formatting note. Strip `每日行駛。` from note.
@@ -50,13 +50,13 @@ TRAExt
 	// Search stations by a given key/value set.
 	// return JSON Object
 	this.searchStation = function (s) {
-		return $filter('filter')( stations , { Station_Name: s || false } )[0];
+		return $filter('filter')( stations, { Station_Name: s || false }, true )[0];
 	}
 
 	// Search period by a given key/value set.
 	// return Time
 	this.searchPeriod = function (p) {
-		return $filter('filter')( this.station() , { Station_Name: p || false } )[0];
+		return $filter('filter')( period, { Station_Name: p || false }, true )[0];
 	}
 
 })
