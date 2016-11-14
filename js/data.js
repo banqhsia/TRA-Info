@@ -1,3 +1,72 @@
+var period =
+{
+	"今天": "TODAY",
+	"明天": "TOMORROW",
+	"後天": "TDBT",
+};
+
+var trainClass = [
+	{
+		"classNo": "1100",
+		"classDesc": "柴聯自強"
+	},
+	{
+		"classNo": "1101",
+		"classDesc": "自強"
+	},
+	{
+		"classNo": "1102",
+		"classDesc": "太魯閣"
+	},
+	{
+		"classNo": "1107",
+		"classDesc": "普悠瑪"
+	},
+	{
+		"classNo": "1108",
+		"classDesc": "自強"
+	},
+	{
+		"classNo": "1110",
+		"classDesc": "莒光"
+	},
+	{
+		"classNo": "1114",
+		"classDesc": "莒光"
+	},
+	{
+		"classNo": "1115",
+		"classDesc": "莒光"
+	},
+	{
+		"classNo": "1120",
+		"classDesc": "復興"
+	},
+	{
+		"classNo": "1131",
+		"classDesc": "區間車"
+	},
+	{
+		"classNo": "1132",
+		"classDesc": "區間快車"
+	}
+];
+
+var tripLine = [
+	{
+		"lineNo": "0",
+		"lineDesc": ""
+	},
+	{
+		"lineNo": "1",
+		"lineDesc": "山"
+	},
+	{
+		"lineNo": "2",
+		"lineDesc": "海"
+	},
+]
+
 var stations = [
   {
     "Station_Code_4": 1008,

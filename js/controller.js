@@ -25,6 +25,26 @@ TRAExt
 
 })
 
+// Transform `TrainClassificationID` into train class
+.filter('trainClass', function($filter){
+	return function(c){
+		return $filter('filter')( trainClass , { classNo: c } )[0].classDesc;
+	}
+})
+// Transform `TripLine` into trip line description
+.filter('tripLine', function($filter){
+	return function(l){
+		return $filter('filter')( tripLine , { lineNo: l } )[0].lineDesc;
+	}
+})
+// Formatting note. Strip `每日行駛。` from note.
+.filter('noteFormat', function($filter){
+	return function(n){
+		n = n || '';
+		return n.replace('每日行駛。', '');
+	}
+})
+
 .service('Data', function($filter) {
 
 	// Search stations by a given key/value set.

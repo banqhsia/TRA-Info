@@ -1,0 +1,95 @@
+<div class="row">
+
+	<div class="ui sixteen wide column">
+
+		<div class="ui form">
+			<div class="field">
+				<input type="text" ng-model="keyword" on-enter="search()" placeholder="中壢 台北" autofocus>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+<div class="row">
+
+	<div class="ui sixteen wide column">
+
+		<table class="ui definition table">
+			<thead>
+				<th class="two wide"></th>
+				<th class="one wide center aligned">經由</th>
+				<th class="two wide center aligned">
+					<h4 class="ui header">開車時間
+						<div class="sub header">Departure</div>
+					</h4>
+				</th>
+				<th class="two wide center aligned"></th>
+				<th class="two wide center aligned">
+					<h4 class="ui header">抵達時間
+						<div class="sub header">Arrival</div>
+					</h4>
+				</th>
+				<th class="seven wide center aligned">
+					<h4 class="ui header">其他
+						<div class="sub header">Address</div>
+					</h4>
+				</th>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in timeTables | orderBy: 'OriginStopTime.ArrivalTime' ">
+					<!-- 車次 -->
+					<td>
+						<h3 class="ui header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+							<div class="sub header">{{ item.DailyTrainInfo.TrainNo }}</div>
+						</h3>
+					</td>
+
+					<!-- 經由 -->
+					<td class="center aligned">{{ item.DailyTrainInfo.TripLine | tripLine }}</td>
+
+					<!-- 出發時間 -->
+					<td class="center aligned">{{ item.OriginStopTime.DepartureTime }}</td>
+
+					<!-- 途經 -->
+					<td class="center aligned">
+						<h5 class="ui trip icon header">
+							<i class="arrow right icon"></i>
+							<div class="sub header">
+								00小時45分
+							</div>
+						</h5>
+					</td>
+
+					<!-- 抵達時間 -->
+					<td class="center aligned">{{ item.DestinationStopTime.ArrivalTime }}</td>
+
+					<td>
+						<div class="ui basic grey horizontal medium label">
+							{{ item.DestinationStopTime.StopSequence - item.OriginStopTime.StopSequence}}站
+						</div>
+
+						<div class="ui blue horizontal medium label" ng-if="item.DailyTrainInfo.WheelchairFlag">
+							輪椅
+						</div>
+
+						<div class="ui pink horizontal medium label" ng-if="item.DailyTrainInfo.BreastFeedingFlag">
+							哺乳室
+						</div>
+
+						<div class="ui green horizontal medium label" ng-if="item.DailyTrainInfo.BikeFlag">
+							自行車
+						</div>
+
+						{{ item.DailyTrainInfo.Note.Zh_tw | noteFormat }}
+
+					</td>
+
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+
+</div>
