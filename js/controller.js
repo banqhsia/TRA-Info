@@ -59,10 +59,16 @@ TRAExt
 
 .service('Data', function($filter) {
 
+	// Transform `台` into `臺` in order to search the station.
+	// return string with `臺`
+	this.taiTransform = function (s) {
+		return s.replace('台', '臺') || '';
+	}
+
 	// Search stations by a given key/value set.
 	// return JSON Object
 	this.searchStation = function (s) {
-		return $filter('filter')( stations, { Station_Name: s || false }, true )[0];
+		return $filter('filter')( stations, { Station_Name: this.taiTransform(s) || false }, true )[0];
 	}
 
 	// Search period by a given key/value set.
