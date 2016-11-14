@@ -28,9 +28,12 @@ TRAExt
 })
 
 // Transform `TrainClassificationID` into train class
+// wantsColor[Boolean] determine if the call wants color.
 .filter('trainClass', function($filter){
-	return function(c){
-		return $filter('filter')( trainClass, { classNo: c }, true )[0].classDesc;
+	return function(c, wantsColor){
+		return (wantsColor)
+			? $filter('filter')( trainClass, { classNo: c }, true )[0].classColor
+			: $filter('filter')( trainClass, { classNo: c }, true )[0].classDesc;
 	}
 })
 // Transform `TripLine` into trip line description

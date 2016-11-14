@@ -8,47 +8,58 @@ var period =
 var trainClass = [
 	{
 		"classNo": "1100",
-		"classDesc": "柴聯自強"
+		"classDesc": "柴聯自強",
+		"classColor": "red"
 	},
 	{
 		"classNo": "1101",
-		"classDesc": "自強"
+		"classDesc": "自強",
+		"classColor": "red"
 	},
 	{
 		"classNo": "1102",
-		"classDesc": "太魯閣"
+		"classDesc": "太魯閣",
+		"classColor": "blue"
 	},
 	{
 		"classNo": "1107",
-		"classDesc": "普悠瑪"
+		"classDesc": "普悠瑪",
+		"classColor": "pink"
 	},
 	{
 		"classNo": "1108",
-		"classDesc": "自強"
+		"classDesc": "自強",
+		"classColor": "red"
 	},
 	{
 		"classNo": "1110",
-		"classDesc": "莒光"
+		"classDesc": "莒光",
+		"classColor": "orange"
 	},
 	{
 		"classNo": "1114",
-		"classDesc": "莒光"
+		"classDesc": "莒光",
+		"classColor": "orange"
 	},
 	{
 		"classNo": "1115",
-		"classDesc": "莒光"
+		"classDesc": "莒光",
+		"classColor": "orange"
 	},
 	{
 		"classNo": "1120",
-		"classDesc": "復興"
+		"classDesc": "復興",
+		"classColor": ""
 	},
 	{
 		"classNo": "1131",
-		"classDesc": "區間車"
+		"classDesc": "區間車",
+		"classColor": ""
 	},
 	{
 		"classNo": "1132",
-		"classDesc": "區間快車"
+		"classDesc": "區間快車",
+		"classColor": "grey"
 	}
 ];
 

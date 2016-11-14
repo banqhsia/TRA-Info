@@ -58,7 +58,7 @@
 				<tr ng-repeat="item in timeTables | orderBy: 'OriginStopTime.ArrivalTime' ">
 					<!-- 車次 -->
 					<td>
-						<h3 class="ui header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+						<h3 class="ui {{ item.DailyTrainInfo.TrainClassificationID | trainClass: true }} header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
 							<div class="sub header">{{ item.DailyTrainInfo.TrainNo }}</div>
 						</h3>
 					</td>
