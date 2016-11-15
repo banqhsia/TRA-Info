@@ -90,15 +90,18 @@ var trainClass = [
 var tripLine = [
 	{
 		"lineNo": "0",
-		"lineDesc": ""
+		"lineDesc": "",
+		"lineColor": ""
 	},
 	{
 		"lineNo": "1",
-		"lineDesc": "山"
+		"lineDesc": "山線",
+		"lineColor": "green"
 	},
 	{
 		"lineNo": "2",
-		"lineDesc": "海"
+		"lineDesc": "海線",
+		"lineColor": "blue"
 	},
 ]
 

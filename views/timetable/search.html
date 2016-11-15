@@ -68,7 +68,11 @@
 					</td>
 
 					<!-- 經由 -->
-					<td class="center aligned">{{ item.DailyTrainInfo.TripLine | tripLine }}</td>
+					<td class="center aligned">
+						 <a class="ui circular basic {{ item.DailyTrainInfo.TripLine | tripLine: true }} label" ng-if="item.DailyTrainInfo.TripLine">
+							 {{ item.DailyTrainInfo.TripLine | tripLine }}
+						</a>
+					</td>
 
 					<!-- 出發時間 -->
 					<td class="center aligned">{{ item.OriginStopTime.DepartureTime }}</td>

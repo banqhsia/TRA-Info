@@ -42,8 +42,10 @@ TRAExt
 })
 // Transform `TripLine` into trip line description
 .filter('tripLine', function($filter){
-	return function(l){
-		return $filter('filter')( tripLine, { lineNo: l } )[0].lineDesc;
+	return function(l, wantsColor){
+		return (wantsColor)
+			? $filter('filter')( tripLine, { lineNo: l } )[0].lineColor
+			: $filter('filter')( tripLine, { lineNo: l } )[0].lineDesc;
 	}
 })
 // Formatting note. Strip `每日行駛。` from note.
