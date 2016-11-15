@@ -4,7 +4,11 @@
 
 		<div class="ui form">
 			<div class="field">
-				<input type="text" ng-model="keyword" on-enter="search()" placeholder="中壢 台北" autofocus>
+				<div class="ui left action icon input">
+					<button class="ui icon button"><i class="exchange icon"></i></button>
+					<input type="text" ng-model="keyword" on-enter="search()" placeholder="中壢 台北" autofocus>
+					<i class="inverted circular search link icon" ng-click="search()"></i>
+				</div>
 			</div>
 		</div>
 
@@ -17,8 +21,8 @@
 	<div class="ui sixteen wide column">
 
 		<div class="ui message">
-			<div class="header">{{ keywordArray[0] }} 到 {{ keywordArray[1] }} 的列車</div>
-			<p>共找到 {{ timeTables.length }} 班列車</p>
+			<div class="header"> {{ period.humanize }}，{{ keywordArray[0] }} 到 {{ keywordArray[1] }} 的列車</div>
+			<p>共有 {{ timeTables.length }} 班列車</p>
 		</div>
 
 	</div>
@@ -55,7 +59,7 @@
 				</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in timeTables | orderBy: 'OriginStopTime.ArrivalTime' ">
+				<tr ng-repeat="item in timeTables">
 					<!-- 車次 -->
 					<td>
 						<h3 class="ui {{ item.DailyTrainInfo.TrainClassificationID | trainClass: true }} header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}

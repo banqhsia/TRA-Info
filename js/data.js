@@ -1,9 +1,33 @@
-var period =
-{
-	"今天": "TODAY",
-	"明天": "TOMORROW",
-	"後天": "TDBT",
-};
+var period = [
+	{
+		"dateDefine": "大前天",
+		"dateValue": -3
+	},
+	{
+		"dateDefine": "前天",
+		"dateValue": -2
+	},
+	{
+		"dateDefine": "昨天",
+		"dateValue": -1
+	},
+	{
+		"dateDefine": "今天",
+		"dateValue": 0
+	},
+	{
+		"dateDefine": "明天",
+		"dateValue": 1
+	},
+	{
+		"dateDefine": "後天",
+		"dateValue": 2
+	},
+	{
+		"dateDefine": "大後天",
+		"dateValue": 3
+	},
+];
 
 var trainClass = [
 	{

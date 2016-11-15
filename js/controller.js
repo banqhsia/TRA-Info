@@ -16,11 +16,15 @@ TRAExt
 		// Replace Whitespace more than 1
 		$scope.keywordArray = $scope.keyword.replace(/\s{1,}/ig, ' ').split(' ');
 
+		$scope.period = Data.searchDate($scope.keywordArray[2]);
+
 		Request.dailyTimeTableOD(
 			Data.searchStation( $scope.keywordArray[0] ).Station_Code_4,
-			Data.searchStation( $scope.keywordArray[1] ).Station_Code_4
+			Data.searchStation( $scope.keywordArray[1] ).Station_Code_4,
+			$scope.period.date
 		).then(function(){
-			$scope.timeTables = Request.getData();
+			// $scope.timeTables in Request.getData() with orderBy filter.
+			$scope.timeTables = $filter('orderBy')(Request.getData(), 'OriginStopTime.DepartureTime');
 		})
 
 	}
@@ -68,6 +72,21 @@ TRAExt
 		return s.replace('台', '臺') || '';
 	}
 
+	// Trun date description into date offset. Calculated by moment.js
+	// Return Date String
+	this.searchDate = function (d) {
+		try {
+			var v = $filter('filter')( period, { dateDefine: d || false }, true )[0].dateValue;
+		} catch (e) {
+			var v = 0;
+		}
+		var m = moment().add(v, 'DAYS');
+		return {
+			'date': m.format('YYYY-MM-DD'),
+			'humanize': m.format('MM月DD日 (dddd)'),
+		};
+	}
+
 	// Search stations by a given key/value set.
 	// return JSON Object
 	this.searchStation = function (s) {
@@ -84,7 +103,7 @@ TRAExt
 
 .service('Request', function($http, $q) {
 
-	this.dailyTimeTableOD = function (original, destination) {
+	this.dailyTimeTableOD = function (original, destination, date) {
 
 		var deferred = $q.defer();
 
@@ -96,7 +115,7 @@ TRAExt
 		// 	return null;
 		// }
 
-		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/OD/'+ original +'/to/'+ destination +'/2016-11-13?$format=JSON')
+		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/OD/'+ original +'/to/'+ destination +'/'+ date +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();
