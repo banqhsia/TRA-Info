@@ -5,3 +5,14 @@
 	font-size: 10px;
 	margin: 0 0 0 0;
 }
+/* Disabled override */
+.ui.table tr.disabled td * {
+	color: rgba(40, 40, 40, .3) !important;
+}
+.ui.table tr.disabled td .label:not(.basic) {
+	background-color: rgba(40, 40, 40, .3) !important;
+}
+.ui.table tr.disabled td .label.basic {
+	color: rgba(40, 40, 40, .3) !important;
+	border: 1px solid rgba(40, 40, 40, .3) !important;
+}

@@ -66,6 +66,23 @@ TRAExt
 	}
 })
 
+// Determine if the train has departure
+// Return 'disabled' (String) (Semantic UI class)
+.filter('isDepartured', function(){
+	return function(departure, date){
+
+		var today = moment().format('YYYY-MM-DD');
+		var now	= moment().format('HH:mm');
+
+		return ( !moment(today).isSame(date) )
+			? ''
+			: ( moment(now, 'HH:mm').isAfter( moment(departure, 'HH:mm')) )
+				? 'disabled'
+				: '';
+
+	}
+})
+
 .service('Data', function($filter) {
 
 	// Transform `台` into `臺` in order to search the station.
