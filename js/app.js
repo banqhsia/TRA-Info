@@ -37,4 +37,4 @@ TRAExt.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, 
 
 
 // Initialize moment.js locale `zh-tw`
-moment.locale('zh-tw')
+moment.locale('zh-tw');

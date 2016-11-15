@@ -1,3 +1,7 @@
+<div class="ui active inverted dimmer" ng-if="success.status == 'loading'">
+	<div class="ui text loader">載入中</div>
+</div>
+
 <div class="row">
 
 	<div class="ui sixteen wide column">
@@ -16,24 +20,35 @@
 
 </div>
 
-<div class="row" ng-if="timeTables">
+<div class="row">
 
 	<div class="ui sixteen wide column">
 
-		<div class="ui message">
+		<div class="ui green message" ng-if="!timeTables && success.status != false && success.status != 'loading'">
+			<div class="header">請輸入關鍵字查詢列車時刻</div>
+			<p>輸入起迄站 (+時間) 即可。中壢 新竹」「新左營 鳳山 明天」「嘉義 民雄 明天」</p>
+		</div>
+
+		<div class="ui message" ng-if="timeTables">
 			<div class="header"> {{ period.humanize }}，{{ keywordArray[0] }} 到 {{ keywordArray[1] }} 的列車</div>
 			<p>共有 {{ timeTables.length }} 班列車</p>
+		</div>
+
+		<div class="ui red message" ng-if="success.status == false">
+			<div class="header">{{ success.title }}</div>
+			<p>{{ success.msg }}</p>
 		</div>
 
 	</div>
 
 </div>
 
-<div class="row" ng-if="timeTables">
+
+<div class="row" ng-if="timeTables.length > 0">
 
 	<div class="ui sixteen wide column">
 
-		<table class="ui definition table">
+		<table class="ui striped definition table">
 			<thead>
 				<th class="two wide"></th>
 				<th class="one wide center aligned">

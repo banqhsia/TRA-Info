@@ -9,26 +9,50 @@ TRAExt
 
 	$scope.keyword = '中壢 臺北 明天';
 
+	// Search Handler
 	$scope.search = function () {
+
+		$scope.keyword = $scope.keyword || '';
+		if ( !$scope.keyword ) return false;
 
 		$scope.timeTables = false;
 
 		// Split string by whitespace
-		$scope.keywordArray = Data.strToArray($scope.keyword);
+		var keywordArrayResult = Data.strToArray($scope.keyword);
+		$scope.keywordArray = ( keywordArrayResult )
+			? keywordArrayResult
+			: false;
 
+		// Get date. Return array.
 		$scope.period = Data.searchDate($scope.keywordArray[2]);
 
-		Request.dailyTimeTableOD(
-			Data.searchStation( $scope.keywordArray[0] ).Station_Code_4,
-			Data.searchStation( $scope.keywordArray[1] ).Station_Code_4,
-			$scope.period.date
-		).then(function(){
-			// $scope.timeTables in Request.getData() with orderBy filter.
-			$scope.timeTables = $filter('orderBy')(Request.getData(), 'OriginStopTime.DepartureTime');
-		})
+		// Search station code
+		var startStation = Data.searchStation( $scope.keywordArray[0] );
+		var destStation = Data.searchStation( $scope.keywordArray[1] );
 
+		if ( startStation && destStation && $scope.keywordArray ) {
+
+			$scope.success =  { "status" : "loading" }
+
+			// Send request to TRA
+			Request.dailyTimeTableOD(
+				startStation.Station_Code_4,
+				destStation.Station_Code_4,
+				$scope.period.date
+			).then(function(){
+				$scope.success =  { "status" : true }
+				$scope.timeTables = $filter('orderBy')(Request.getData(), 'OriginStopTime.DepartureTime');
+			})
+		}
+		else {
+			// Error message
+			$scope.success =  {
+				"status" : false,
+				"title": "查無此站或格式錯誤。",
+				"msg": "請輸入起迄站(時間)「中壢 新竹」「新左營 鳳山 明天」「嘉義 民雄 明天」"
+			}
+		}
 	}
-
 })
 
 // Transform `TrainClassificationID` into train class
@@ -100,12 +124,22 @@ TRAExt
 	// Trun date description into date offset. Calculated by moment.js
 	// return Date String
 	this.searchDate = function (d) {
-		try {
-			var v = $filter('filter')( period, { dateDefine: d || false }, true )[0].dateValue;
-		} catch (e) {
-			var v = 0;
+
+		d = d || '';
+
+		if ( d.match(/(週|星期)(一|二|三|四|五|六|日)|(星期天)/) ) {
+			var m = moment().days(d);
 		}
-		var m = moment().add(v, 'DAYS');
+		else {
+
+			try {
+				var v = $filter('filter')( period, { dateDefine: d || false }, true )[0].dateValue;
+			} catch (e) {
+				var v = 0;
+			}
+			var m = moment().add(v, 'DAYS');
+		}
+
 		return {
 			'date': m.format('YYYY-MM-DD'),
 			'humanize': m.format('MM月DD日 (dddd)'),
@@ -115,13 +149,11 @@ TRAExt
 	// Search stations by a given key/value set.
 	// return JSON Object
 	this.searchStation = function (s) {
-		return $filter('filter')( stations, { Station_Name: this.taiTransform(s) || false }, true )[0];
-	}
-
-	// Search period by a given key/value set.
-	// return Time
-	this.searchPeriod = function (p) {
-		return $filter('filter')( period, { Station_Name: p || false }, true )[0];
+		try {
+			return $filter('filter')( stations, { Station_Name: this.taiTransform(s) || false }, true )[0];
+		} catch (e) {
+			return false;
+		}
 	}
 
 })
@@ -132,24 +164,13 @@ TRAExt
 
 		var deferred = $q.defer();
 
-		// Declare that original and destination is not falsy.
-		// original =  original || false;
-		// destination = destination || false;
-		//
-		// if ( original || destination ) {
-		// 	return null;
-		// }
-
 		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/OD/'+ original +'/to/'+ destination +'/'+ date +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();
-			// return ( response ) ? response : false;
-
 		})
 		.error ( function(response) {
-			// console.log(xhr);
-			// return false;
+			return false;
 		});
 
 		return deferred.promise;

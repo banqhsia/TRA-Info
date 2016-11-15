@@ -1,5 +1,5 @@
-.ui.grid.container {
-	margin-top: 2em;
+.ui.grid.container:first-child {
+	padding-top: 3em;
 }
 .icon.trip.header {
 	font-size: 10px;
