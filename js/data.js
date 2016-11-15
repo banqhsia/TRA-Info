@@ -84,6 +84,11 @@ var trainClass = [
 		"classNo": "1132",
 		"classDesc": "區間快車",
 		"classColor": "grey"
+	},
+	{
+		"classNo": "1140",
+		"classDesc": "普快車",
+		"classColor": ""
 	}
 ];
 
