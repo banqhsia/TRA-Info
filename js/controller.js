@@ -13,8 +13,8 @@ TRAExt
 
 		$scope.timeTables = false;
 
-		// Replace Whitespace more than 1
-		$scope.keywordArray = $scope.keyword.replace(/\s{1,}/ig, ' ').split(' ');
+		// Split string by whitespace
+		$scope.keywordArray = Data.strToArray($scope.keyword);
 
 		$scope.period = Data.searchDate($scope.keywordArray[2]);
 
@@ -72,8 +72,14 @@ TRAExt
 		return s.replace('台', '臺') || '';
 	}
 
+	// Replace whitespace more than 1, split into array
+	// return keyword Array
+	this.strToArray = function (s) {
+		return s.replace(/\s{1,}/ig, ' ').split(' ');
+	}
+
 	// Trun date description into date offset. Calculated by moment.js
-	// Return Date String
+	// return Date String
 	this.searchDate = function (d) {
 		try {
 			var v = $filter('filter')( period, { dateDefine: d || false }, true )[0].dateValue;
