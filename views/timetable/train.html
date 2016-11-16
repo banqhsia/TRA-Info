@@ -4,11 +4,27 @@
 
 <div class="row" ng-if="trainInfo">
 
+	<div class="ui computer only sixteen wide column">
+		<button class="ui icon button" ng-click="goToTimeTable()">
+			<i class="chevron left icon"></i> 返回
+		</button>
+	</div>
+
+	<div class="ui mobile tablet only sixteen wide column">
+		<button class="ui fluid icon button" ng-click="goToTimeTable()">
+			<i class="chevron left icon"></i> 返回
+		</button>
+	</div>
+
+</div>
+
+<div class="row" ng-if="trainInfo">
+
 	<div class="ui sixteen wide column">
 
 		<h2 class="ui header">{{ trainInfo.DailyTrainInfo.TrainNo }} {{ trainInfo.DailyTrainInfo.TrainClassificationID | trainClass }}
 			<div class="sub header">
-				{{ period.humanize }}
+				{{ period.humanize }}，<b>{{ trainInfo.StopTimes[0].StationName.Zh_tw }}</b>到<b>{{ trainInfo.StopTimes[trainInfo.StopTimes.length-1].StationName.Zh_tw }}</b>
 			</div>
 		</h2>
 

@@ -78,7 +78,7 @@ TRAExt
 })
 
 // Train Info Controller
-.controller('TrainInfoCtrl', function($scope, $stateParams, Data, Request) {
+.controller('TrainInfoCtrl', function($scope, $stateParams, $state, Data, Request) {
 
 	$scope.success =  { "status" : "loading" }
 
@@ -94,6 +94,11 @@ TRAExt
 		$scope.success =  { "status" : true }
 		$scope.trainInfo = Request.getData()[0];
 	});
+
+	// Handle back button click. Redirect to time table.
+	$scope.goToTimeTable = function () {
+		$state.go('timetable');
+	}
 
 })
 

@@ -24,7 +24,7 @@ TRAExt.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, 
 	})
 
 
-	$urlRouterProvider.otherwise('/station');
+	$urlRouterProvider.otherwise('/timetable');
 
 }])
 .directive('onEnter', function () {
