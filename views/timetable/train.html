@@ -22,25 +22,32 @@
 
 	<div class="ui sixteen wide column">
 
-		<h2 class="ui header">{{ trainInfo.DailyTrainInfo.TrainNo }} {{ trainInfo.DailyTrainInfo.TrainClassificationID | trainClass }}
-			<div class="sub header">
-				{{ period.humanize }}，<b>{{ trainInfo.StopTimes[0].StationName.Zh_tw }}</b>到<b>{{ trainInfo.StopTimes[trainInfo.StopTimes.length-1].StationName.Zh_tw }}</b>
+		<div class="ui  {{ trainInfo.DailyTrainInfo.TrainClassificationID | trainClass: true }} segment">
+			<h2 class="ui header">{{ trainInfo.DailyTrainInfo.TrainNo }} {{ trainInfo.DailyTrainInfo.TrainClassificationID | trainClass }}
+				<div class="sub header">
+					{{ period.humanize }}，<b>{{ trainInfo.StopTimes[0].StationName.Zh_tw }}</b>到<b>{{ trainInfo.StopTimes[trainInfo.StopTimes.length-1].StationName.Zh_tw }}</b>
+				</div>
+			</h2>
+
+			<div class="ui circular horizontal basic {{ trainInfo.DailyTrainInfo.TripLine | tripLine: true }} label" ng-if="trainInfo.DailyTrainInfo.TripLine">
+				{{ trainInfo.DailyTrainInfo.TripLine | tripLine }}
+		   </div>
+
+			<div class="ui blue horizontal medium label" ng-if="trainInfo.DailyTrainInfo.WheelchairFlag">
+				輪椅
 			</div>
-		</h2>
 
-		<div class="ui blue horizontal medium label" ng-if="trainInfo.DailyTrainInfo.WheelchairFlag">
-			輪椅
+			<div class="ui pink horizontal medium label" ng-if="trainInfo.DailyTrainInfo.BreastFeedingFlag">
+				哺乳室
+			</div>
+
+			<div class="ui green horizontal medium label" ng-if="trainInfo.DailyTrainInfo.BikeFlag">
+				自行車
+			</div>
+
+			{{ trainInfo.DailyTrainInfo.Note.Zh_tw | noteFormat }}
 		</div>
 
-		<div class="ui pink horizontal medium label" ng-if="trainInfo.DailyTrainInfo.BreastFeedingFlag">
-			哺乳室
-		</div>
-
-		<div class="ui green horizontal medium label" ng-if="trainInfo.DailyTrainInfo.BikeFlag">
-			自行車
-		</div>
-
-		{{ trainInfo.DailyTrainInfo.Note.Zh_tw | noteFormat }}
 	</div>
 </div>
 
