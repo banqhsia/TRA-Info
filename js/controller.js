@@ -5,7 +5,7 @@ TRAExt
 
 })
 
-.controller('TimetableCtrl', function($scope, $filter, Data, Request) {
+.controller('TimetableCtrl', function($scope, $filter, $state, $stateParams, Data, Request) {
 
 	$scope.keyword = '中壢 臺北 明天';
 
@@ -49,10 +49,36 @@ TRAExt
 			$scope.success =  {
 				"status" : false,
 				"title": "查無此站或格式錯誤。",
-				"msg": "請輸入起迄站(時間)「中壢 新竹」「新左營 鳳山 明天」「嘉義 民雄 明天」"
+				"msg": "請輸入起迄站(時間)「中壢 新竹」「新左營 鳳山 週四」。可用 1/18、1月18日、1-18、星期四、週四。車站請輸入全名，沒有簡稱 (北車 高火)"
 			}
 		}
 	}
+
+	// Handle table row onclick. Redirect to train info.
+	$scope.goToTrainInfo = function (t) {
+		$state.go('train', { train: t, date: $scope.period.date });
+	}
+
+})
+
+// Train Info Controller
+.controller('TrainInfoCtrl', function($scope, $stateParams, Data, Request) {
+
+	$scope.success =  { "status" : "loading" }
+
+	var t = $stateParams.train;
+	var d = $stateParams.date;
+
+	$scope.period = Data.searchDate(d);
+
+	// Send Request to TRA, get specific train information 
+	Request.dailyTimeTable(
+		t, $scope.period.date
+	).then(function(){
+		$scope.success =  { "status" : true }
+		$scope.trainInfo = Request.getData()[0];
+	});
+
 })
 
 // Transform `TrainClassificationID` into train class
@@ -87,6 +113,16 @@ TRAExt
 			moment(e,'HH:mm').diff(
 			moment(s,'HH:mm'))
 		).format('H[小時]m[分鐘]').replace(/^0小時/g, '');
+	}
+})
+
+// Search Date filter. Alias for Data.searchDate
+// d (date), m (mode). Set m = TRUE to ask for humanize format.
+// Return Date (String)
+.filter('searchDate', function(Data){
+	return function(d, m){
+		var r = Data.searchDate(d);
+		return (m) ? r.humanize : r.date;
 	}
 })
 
@@ -132,12 +168,25 @@ TRAExt
 		}
 		else {
 
-			try {
-				var v = $filter('filter')( period, { dateDefine: d || false }, true )[0].dateValue;
-			} catch (e) {
-				var v = 0;
+			// Determine if the date is almost valid
+			if ( moment(d, 'YYYY-MM-DD').isValid() || moment(d, 'MM-DD').isValid() ) {
+
+				// To know what they really is, return a moment() object.
+				var m = ( moment(d, 'YYYY-M-D', true).isValid() || moment(d, 'YYYY年M月D日', true).isValid() || moment(d, 'YYYY/M/D', true).isValid() )
+					? m = moment(d, 'YYYY-M-D')
+					: ( moment(d, 'M-D', true).isValid() || moment(d, 'M月D日', true).isValid() || moment(d, 'M/D', true).isValid() )
+						? m = moment(d, 'MM-DD')
+						: m = moment();
 			}
-			var m = moment().add(v, 'DAYS');
+			else {
+
+				try {
+					var v = $filter('filter')( period, { dateDefine: d || false }, true )[0].dateValue;
+				} catch (e) {
+					var v = 0;
+				}
+				var m = moment().add(v, 'DAYS');
+			}
 		}
 
 		return {
@@ -160,6 +209,7 @@ TRAExt
 
 .service('Request', function($http, $q) {
 
+	// Get Daily Timetable with Origin and Destination
 	this.dailyTimeTableOD = function (original, destination, date) {
 
 		var deferred = $q.defer();
@@ -175,6 +225,24 @@ TRAExt
 
 		return deferred.promise;
 	}
+
+	// Get the specific train information by TrainNo.
+	this.dailyTimeTable = function (train, date) {
+
+		var deferred = $q.defer();
+
+		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/'+ train +'/'+ date +'?$format=JSON')
+		.success( function(response) {
+			data = response;
+			deferred.resolve();
+		})
+		.error ( function(response) {
+			return false;
+		});
+
+		return deferred.promise;
+	}
+
 
 	// Return HTTP request response.
 	this.getData = function() {

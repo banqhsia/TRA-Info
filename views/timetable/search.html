@@ -26,7 +26,7 @@
 
 		<div class="ui green message" ng-if="!timeTables && success.status != false && success.status != 'loading'">
 			<div class="header">請輸入關鍵字查詢列車時刻</div>
-			<p>輸入起迄站 (+時間) 即可。中壢 新竹」「新左營 鳳山 明天」「嘉義 民雄 明天」</p>
+			<p>輸入起迄站 (+時間) 即可。「中壢 新竹」「新左營 鳳山 11/7」「嘉義 民雄 週四」</p>
 		</div>
 
 		<div class="ui message" ng-if="timeTables">
@@ -48,7 +48,7 @@
 
 	<div class="ui sixteen wide column">
 
-		<table class="ui striped definition table">
+		<table class="ui selectable striped definition table">
 			<thead>
 				<th class="two wide"></th>
 				<th class="one wide center aligned">
@@ -74,7 +74,7 @@
 				</th>
 			</thead>
 			<tbody>
-				<tr ng-repeat="item in timeTables">
+				<tr class="pointer" ng-repeat="item in timeTables" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
 					<!-- 車次 -->
 					<td>
 						<h3 class="ui {{ item.DailyTrainInfo.TrainClassificationID | trainClass: true }} header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}

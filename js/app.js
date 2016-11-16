@@ -13,8 +13,14 @@ TRAExt.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, 
 
 	.state('timetable', {
 		url: '/timetable',
-		templateUrl: 'views/timetable/search',
+		templateUrl: 'views/timetable/search.html',
 		controller: 'TimetableCtrl'
+	})
+
+	.state('train', {
+		url: '/timetable/:train/:date',
+		templateUrl: 'views/timetable/train.html',
+		controller: 'TrainInfoCtrl'
 	})
 
 

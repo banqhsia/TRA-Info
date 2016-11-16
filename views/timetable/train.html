@@ -1,0 +1,79 @@
+<div class="ui active inverted dimmer" ng-if="success.status == 'loading'">
+	<div class="ui text loader">載入中</div>
+</div>
+
+<div class="row" ng-if="trainInfo">
+
+	<div class="ui sixteen wide column">
+
+		<h2 class="ui header">{{ trainInfo.DailyTrainInfo.TrainNo }} {{ trainInfo.DailyTrainInfo.TrainClassificationID | trainClass }}
+			<div class="sub header">
+				{{ period.humanize }}
+			</div>
+		</h2>
+
+		<div class="ui blue horizontal medium label" ng-if="trainInfo.DailyTrainInfo.WheelchairFlag">
+			輪椅
+		</div>
+
+		<div class="ui pink horizontal medium label" ng-if="trainInfo.DailyTrainInfo.BreastFeedingFlag">
+			哺乳室
+		</div>
+
+		<div class="ui green horizontal medium label" ng-if="trainInfo.DailyTrainInfo.BikeFlag">
+			自行車
+		</div>
+
+		{{ trainInfo.DailyTrainInfo.Note.Zh_tw | noteFormat }}
+	</div>
+</div>
+
+<div class="row" ng-if="trainInfo">
+
+	<div class="ui sixteen wide column">
+		<table class="ui unstackable basic definition table">
+			<thead>
+				<tr>
+					<th class="four wide">詳細資料</th>
+					<th class="four wide">
+						<h4 class="ui header">抵達時間
+							<div class="sub header">
+								Arrival
+							</div>
+						</h4>
+					</th>
+					<th class="four wide">
+						<h4 class="ui header">開車時間
+							<div class="sub header">
+								Departure
+							</div>
+						</h4>
+					</th>
+					<th class="four wide">
+						<h4 class="ui header">停留時間
+							<div class="sub header">
+								Duration
+							</div>
+						</h4>
+					</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in trainInfo.StopTimes">
+					<td>
+						<h4 class="ui header">
+							<i class="icon grey">{{ item.StopSequence }}</i>
+							<div class="content">
+								{{ item.StationName.Zh_tw }}
+								<div class="sub header">{{ item.StationName.En }}</div>
+							</div>
+						</h4>
+					</td>
+					<td>{{ item.ArrivalTime }}</td>
+					<td>{{ item.DepartureTime }}</td>
+					<td>{{ item.ArrivalTime | timeDiff: item.DepartureTime }}</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
+</div>
