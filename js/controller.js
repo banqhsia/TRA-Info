@@ -7,7 +7,11 @@ TRAExt
 
 .controller('TimetableCtrl', function($scope, $filter, $state, $stateParams, Data, Request) {
 
-	$scope.keyword = '中壢 臺北 明天';
+	// get item from the localStorage
+	$scope.keyword = localStorage.getItem('keyword');
+	$scope.timeTables = JSON.parse(localStorage.getItem('timeTables') ) || false;
+	$scope.keywordArray = JSON.parse(localStorage.getItem('keywordArray') );
+	$scope.period = JSON.parse(localStorage.getItem('period') );
 
 	// Search Handler
 	$scope.search = function () {
@@ -42,6 +46,12 @@ TRAExt
 			).then(function(){
 				$scope.success =  { "status" : true }
 				$scope.timeTables = $filter('orderBy')(Request.getData(), 'OriginStopTime.DepartureTime');
+
+				// Set items in localStorage.
+				Data.setItem('keyword', $scope.keyword);
+				Data.setItem('timeTables', $scope.timeTables);
+				Data.setItem('keywordArray', $scope.keywordArray);
+				Data.setItem('period', $scope.period);
 			})
 		}
 		else {
@@ -52,6 +62,12 @@ TRAExt
 				"msg": "請輸入起迄站(時間)「中壢 新竹」「新左營 鳳山 週四」。可用 1/18、1月18日、1-18、星期四、週四。車站請輸入全名，沒有簡稱 (北車 高火)"
 			}
 		}
+	}
+
+	// Clear Search <input>, then focus it.
+	$scope.searchEmpty = function () {
+		$scope.keyword = null;
+		angular.element('input').trigger('focus');
 	}
 
 	// Handle table row onclick. Redirect to train info.
@@ -71,7 +87,7 @@ TRAExt
 
 	$scope.period = Data.searchDate(d);
 
-	// Send Request to TRA, get specific train information 
+	// Send Request to TRA, get specific train information
 	Request.dailyTimeTable(
 		t, $scope.period.date
 	).then(function(){
@@ -144,6 +160,12 @@ TRAExt
 })
 
 .service('Data', function($filter) {
+
+	this.setItem = function (k, v) {
+		v = ( typeof v == 'object' ) ? JSON.stringify(v) : v;
+		localStorage.setItem(k, v);
+		return true;
+	}
 
 	// Transform `台` into `臺` in order to search the station.
 	// return string with `臺`
