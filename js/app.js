@@ -17,6 +17,12 @@ TRAExt.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, 
 		controller: 'TimetableCtrl'
 	})
 
+	.state('about', {
+		url: '/about',
+		templateUrl: 'views/templates/about.html',
+		controller: ''
+	})
+
 	.state('train', {
 		url: '/timetable/:train/:date',
 		templateUrl: 'views/timetable/train.html',
