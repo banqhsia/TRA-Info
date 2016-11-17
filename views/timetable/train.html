@@ -86,7 +86,7 @@
 					<td>
 						<h4 class="ui header">
 							<i class="icon grey">{{ item.StopSequence }}</i>
-							<div class="content">
+							<div class="content pointer" ng-click="goToStationInfo(item.StationID)">
 								{{ item.StationName.Zh_tw }}
 								<div class="sub header">{{ item.StationName.En }}</div>
 							</div>

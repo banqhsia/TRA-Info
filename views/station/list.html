@@ -37,7 +37,7 @@
 					</th>
 				</thead>
 				<tbody>
-					<tr ng-repeat="station in stations | filter: keyword ">
+					<tr class="pointer" ng-repeat="station in stations | filter: keyword " ng-click="goToStationInfo(station.Station_Code_4)">
 						<td>
 							<h3 class="ui header">{{ station.Station_Name }}
 								<div class="sub header">{{ station.EnglishName }}</div>

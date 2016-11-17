@@ -9,13 +9,16 @@
 	margin: 0 0 0 0;
 }
 /* Disabled override */
-.ui.table tr.disabled td * {
+.ui.table tr.display-none {
+	display: none;
+}
+.ui.table tr.disabled-color td * {
 	color: rgba(40, 40, 40, .3) !important;
 }
-.ui.table tr.disabled td .label:not(.basic) {
+.ui.table tr.disabled-color td .label:not(.basic) {
 	background-color: rgba(40, 40, 40, .3) !important;
 }
-.ui.table tr.disabled td .label.basic {
+.ui.table tr.disabled-color td .label.basic {
 	color: rgba(40, 40, 40, .3) !important;
 	border: 1px solid rgba(40, 40, 40, .3) !important;
 }

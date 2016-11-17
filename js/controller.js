@@ -1,7 +1,12 @@
 TRAExt
-.controller('StationCtrl', function($scope) {
+.controller('StationCtrl', function($scope, $state) {
 
 	$scope.stations = JSON.parse(JSON.stringify(stations));
+
+	// Handle station name buttom on click. Redirect to station info.
+	$scope.goToStationInfo = function (s) {
+		$state.go('stationinfo', { station: s });
+	}
 
 })
 
@@ -100,6 +105,50 @@ TRAExt
 		$state.go('timetable');
 	}
 
+	// Handle station name buttom on click. Redirect to station info.
+	$scope.goToStationInfo = function (s) {
+		$state.go('stationinfo', { station: s, date: $scope.period.date });
+	}
+
+})
+
+// Train Info Controller
+.controller('StationInfoCtrl', function($scope, $stateParams, $state, Data, Request) {
+
+	$scope.success =  { "status" : "loading" }
+
+	var s = $stateParams.station;
+	var d = $stateParams.date;
+
+	$scope.station = Data.searchStation(s, true);
+	$scope.period = Data.searchDate(d);
+
+	// Send Request to TRA, get specific train information
+	Request.dailyTimeTableStation(
+		s, $scope.period.date
+	).then(function(){
+		$scope.success =  { "status" : true }
+		$scope.trainInfo = Request.getData();
+	});
+
+	// Toggle clockwise or counterclockwise trains.
+	// Click again for dismiss
+	$scope.directionSwitch = function (d) {
+		$scope.direction = (d == $scope.direction)
+			? undefined
+			: d;
+	}
+
+	// Handle back button click. Redirect to time table.
+	$scope.goToTimeTable = function () {
+		$state.go('timetable');
+	}
+
+	// Handle table row onclick. Redirect to train info.
+	$scope.goToTrainInfo = function (t) {
+		$state.go('train', { train: t, date: $scope.period.date });
+	}
+
 })
 
 // Transform `TrainClassificationID` into train class
@@ -109,6 +158,16 @@ TRAExt
 		return (wantsColor)
 			? $filter('filter')( trainClass, { classNo: c }, true )[0].classColor
 			: $filter('filter')( trainClass, { classNo: c }, true )[0].classDesc;
+	}
+})
+.filter('trainClassZH', function($filter){
+	return function(t, wantsColor){
+		var r = t.replace(/自強\(普悠瑪\)/g, '普悠瑪').replace(/自強\(太魯閣\)/g, '太魯閣')
+				.replace(/自強\(DMU2800、2900、3000型柴聯及 EMU型電車自強號\)/g, '柴聯自強')
+				.replace(/區間快/g, '區間快車').replace(/\(.+\)/g, '');
+		return (wantsColor)
+			? $filter('filter')( trainClass, { classDesc: r }, true )[0].classColor
+			: r;
 	}
 })
 // Transform `TripLine` into trip line description
@@ -147,7 +206,7 @@ TRAExt
 	}
 })
 
-// Determine if the train has departure
+// Determine if the train has departured
 // Return 'disabled' (String) (Semantic UI class)
 .filter('isDepartured', function(){
 	return function(departure, date){
@@ -158,7 +217,7 @@ TRAExt
 		return ( !moment(today).isSame(date) )
 			? ''
 			: ( moment(now, 'HH:mm').isAfter( moment(departure, 'HH:mm')) )
-				? 'disabled'
+				? 'display-none'
 				: '';
 
 	}
@@ -219,14 +278,18 @@ TRAExt
 		return {
 			'date': m.format('YYYY-MM-DD'),
 			'humanize': m.format('MM月DD日 (dddd)'),
+			'today': moment( moment().format('YYYY-MM-DD') ).isSame( m.format('YYYY-MM-DD') ),
 		};
 	}
 
 	// Search stations by a given key/value set.
 	// return JSON Object
-	this.searchStation = function (s) {
+	// s: station Name/station Code. isCode: search by code
+	this.searchStation = function (s, isCode) {
 		try {
-			return $filter('filter')( stations, { Station_Name: this.taiTransform(s) || false }, true )[0];
+			return (isCode)
+				? $filter('filter')( stations, { Station_Code_4: Number(s) || false }, true )[0]
+				: $filter('filter')( stations, { Station_Name: this.taiTransform(s) || false }, true )[0];
 		} catch (e) {
 			return false;
 		}
@@ -270,6 +333,22 @@ TRAExt
 		return deferred.promise;
 	}
 
+	// Get the all train information by StationCode
+	this.dailyTimeTableStation = function (station, date) {
+
+		var deferred = $q.defer();
+
+		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/Station/'+ station +'/'+ date +'?$format=JSON')
+		.success( function(response) {
+			data = response;
+			deferred.resolve();
+		})
+		.error ( function(response) {
+			return false;
+		});
+
+		return deferred.promise;
+	}
 
 	// Return HTTP request response.
 	this.getData = function() {

@@ -39,6 +39,12 @@
 			<p>{{ success.msg }}</p>
 		</div>
 
+		<!-- 隱藏已離站列車 toggle -->
+		<div class="ui toggle checkbox" ng-show="period.today && timeTables">
+			<input type="checkbox" ng-model="showDepartured" ng-init="showDepartured = true">
+			<label>隱藏已離站列車</label>
+		</div>
+
 	</div>
 
 </div>
@@ -74,7 +80,7 @@
 				</th>
 			</thead>
 			<tbody>
-				<tr class="pointer" ng-repeat="item in timeTables" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
+				<tr class="pointer {{ ( showDepartured ) ? (item.OriginStopTime.DepartureTime | isDepartured: period.date) : '' }}" ng-repeat="item in timeTables" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
 					<!-- 車次 -->
 					<td>
 						<h3 class="ui {{ item.DailyTrainInfo.TrainClassificationID | trainClass: true }} header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}

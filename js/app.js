@@ -23,6 +23,12 @@ TRAExt.config(['$stateProvider', '$urlRouterProvider', function($stateProvider, 
 		controller: 'TrainInfoCtrl'
 	})
 
+	.state('stationinfo', {
+		url: '/station/:station/:date',
+		templateUrl: 'views/timetable/station.html',
+		controller: 'StationInfoCtrl'
+	})
+
 
 	$urlRouterProvider.otherwise('/timetable');
 
