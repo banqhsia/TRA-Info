@@ -73,9 +73,9 @@
 						</h4>
 					</th>
 					<th class="four wide">
-						<h4 class="ui header">停留時間
+						<h4 class="ui header">行車時間
 							<div class="sub header">
-								Duration
+								Travel Time
 							</div>
 						</h4>
 					</th>
@@ -94,7 +94,7 @@
 					</td>
 					<td>{{ item.ArrivalTime }}</td>
 					<td>{{ item.DepartureTime }}</td>
-					<td>{{ item.ArrivalTime | timeDiff: item.DepartureTime }}</td>
+					<td>{{ trainInfo.StopTimes[$index-1].DepartureTime | timeDiff: item.ArrivalTime}}</td>
 				</tr>
 			</tbody>
 		</table>

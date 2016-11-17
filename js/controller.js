@@ -189,10 +189,12 @@ TRAExt
 // Use moment.js, and strip `0小時` from the result.
 .filter('timeDiff', function(){
 	return function(s, e){
-		return moment.utc(
+		var r = moment.utc(
 			moment(e,'HH:mm').diff(
 			moment(s,'HH:mm'))
 		).format('H[小時]m[分鐘]').replace(/^0小時/g, '');
+		// Handle `Invalid date`. Avoid to display.
+		return ( r == 'Invalid date' ) ? '' : r;
 	}
 })
 
