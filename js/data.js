@@ -32,7 +32,7 @@ var period = [
 var trainClass = [
 	{
 		"classNo": "1100",
-		"classDesc": "柴聯自強",
+		"classDesc": "自強",
 		"classColor": "red"
 	},
 	{

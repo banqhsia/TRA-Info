@@ -72,7 +72,7 @@ TRAExt
 	// Clear Search <input>, then focus it.
 	$scope.searchEmpty = function () {
 		$scope.keyword = null;
-		angular.element('input').trigger('focus');
+		angular.element('input[ng-model=keyword]').trigger('focus');
 	}
 
 	// Handle table row onclick. Redirect to train info.
@@ -163,7 +163,7 @@ TRAExt
 .filter('trainClassZH', function($filter){
 	return function(t, wantsColor){
 		var r = t.replace(/自強\(普悠瑪\)/g, '普悠瑪').replace(/自強\(太魯閣\)/g, '太魯閣')
-				.replace(/自強\(DMU2800、2900、3000型柴聯及 EMU型電車自強號\)/g, '柴聯自強')
+				.replace(/自強\(DMU2800、2900、3000型柴聯及 EMU型電車自強號\)/g, '自強')
 				.replace(/區間快/g, '區間快車').replace(/\(.+\)/g, '');
 		return (wantsColor)
 			? $filter('filter')( trainClass, { classDesc: r }, true )[0].classColor
