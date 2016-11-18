@@ -73,9 +73,14 @@
 						<div class="sub header">Arrival</div>
 					</h4>
 				</th>
-				<th class="seven wide">
+				<th class="six wide">
 					<h4 class="ui header">其他
 						<div class="sub header">Information</div>
+					</h4>
+				</th>
+				<th class="one wide">
+					<h4 class="ui header">票價
+						<div class="sub header">Fare</div>
 					</h4>
 				</th>
 			</thead>
@@ -130,6 +135,10 @@
 
 						{{ item.DailyTrainInfo.Note.Zh_tw | noteFormat }}
 
+					</td>
+
+					<td>
+						<p ng-if="fares">{{ (item.DailyTrainInfo.TrainClassificationID | trainFare: fares) | currency: '$':0 || '' }}</p>
 					</td>
 
 				</tr>

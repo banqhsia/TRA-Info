@@ -33,62 +33,74 @@ var trainClass = [
 	{
 		"classNo": "1100",
 		"classDesc": "自強",
-		"classColor": "red"
+		"classColor": "red",
+		"classFare": "成自"
 	},
 	{
 		"classNo": "1101",
 		"classDesc": "自強",
-		"classColor": "red"
+		"classColor": "red",
+		"classFare": "成自"
 	},
 	{
 		"classNo": "1102",
 		"classDesc": "太魯閣",
-		"classColor": "blue"
+		"classColor": "blue",
+		"classFare": "成自"
 	},
 	{
 		"classNo": "1107",
 		"classDesc": "普悠瑪",
-		"classColor": "pink"
+		"classColor": "pink",
+		"classFare": "成自"
 	},
 	{
 		"classNo": "1108",
 		"classDesc": "自強",
-		"classColor": "red"
+		"classColor": "red",
+		"classFare": "成自"
 	},
 	{
 		"classNo": "1110",
 		"classDesc": "莒光",
-		"classColor": "orange"
+		"classColor": "orange",
+		"classFare": "成莒"
 	},
 	{
 		"classNo": "1114",
 		"classDesc": "莒光",
-		"classColor": "orange"
+		"classColor": "orange",
+		"classFare": "成莒"
 	},
 	{
 		"classNo": "1115",
 		"classDesc": "莒光",
-		"classColor": "orange"
+		"classColor": "orange",
+		"classFare": "成莒"
 	},
 	{
 		"classNo": "1120",
 		"classDesc": "復興",
-		"classColor": ""
+		"classColor": "",
+		"classFare": "成復"
 	},
 	{
 		"classNo": "1131",
 		"classDesc": "區間車",
-		"classColor": ""
+		"classColor": "",
+		"classFare": "成復"
 	},
 	{
 		"classNo": "1132",
 		"classDesc": "區間快車",
-		"classColor": "grey"
+		"classColor": "grey",
+		"classFare": "成復"
 	},
 	{
 		"classNo": "1140",
 		"classDesc": "普快車",
-		"classColor": ""
+		"classColor": "",
+		"classFare": "成普"
 	}
 ];
 

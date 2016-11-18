@@ -17,6 +17,7 @@ TRAExt
 	$scope.timeTables = JSON.parse(localStorage.getItem('timeTables') ) || false;
 	$scope.keywordArray = JSON.parse(localStorage.getItem('keywordArray') );
 	$scope.period = JSON.parse(localStorage.getItem('period') );
+	$scope.fares = JSON.parse(localStorage.getItem('fares') );
 
 	// Search Handler
 	$scope.search = function () {
@@ -24,6 +25,8 @@ TRAExt
 		$scope.keyword = $scope.keyword || '';
 		if ( !$scope.keyword ) return false;
 
+		// Initialize before starting a new search
+		$scope.fares = undefined;
 		$scope.timeTables = false;
 
 		// Split string by whitespace
@@ -43,7 +46,15 @@ TRAExt
 
 			$scope.success =  { "status" : "loading" }
 
-			// Send request to TRA
+			// Send fare request
+			Request.ODFare(
+				startStation.Station_Code_4,
+				destStation.Station_Code_4
+			).then(function(){
+				$scope.fares = Request.getData()[0].Fares;
+			})
+
+			// Send time table request
 			Request.dailyTimeTableOD(
 				startStation.Station_Code_4,
 				destStation.Station_Code_4,
@@ -57,6 +68,7 @@ TRAExt
 				Data.setItem('timeTables', $scope.timeTables);
 				Data.setItem('keywordArray', $scope.keywordArray);
 				Data.setItem('period', $scope.period);
+				Data.setItem('fares', $scope.fares);
 			})
 		}
 		else {
@@ -168,6 +180,15 @@ TRAExt
 		return (wantsColor)
 			? $filter('filter')( trainClass, { classDesc: r }, true )[0].classColor
 			: r;
+	}
+})
+// Search Fare by fares[Array] given from controller->view
+// c: TrainClassificationID
+.filter('trainFare', function($filter){
+	return function(c, fares){
+		return $filter('filter')( fares, {
+			TicketType: $filter('filter')( trainClass, { classNo: c }, true )[0].classFare
+		}, true )[0].Price;
 	}
 })
 // Transform `TripLine` into trip line description
@@ -341,6 +362,23 @@ TRAExt
 		var deferred = $q.defer();
 
 		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/Station/'+ station +'/'+ date +'?$format=JSON')
+		.success( function(response) {
+			data = response;
+			deferred.resolve();
+		})
+		.error ( function(response) {
+			return false;
+		});
+
+		return deferred.promise;
+	}
+
+	// Get the fares between startStation and destStation.
+	this.ODFare = function (original, destination) {
+
+		var deferred = $q.defer();
+
+		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/ODFare/'+ original +'/to/'+ destination +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();
