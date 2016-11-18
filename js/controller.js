@@ -17,7 +17,7 @@ TRAExt
 	$scope.timeTables = JSON.parse(localStorage.getItem('timeTables') ) || false;
 	$scope.keywordArray = JSON.parse(localStorage.getItem('keywordArray') );
 	$scope.period = JSON.parse(localStorage.getItem('period') );
-	$scope.fares = JSON.parse(localStorage.getItem('fares') );
+	$scope.fares = JSON.parse(localStorage.getItem('fares')) || undefined;
 
 	// Search Handler
 	$scope.search = function () {
@@ -26,7 +26,7 @@ TRAExt
 		if ( !$scope.keyword ) return false;
 
 		// Initialize before starting a new search
-		$scope.fares = undefined;
+		$scope.fares = false;
 		$scope.timeTables = false;
 
 		// Split string by whitespace
@@ -83,8 +83,17 @@ TRAExt
 
 	// Clear Search <input>, then focus it.
 	$scope.searchEmpty = function () {
-		$scope.keyword = null;
+
+		// Set variables `undefined` to clear all the result.
+		$scope.keyword = undefined;
+		$scope.timeTables = undefined;
+		$scope.fares = undefined;
+
+		// Focus on the <input>
 		angular.element('input[ng-model=keyword]').trigger('focus');
+
+		// Clear localStorage.
+		localStorage.clear();
 	}
 
 	// Handle table row onclick. Redirect to train info.
