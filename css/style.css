@@ -10,7 +10,7 @@
 }
 /* Disabled override */
 .ui.table tr.display-none {
-	display: none;
+	display: none !important;
 }
 .ui.table tr.disabled-color td * {
 	color: rgba(40, 40, 40, .3) !important;

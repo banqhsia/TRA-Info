@@ -54,6 +54,15 @@ TRAExt
 				$scope.fares = Request.getData()[0].Fares;
 			})
 
+			// Request for the delay information if is today.
+			if ( $scope.period.today )
+				Request.liveBoard(
+					startStation.Station_Code_4
+				).then(function(){
+					$scope.delay = Request.getData();
+				});
+			}
+
 			// Send time table request
 			Request.dailyTimeTableOD(
 				startStation.Station_Code_4,
@@ -143,6 +152,15 @@ TRAExt
 
 	$scope.station = Data.searchStation(s, true);
 	$scope.period = Data.searchDate(d);
+
+	// Request for the delay information if is today.
+	if ( $scope.period.today ) {
+		Request.liveBoard(
+			s
+		).then(function(){
+			$scope.delay = Request.getData();
+		});
+	}
 
 	// Send Request to TRA, get specific train information
 	Request.dailyTimeTableStation(
@@ -254,6 +272,18 @@ TRAExt
 
 	}
 })
+// Determine if the train is delay.
+// t: TrainNo, delay: Delay info given from controller->view
+.filter('isDelay', function($filter){
+	return function(t, delay){
+		try {
+			return $filter('filter')( delay, { TrainNo: t }, true )[0].DelayTime
+		} catch(e) {
+			return false
+		}
+	}
+})
+
 
 .service('Data', function($filter) {
 
@@ -388,6 +418,23 @@ TRAExt
 		var deferred = $q.defer();
 
 		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/ODFare/'+ original +'/to/'+ destination +'?$format=JSON')
+		.success( function(response) {
+			data = response;
+			deferred.resolve();
+		})
+		.error ( function(response) {
+			return false;
+		});
+
+		return deferred.promise;
+	}
+
+	// Get Live PIDS(Passenger Information Display System) information.
+	this.liveBoard = function (original) {
+
+		var deferred = $q.defer();
+
+		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/LiveBoard/'+ original +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();

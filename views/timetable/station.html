@@ -59,6 +59,11 @@
 						<div class="sub header">Departure</div>
 					</h4>
 				</th>
+				<th class="one wide left aligned" ng-show="period.today && delay">
+					<h4 class="ui header">誤點
+						<div class="sub header">Delay</div>
+					</h4>
+				</th>
 				<th class="two wide center aligned"></th>
 				<th class="two wide center aligned">
 					<h4 class="ui header">終點站
@@ -78,6 +83,13 @@
 
 					<!-- 出發時間 -->
 					<td class="center aligned">{{ item.DepartureTime }}</td>
+
+					<!-- 誤點 -->
+					<td ng-show="period.today && delay">
+						<div ng-if="(item.TrainNo | isDelay: delay) !== false">
+							<div class="ui circular empty {{ (item.TrainNo | isDelay: delay) == 0 ? 'green' : 'yellow' }} horizontal medium label"></div>{{ (item.TrainNo | isDelay: delay) ? (item.TrainNo | isDelay: delay) : ''}}
+						</div>
+					</td>
 
 					<!-- 途經 -->
 					<td class="center aligned">

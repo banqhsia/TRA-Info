@@ -73,9 +73,15 @@
 						<div class="sub header">Arrival</div>
 					</h4>
 				</th>
-				<th class="six wide">
+				<th class="five wide">
 					<h4 class="ui header">其他
 						<div class="sub header">Information</div>
+					</h4>
+				</th>
+
+				<th class="one wide" ng-show="period.today && delay">
+					<h4 class="ui header">誤點
+						<div class="sub header">Delay</div>
 					</h4>
 				</th>
 				<th class="one wide">
@@ -137,6 +143,14 @@
 
 					</td>
 
+					<!-- 誤點 -->
+					<td ng-show="period.today && delay">
+						<div ng-if="(item.DailyTrainInfo.TrainNo | isDelay: delay) !== false">
+							<div class="ui circular empty {{ (item.DailyTrainInfo.TrainNo | isDelay: delay) == 0 ? 'green' : 'yellow' }} horizontal medium label"></div>{{ (item.DailyTrainInfo.TrainNo | isDelay: delay) ? (item.DailyTrainInfo.TrainNo | isDelay: delay) : ''}}
+						</div>
+					</td>
+
+					<!-- 票價 -->
 					<td>
 						<p ng-if="fares">{{ (item.DailyTrainInfo.TrainClassificationID | trainFare: fares) | currency: '$':0 || '' }}</p>
 					</td>
