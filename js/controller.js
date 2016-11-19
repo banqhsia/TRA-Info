@@ -55,7 +55,7 @@ TRAExt
 			})
 
 			// Request for the delay information if is today.
-			if ( $scope.period.today )
+			if ( $scope.period.today ) {
 				Request.liveBoard(
 					startStation.Station_Code_4
 				).then(function(){
