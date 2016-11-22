@@ -15,7 +15,7 @@ TRAExt
 	// get item from the localStorage
 	$scope.keyword = localStorage.getItem('keyword');
 	$scope.timeTables = JSON.parse(localStorage.getItem('timeTables') ) || false;
-	$scope.keywordArray = JSON.parse(localStorage.getItem('keywordArray') );
+	$scope.sdStations = JSON.parse(localStorage.getItem('sdStations') );
 	$scope.period = JSON.parse(localStorage.getItem('period') );
 	$scope.fares = JSON.parse(localStorage.getItem('fares')) || undefined;
 
@@ -30,26 +30,26 @@ TRAExt
 		$scope.timeTables = false;
 
 		// Split string by whitespace
-		var keywordArrayResult = Data.strToArray($scope.keyword);
-		$scope.keywordArray = ( keywordArrayResult )
-			? keywordArrayResult
-			: false;
+		var keywordArray = Data.strToArray($scope.keyword) || false;
 
 		// Get date. Return array.
-		$scope.period = Data.searchDate($scope.keywordArray[2]);
+		$scope.period = Data.searchDate(keywordArray[2]);
 
 		// Search station code
-		var startStation = Data.searchStation( $scope.keywordArray[0] );
-		var destStation = Data.searchStation( $scope.keywordArray[1] );
+		// sdStations: startStation & destStation
+		$scope.sdStations = {
+			'startStation': Data.searchStation( keywordArray[0] ),
+			'destStation': Data.searchStation( keywordArray[1] )
+		}
 
-		if ( startStation && destStation && $scope.keywordArray ) {
+		if ( $scope.sdStations.startStation && $scope.sdStations.destStation ) {
 
 			$scope.success =  { "status" : "loading" }
 
 			// Send fare request
 			Request.ODFare(
-				startStation.Station_Code_4,
-				destStation.Station_Code_4
+				$scope.sdStations.startStation.Station_Code_4,
+				$scope.sdStations.destStation.Station_Code_4
 			).then(function(){
 				$scope.fares = Request.getData()[0].Fares;
 			})
@@ -57,7 +57,7 @@ TRAExt
 			// Request for the delay information if is today.
 			if ( $scope.period.today ) {
 				Request.liveBoard(
-					startStation.Station_Code_4
+					$scope.sdStations.startStation.Station_Code_4
 				).then(function(){
 					$scope.delay = Request.getData();
 				});
@@ -65,8 +65,8 @@ TRAExt
 
 			// Send time table request
 			Request.dailyTimeTableOD(
-				startStation.Station_Code_4,
-				destStation.Station_Code_4,
+				$scope.sdStations.startStation.Station_Code_4,
+				$scope.sdStations.destStation.Station_Code_4,
 				$scope.period.date
 			).then(function(){
 				$scope.success =  { "status" : true }
@@ -75,7 +75,7 @@ TRAExt
 				// Set items in localStorage.
 				Data.setItem('keyword', $scope.keyword);
 				Data.setItem('timeTables', $scope.timeTables);
-				Data.setItem('keywordArray', $scope.keywordArray);
+				Data.setItem('sdStations', $scope.sdStations);
 				Data.setItem('period', $scope.period);
 				Data.setItem('fares', $scope.fares);
 			})
@@ -108,6 +108,10 @@ TRAExt
 	// Handle table row onclick. Redirect to train info.
 	$scope.goToTrainInfo = function (t) {
 		$state.go('train', { train: t, date: $scope.period.date });
+	}
+	// Handle station name buttom on click. Redirect to station info.
+	$scope.goToStationInfo = function (s) {
+		$state.go('stationinfo', { station: s, date: $scope.period.date });
 	}
 
 })
@@ -150,13 +154,13 @@ TRAExt
 	var s = $stateParams.station;
 	var d = $stateParams.date;
 
-	$scope.station = Data.searchStation(s, true);
+	$scope.station = Data.searchStation(s);
 	$scope.period = Data.searchDate(d);
 
 	// Request for the delay information if is today.
 	if ( $scope.period.today ) {
 		Request.liveBoard(
-			s
+			$scope.station.Station_Code_4
 		).then(function(){
 			$scope.delay = Request.getData();
 		});
@@ -164,7 +168,8 @@ TRAExt
 
 	// Send Request to TRA, get specific train information
 	Request.dailyTimeTableStation(
-		s, $scope.period.date
+		$scope.station.Station_Code_4,
+		$scope.period.date
 	).then(function(){
 		$scope.success =  { "status" : true }
 		$scope.trainInfo = Request.getData();
@@ -346,12 +351,17 @@ TRAExt
 
 	// Search stations by a given key/value set.
 	// return JSON Object
-	// s: station Name/station Code. isCode: search by code
-	this.searchStation = function (s, isCode) {
+	// s: station Name/station Code.
+	this.searchStation = function (s) {
 		try {
-			return (isCode)
+			return ( s.match(/^\d{4}$/) )
+				// 	Matches `Station_Code_4`. eg. 1008, 1017...
 				? $filter('filter')( stations, { Station_Code_4: Number(s) || false }, true )[0]
-				: $filter('filter')( stations, { Station_Name: this.taiTransform(s) || false }, true )[0];
+				: ( s.match(/^\d{1,3}$/) )
+					// Matches `Station_Code_3`. eg. 2, 4, 26, 100, 108
+					? $filter('filter')( stations, { Station_Code_3: Number(s) || false }, true )[0]
+					// Else: Search `Station_Name`.
+					: $filter('filter')( stations, { Station_Name: this.taiTransform(s) || false }, true )[0];
 		} catch (e) {
 			return false;
 		}
