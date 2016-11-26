@@ -1,7 +1,12 @@
 TRAExt
-.controller('StationCtrl', function($scope, $state) {
+.controller('StationCtrl', function($scope, $state, Data) {
 
 	$scope.stations = JSON.parse(JSON.stringify(stations));
+
+	// Watch & trigger `taiTransform` on keyword change
+	$scope.$watch('keyword', function (n, o) {
+		$scope.keywordTransform = Data.taiTransform($scope.keyword);
+	}, true);
 
 	// Handle station name buttom on click. Redirect to station info.
 	$scope.goToStationInfo = function (s) {
@@ -301,7 +306,8 @@ TRAExt
 	// Transform `台` into `臺` in order to search the station.
 	// return string with `臺`
 	this.taiTransform = function (s) {
-		return s.replace('台', '臺') || '';
+		s = s || '';
+		return s.replace('台', '臺');
 	}
 
 	// Replace whitespace more than 1, split into array
