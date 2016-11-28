@@ -237,10 +237,16 @@ TRAExt
 	}
 })
 // Formatting note. Strip `每日行駛。` from note.
-.filter('noteFormat', function($filter){
+.filter('noteFormat', function(){
 	return function(n){
 		n = n || '';
-		return n.replace('每日行駛。', '');
+		return n.replace('每日行駛。', '').replace(/柴聯自強號(，|。)/ig, '');
+	}
+})
+// Return TRUE if the DMU note exists.
+.filter('DMULabel', function($filter){
+	return function(n){
+		return /柴聯自強號(，|。)/ig.test(n);
 	}
 })
 // Time subtract, return difference (string)

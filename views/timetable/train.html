@@ -45,6 +45,10 @@
 				自行車
 			</div>
 
+			<div class="ui yellow horizontal medium label" ng-if="trainInfo.DailyTrainInfo.Note.Zh_tw | DMULabel ">
+				柴聯
+			</div>
+
 			{{ trainInfo.DailyTrainInfo.Note.Zh_tw | noteFormat }}
 		</div>
 
