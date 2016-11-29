@@ -49,9 +49,8 @@
 
 </div>
 
-
-<div class="row" ng-if="timeTables.length > 0">
-
+<!-- COMPUTER ONLY ROW -->
+<div class="computer only row" ng-if="timeTables.length > 0">
 	<div class="ui sixteen wide column">
 
 		<table class="ui selectable striped definition table">
@@ -107,7 +106,7 @@
 					</td>
 
 					<!-- 出發時間 -->
-					<td class="center aligned">{{ item.OriginStopTime.DepartureTime }}</td>
+					<td class="center aligned departure-time">{{ item.OriginStopTime.DepartureTime }}</td>
 
 					<!-- 途經 -->
 					<td class="center aligned">
@@ -165,4 +164,83 @@
 
 	</div>
 
-</div>
+</div><!-- END OF COMPUTER ONLY ROW  -->
+
+
+<!-- MOBILE TABLET ONLY -->
+<div class="mobile tablet only row" ng-if="timeTables.length > 0">
+
+	<div class="ui sixteen wide column">
+		<div class="ui fluid card pointer {{ ( showDepartured ) ? (item.OriginStopTime.DepartureTime | isDepartured: period.date) : '' }}" ng-repeat="item in timeTables" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
+
+			<div class="content">
+				<!-- 經由 -->
+				<div class="right floated ui">
+					<a class="ui circular basic {{ item.DailyTrainInfo.TripLine | tripLine: true }} label" ng-if="item.DailyTrainInfo.TripLine">
+						{{ item.DailyTrainInfo.TripLine | tripLine }}
+				   </a>
+				</div>
+
+				<!-- 車次 -->
+				<div>
+					<h4 class="ui {{ item.DailyTrainInfo.TrainClassificationID | trainClass: true }} header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+						<div class="sub header">{{ item.DailyTrainInfo.TrainNo }}</div>
+					</h4>
+				</div>
+
+				<!-- 誤點 -->
+				<div class="meta">
+					<div ng-if="period.today && delay && (item.DailyTrainInfo.TrainNo | isDelay: delay) !== false">
+						<div class="ui circular empty {{ (item.DailyTrainInfo.TrainNo | isDelay: delay) == 0 ? 'green' : 'yellow' }} horizontal medium label"></div>{{ (item.DailyTrainInfo.TrainNo | isDelay: delay) ? (item.DailyTrainInfo.TrainNo | isDelay: delay) : ''}}
+					</div>
+				</div>
+				<div class="description">
+					<div class="ui grid">
+						<!-- 出發時間 -->
+						<div class="three wide column departure-time">{{ item.OriginStopTime.DepartureTime }}</div>
+						<!-- 箭頭 -->
+						<div class="two wide column"><i class="arrow right icon"></i></div>
+						<!-- 抵達 -->
+						<div class="three wide column">{{ item.DestinationStopTime.ArrivalTime }}</div>
+						<!-- 途經 -->
+						<div class="five wide center aligned column">{{ item.OriginStopTime.DepartureTime | timeDiff: item.DestinationStopTime.ArrivalTime }}</div>
+						<!-- 票價 -->
+						<div class="three wide right aligned column">
+							<p ng-if="fares">
+								{{ (item.DailyTrainInfo.TrainClassificationID | trainFare: fares) | currency: '$':0 || '' }}
+							</p>
+						</div>
+
+					</div>
+
+				</div>
+			</div>
+			<div class="extra content">
+
+				<div class="ui basic grey horizontal medium label">
+					{{ item.DestinationStopTime.StopSequence - item.OriginStopTime.StopSequence}}站
+				</div>
+
+				<div class="ui blue horizontal medium label" ng-if="item.DailyTrainInfo.WheelchairFlag">
+					輪椅
+				</div>
+
+				<div class="ui pink horizontal medium label" ng-if="item.DailyTrainInfo.BreastFeedingFlag">
+					哺乳室
+				</div>
+
+				<div class="ui green horizontal medium label" ng-if="item.DailyTrainInfo.BikeFlag">
+					自行車
+				</div>
+
+				<div class="ui yellow  horizontal medium label" ng-if="item.DailyTrainInfo.Note.Zh_tw | DMULabel ">
+					柴聯
+				</div>
+
+				{{ item.DailyTrainInfo.Note.Zh_tw | noteFormat }}
+
+			</div>
+		</div>
+
+	</div><!-- END OF 16 WIDE COLUMN -->
+</div><!-- END OF MOBILE, TABLET ONLY ROW  -->

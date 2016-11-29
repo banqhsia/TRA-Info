@@ -8,17 +8,14 @@
 	font-size: 10px;
 	margin: 0 0 0 0;
 }
-/* Disabled override */
+/* Hide if the train is departured */
 .ui.table tr.display-none {
 	display: none !important;
 }
-.ui.table tr.disabled-color td * {
-	color: rgba(40, 40, 40, .3) !important;
+.ui.card.display-none {
+	display: none !important;
 }
-.ui.table tr.disabled-color td .label:not(.basic) {
-	background-color: rgba(40, 40, 40, .3) !important;
-}
-.ui.table tr.disabled-color td .label.basic {
-	color: rgba(40, 40, 40, .3) !important;
-	border: 1px solid rgba(40, 40, 40, .3) !important;
+/* Font Size */
+.departure-time {
+	font-size: 1.2em;
 }
