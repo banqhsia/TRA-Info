@@ -10,7 +10,7 @@
 			<div class="field">
 				<div class="ui left action icon input">
 					<button class="ui icon button" ng-click="searchEmpty()"><i class="trash icon"></i></button>
-					<input type="text" ng-model="keyword" on-enter="search()" placeholder="中壢 台北 明天" autofocus>
+					<input type="text" ng-model="keyword" on-enter="search()" placeholder="中壢 台北 明天 自強號" autofocus>
 					<i class="inverted circular search link icon" ng-click="search()"></i>
 				</div>
 			</div>
@@ -26,7 +26,7 @@
 
 		<div class="ui green message" ng-if="!timeTables && success.status != false && success.status != 'loading'">
 			<div class="header">請輸入關鍵字查詢列車時刻</div>
-			<p>輸入起迄站 (+時間) 即可。「中壢 新竹」「新左營 鳳山 11/7」「嘉義 民雄 週四」</p>
+			<p>輸入起迄站 (+時間) (+車種) 即可。「中壢 新竹」「新左營 鳳山 11/7」「嘉義 民雄 週四 莒光號」</p>
 		</div>
 
 		<div class="ui message" ng-if="timeTables">
