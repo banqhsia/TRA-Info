@@ -30,8 +30,8 @@
 		</div>
 
 		<div class="ui message" ng-if="timeTables">
-			<div class="header"> {{ period.humanize }}，<a class="pointer" ng-click="goToStationInfo(sdStations.startStation.Station_Code_4)">{{ sdStations.startStation.Station_Name }}</a> 到 <a class="pointer" ng-click="goToStationInfo(sdStations.destStation.Station_Code_4)">{{ sdStations.destStation.Station_Name }}</a> 的列車</div>
-			<p>共有 {{ timeTables.length }} 班列車</p>
+			<div class="header"> {{ period.humanize }}，<a class="pointer" ng-click="goToStationInfo(sdStations.startStation.Station_Code_4)">{{ sdStations.startStation.Station_Name }}</a> 到 <a class="pointer" ng-click="goToStationInfo(sdStations.destStation.Station_Code_4)">{{ sdStations.destStation.Station_Name }}</a> 的 {{ trainClassMap.desc || '所有列車' }}</div>
+			<p>共有 {{ (timeTables | trainClassFilter: trainClassMap.list ).length }} 班列車</p>
 		</div>
 
 		<div class="ui red message" ng-if="success.status == false">
@@ -90,7 +90,7 @@
 				</th>
 			</thead>
 			<tbody>
-				<tr class="pointer {{ ( showDepartured ) ? (item.OriginStopTime.DepartureTime | isDepartured: period.date) : '' }}" ng-repeat="item in timeTables" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
+				<tr class="pointer {{ ( showDepartured ) ? (item.OriginStopTime.DepartureTime | isDepartured: period.date) : '' }}" ng-repeat="item in timeTables | trainClassFilter: trainClassMap.list" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
 					<!-- 車次 -->
 					<td>
 						<h3 class="ui {{ item.DailyTrainInfo.TrainClassificationID | trainClass: true }} header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
@@ -171,7 +171,7 @@
 <div class="mobile tablet only row" ng-if="timeTables.length > 0">
 
 	<div class="ui sixteen wide column">
-		<div class="ui fluid card pointer {{ ( showDepartured ) ? (item.OriginStopTime.DepartureTime | isDepartured: period.date) : '' }}" ng-repeat="item in timeTables" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
+		<div class="ui fluid card pointer {{ ( showDepartured ) ? (item.OriginStopTime.DepartureTime | isDepartured: period.date) : '' }}" ng-repeat="item in timeTables | trainClassFilter: trainClassMap.list" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
 
 			<div class="content">
 				<!-- 經由 -->

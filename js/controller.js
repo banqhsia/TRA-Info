@@ -23,6 +23,7 @@ TRAExt
 	$scope.sdStations = JSON.parse(localStorage.getItem('sdStations') );
 	$scope.period = JSON.parse(localStorage.getItem('period') );
 	$scope.fares = JSON.parse(localStorage.getItem('fares')) || undefined;
+	$scope.trainClassMap = JSON.parse(localStorage.getItem('trainClassMap'));
 
 	// Search Handler
 	$scope.search = function () {
@@ -36,6 +37,21 @@ TRAExt
 
 		// Split string by whitespace
 		var keywordArray = Data.strToArray($scope.keyword) || false;
+
+		// ---- START of finding trainClassList (for filter)
+		// Find which index of the array is train class definition `自強`, `莒光`...
+		var trainClassIndex = keywordArray.findIndex( function (item) {
+			return Data.searchTrainClass( item.toLowerCase() );
+		});
+
+		// Find the list of class description. eg [1100, 1101, 1102, 1107, 1108] for `自強號`
+		// The list is for filter
+		$scope.trainClassMap = Data.searchTrainClass( keywordArray[trainClassIndex] );
+
+		// Remove the train class description from `keywordArray` to prevent impacting others
+		if (trainClassIndex != -1) keywordArray.splice(trainClassIndex, 1);
+
+		// ---- END of finding trainClassIndex
 
 		// Get date. Return array.
 		$scope.period = Data.searchDate(keywordArray[2]);
@@ -83,6 +99,9 @@ TRAExt
 				Data.setItem('sdStations', $scope.sdStations);
 				Data.setItem('period', $scope.period);
 				Data.setItem('fares', $scope.fares);
+				( $scope.trainClassMap )
+					? Data.setItem('trainClassMap', $scope.trainClassMap)
+					: localStorage.removeItem('trainClassMap');
 			})
 		}
 		else {
@@ -288,6 +307,7 @@ TRAExt
 
 	}
 })
+
 // Determine if the train is delay.
 // t: TrainNo, delay: Delay info given from controller->view
 .filter('isDelay', function($filter){
@@ -300,6 +320,18 @@ TRAExt
 	}
 })
 
+// trainClassFilter. Filter train class by the class list
+// timeTables: the time table list;  trainClassList[array]: the list is filter by the array.
+.filter('trainClassFilter', function($filter){
+    return function(timeTables, trainClassList){
+		// return the original array if the list not sets.
+        if( !trainClassList ) return timeTables;
+
+        return $filter("filter")(timeTables, function(item){
+            return trainClassList.indexOf( Number(item.DailyTrainInfo.TrainClassificationID) ) != -1;
+        });
+    };
+})
 
 .service('Data', function($filter) {
 
@@ -320,6 +352,16 @@ TRAExt
 	// return keyword Array
 	this.strToArray = function (s) {
 		return s.replace(/\s{1,}/ig, ' ').split(' ');
+	}
+
+	// return the result of searching `trainClassMap`.
+	// undefined is returned if there's no such train class definition
+	this.searchTrainClass = function (def) {
+		for (i in trainClassMap) {
+			if ( trainClassMap[i].classDef.indexOf(def) != -1  ) {
+				return  trainClassMap[i].classDetail;
+			}
+		}
 	}
 
 	// Trun date description into date offset. Calculated by moment.js
