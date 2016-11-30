@@ -106,10 +106,24 @@ var trainClass = [
 
 var trainClassMap = [
 	{
-		"classDef": ["普悠瑪", "普悠瑪號", "太魯閣", "太魯閣號", "滷蛋", "太滷蛋", "番鴨", "紅番鴨", "傾斜式", "傾斜式列車", "taroko", "puyuma"],
+		"classDef": ["傾斜式", "傾斜式列車"],
 		"classDetail": {
 			"list": [1102, 1107],
 			"desc": "傾斜式列車",
+		}
+	},
+	{
+		"classDef": ["普悠瑪", "普悠瑪號", "番鴨", "紅番鴨", "puyuma"],
+		"classDetail": {
+			"list": [1107],
+			"desc": "普悠瑪號",
+		}
+	},
+	{
+		"classDef": ["太魯閣", "太魯閣號", "滷蛋", "太魯蛋", "taroko"],
+		"classDetail": {
+			"list": [1102],
+			"desc": "太魯閣號",
 		}
 	},
 	{
