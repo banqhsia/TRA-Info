@@ -30,8 +30,16 @@
 		</div>
 
 		<div class="ui message" ng-if="timeTables">
-			<div class="header"> {{ period.humanize }}，<a class="pointer" ng-click="goToStationInfo(sdStations.startStation.Station_Code_4)">{{ sdStations.startStation.Station_Name }}</a> 到 <a class="pointer" ng-click="goToStationInfo(sdStations.destStation.Station_Code_4)">{{ sdStations.destStation.Station_Name }}</a> 的 {{ trainClassMap.desc || '所有列車' }}</div>
-			<p>共有 {{ (timeTables | trainClassFilter: trainClassMap.list ).length }} 班列車</p>
+			<div class="header">
+				{{ period.humanize }}，
+				<a class="pointer" ng-click="goToStationInfo(sdStations.startStation.Station_Code_4)">{{ sdStations.startStation.Station_Name }}</a> 到
+				<a class="pointer" ng-click="goToStationInfo(sdStations.destStation.Station_Code_4)">{{ sdStations.destStation.Station_Name }}</a>
+				的 {{ trainClassMap.desc || '所有列車' }}<i class="close brown link icon" ng-click="clearFilter()" ng-if="trainClassMap"></i>
+			</div>
+			<p>
+				共有 {{ timeTables.length }} 班列車
+				<span ng-if="trainClassMap">，顯示 {{ (timeTables | trainClassFilter: trainClassMap.list ).length }} 個結果</span>
+			</p>
 		</div>
 
 		<div class="ui red message" ng-if="success.status == false">

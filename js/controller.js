@@ -129,6 +129,12 @@ TRAExt
 		localStorage.clear();
 	}
 
+	// Clear timeTables filter && localStorage.trainClassMap
+	$scope.clearFilter = function () {
+		$scope.trainClassMap = null;
+		localStorage.removeItem('trainClassMap');
+	}
+
 	// Handle table row onclick. Redirect to train info.
 	$scope.goToTrainInfo = function (t) {
 		$state.go('train', { train: t, date: $scope.period.date });
