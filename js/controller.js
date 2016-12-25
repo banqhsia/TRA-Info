@@ -306,10 +306,10 @@ TRAExt
 		var now	= moment().format('HH:mm');
 
 		return ( !moment(today).isSame(date) )
-			? ''
+			? false
 			: ( moment(now, 'HH:mm').isAfter( moment(departure, 'HH:mm')) )
-				? 'display-none'
-				: '';
+				? true
+				: false;
 
 	}
 })

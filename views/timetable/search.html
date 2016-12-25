@@ -49,7 +49,7 @@
 
 		<!-- 隱藏已離站列車 toggle -->
 		<div class="ui toggle checkbox" ng-show="period.today && timeTables">
-			<input type="checkbox" ng-model="showDepartured" ng-init="showDepartured = true">
+			<input type="checkbox" ng-model="hideDepartured" ng-init="hideDepartured = true">
 			<label>隱藏已離站列車</label>
 		</div>
 
@@ -98,7 +98,7 @@
 				</th>
 			</thead>
 			<tbody>
-				<tr class="pointer {{ ( showDepartured ) ? (item.OriginStopTime.DepartureTime | isDepartured: period.date) : '' }}" ng-repeat="item in timeTables | trainClassFilter: trainClassMap.list" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
+				<tr class="pointer" ng-hide="( hideDepartured ) && (item.OriginStopTime.DepartureTime | isDepartured: period.date)" ng-repeat="item in timeTables | trainClassFilter: trainClassMap.list" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
 					<!-- 車次 -->
 					<td>
 						<h3 class="ui {{ item.DailyTrainInfo.TrainClassificationID | trainClass: true }} header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
@@ -179,7 +179,7 @@
 <div class="mobile tablet only row" ng-if="timeTables.length > 0">
 
 	<div class="ui sixteen wide column">
-		<div class="ui fluid card pointer {{ ( showDepartured ) ? (item.OriginStopTime.DepartureTime | isDepartured: period.date) : '' }}" ng-repeat="item in timeTables | trainClassFilter: trainClassMap.list" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
+		<div class="ui fluid card pointer" ng-hide="( hideDepartured ) && (item.OriginStopTime.DepartureTime | isDepartured: period.date)" ng-repeat="item in timeTables | trainClassFilter: trainClassMap.list" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
 
 			<div class="content">
 				<!-- 經由 -->
