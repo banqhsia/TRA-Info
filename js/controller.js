@@ -376,91 +376,74 @@ TRAExt
 
 		d = d || '';
 
-		if ( d.match(/(下)?(週|星期|禮拜)(一|二|三|四|五|六|日|天)/) ) {
+		// Year Handling format
+		var yearCondition = ['YYYY-M-D', 'YYYY年M月D日', 'YYYY/M/D'];
+		// Month && Day only handling format
+		var noYearCondition = ['M-D', 'M月D日', 'M/D', 'M月D'];
 
-			// Replace '禮拜' to '星期';
-			d = d.replace('禮拜', '星期');
+		function getToday() {
+			return moment().format('YYYY-MM-DD');
+		}
+		// Get the weekday by given string
+		function getDay(d) {
+			return moment().isoWeekday(d);
+		}
+		// Check if the given condition matches the format of date
+		// It's an alias of `moment.js`
+		function isValidDate(param) {
+			return moment(d, param, true).isValid();
+		}
 
-			// If contains `下` then stands for `NEXT`
-			if ( /^下/.test(d) ) {
-				// Remove `下` of the start of String, and add 1 week for the next.
-				var m = getDay( d.replace(/下/g, '') ).add( 1 , 'WEEK');
-			}
-			// Else: normal weekday
-			else {
+		// Get the moment() instance by many ways
+		var m = (function() {
+
+			// If matches the following format (下週一, 週三, 星期六, 禮拜天... etc...)
+			if ( d.match(/(下)?(週|星期|禮拜)(一|二|三|四|五|六|日|天)/) ) {
+
+				// Replace '禮拜' to '星期'
+				d = d.replace('禮拜', '星期');
+
+				// If contains `下` then stands for `NEXT`
+				if ( /^下/.test(d) ) {
+					// Remove `下` of the start of String, and add 1 week for the `next`.
+					return getDay( d.replace(/下/g, '') ).add( 1 , 'WEEK');
+				}
+
 				// Determine if the date is before today or not. If so, get the next weekday
-				if ( getDay(d).isBefore(moment().format('YYYY-MM-DD')) ) {
-					var m = getDay(d).add( 1 , 'WEEK');
-				}
-				else {
-					// Return normal weekday
-					var m = getDay(d);
+				if ( getDay(d).isBefore( getToday() ) ) {
+					return getDay(d).add( 1 , 'WEEK');
 				}
 			}
 
-			// Get the weekday by given string
-			function getDay(d) {
-				return moment().isoWeekday(d);
+			// If matches the `Year` format
+			if ( yearCondition.map( isValidDate ).includes(true) ) {
+				return moment(d, 'YYYY-MM-DD');
 			}
-		}
-		else {
 
-			// Determine if the date is almost valid
-			if ( moment(d, 'YYYY-MM-DD').isValid() || moment(d, 'MM-DD').isValid() ) {
-
-				var yearCondition = [
-					moment(d, 'YYYY-M-D', true).isValid(),
-					moment(d, 'YYYY年M月D日', true).isValid(),
-					moment(d, 'YYYY/M/D', true).isValid()
-				]
-
-				if ( yearCondition.indexOf(true) !== -1 ) {
-
-					var m = moment(d, 'YYYY-MM-DD');
-
-				}
-				else {
-
-					var noYearCondition = [
-						moment(d, 'M-D', true).isValid(),
-						moment(d, 'M月D日', true).isValid(),
-						moment(d, 'M/D', true).isValid(),
-					]
-
-					if ( noYearCondition.indexOf(true) !== -1 ) {
-
-						if (  moment(d, 'MM-DD').isBefore(moment().format('YYYY-MM-DD')) ) {
-							var m = moment(d, 'M-D' ).add(1, 'year');
-						}
-						else {
-							var m = moment(d, 'M-D' );
-						}
-					}
-					else {
-
-						var m = moment();
-					}
-
-				}
+			// If matches the `noYear` format
+			if ( noYearCondition.map( isValidDate ).includes(true) ) {
+				return (  moment(d, 'MM-DD').isBefore( getToday() ) )
+					? moment(d, 'M-D' ).add(1, 'year')
+					: moment(d, 'M-D' );
 			}
-			else {
 
-				try {
-					var v = $filter('filter')( period, { dateDefine: d || false }, true )[0].dateValue;
-				} catch (e) {
-					var v = 0;
-				}
-				var m = moment().add(v, 'DAYS');
+			// Match 今天, 明天, 大後天 .. etc.., get the offset against today
+			try {
+				var v = $filter('filter')( period, { dateDefine: d || false }, true )[0].dateValue;
+			} catch (e) {
+				var v = 0;
 			}
-		}
 
-		var result = {
+ 			return moment().add(v, 'DAYS');
+
+		})();
+
+		return {
 			'date': m.format('YYYY-MM-DD'),
 			'humanize': m.format('YYYY年MM月DD日 (dddd)'),
-			'today': moment( moment().format('YYYY-MM-DD') ).isSame( m.format('YYYY-MM-DD') ),
+			'today': moment( getToday() ).isSame( m.format('YYYY-MM-DD') ),
 		};
 
-		return result;
 	}
 
 	// Search stations by a given key/value set.
