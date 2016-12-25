@@ -370,26 +370,78 @@ TRAExt
 		}
 	}
 
-	// Trun date description into date offset. Calculated by moment.js
+	// Turn date description into date. Calculated by moment.js
 	// return Date String
 	this.searchDate = function (d) {
 
 		d = d || '';
 
-		if ( d.match(/(週|星期)(一|二|三|四|五|六|日)|(星期天)/) ) {
-			var m = moment().days(d);
+		if ( d.match(/(下)?(週|星期|禮拜)(一|二|三|四|五|六|日|天)/) ) {
+
+			// Replace '禮拜' to '星期';
+			d = d.replace('禮拜', '星期');
+
+			// If contains `下` then stands for `NEXT`
+			if ( /^下/.test(d) ) {
+				// Remove `下` of the start of String, and add 1 week for the next.
+				var m = getDay( d.replace(/下/g, '') ).add( 1 , 'WEEK');
+			}
+			// Else: normal weekday
+			else {
+				// Determine if the date is before today or not. If so, get the next weekday
+				if ( getDay(d).isBefore(moment().format('YYYY-MM-DD')) ) {
+					var m = getDay(d).add( 1 , 'WEEK');
+				}
+				else {
+					// Return normal weekday
+					var m = getDay(d);
+				}
+			}
+
+			// Get the weekday by given string
+			function getDay(d) {
+				return moment().isoWeekday(d);
+			}
 		}
 		else {
 
 			// Determine if the date is almost valid
 			if ( moment(d, 'YYYY-MM-DD').isValid() || moment(d, 'MM-DD').isValid() ) {
 
-				// To know what they really is, return a moment() object.
-				var m = ( moment(d, 'YYYY-M-D', true).isValid() || moment(d, 'YYYY年M月D日', true).isValid() || moment(d, 'YYYY/M/D', true).isValid() )
-					? m = moment(d, 'YYYY-M-D')
-					: ( moment(d, 'M-D', true).isValid() || moment(d, 'M月D日', true).isValid() || moment(d, 'M/D', true).isValid() )
-						? m = moment(d, 'MM-DD')
-						: m = moment();
+				var yearCondition = [
+					moment(d, 'YYYY-M-D', true).isValid(),
+					moment(d, 'YYYY年M月D日', true).isValid(),
+					moment(d, 'YYYY/M/D', true).isValid()
+				]
+
+				if ( yearCondition.indexOf(true) !== -1 ) {
+
+					var m = moment(d, 'YYYY-MM-DD');
+
+				}
+				else {
+
+					var noYearCondition = [
+						moment(d, 'M-D', true).isValid(),
+						moment(d, 'M月D日', true).isValid(),
+						moment(d, 'M/D', true).isValid(),
+					]
+
+					if ( noYearCondition.indexOf(true) !== -1 ) {
+
+						if (  moment(d, 'MM-DD').isBefore(moment().format('YYYY-MM-DD')) ) {
+							var m = moment(d, 'M-D' ).add(1, 'year');
+						}
+						else {
+							var m = moment(d, 'M-D' );
+						}
+					}
+					else {
+
+						var m = moment();
+					}
+
+				}
 			}
 			else {
 
@@ -402,11 +454,13 @@ TRAExt
 			}
 		}
 
-		return {
+		var result = {
 			'date': m.format('YYYY-MM-DD'),
-			'humanize': m.format('MM月DD日 (dddd)'),
+			'humanize': m.format('YYYY年MM月DD日 (dddd)'),
 			'today': moment( moment().format('YYYY-MM-DD') ).isSame( m.format('YYYY-MM-DD') ),
 		};
+
+		return result;
 	}
 
 	// Search stations by a given key/value set.
