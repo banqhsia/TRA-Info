@@ -413,6 +413,8 @@ TRAExt
 				if ( getDay(d).isBefore( getToday() ) ) {
 					return getDay(d).add( 1 , 'WEEK');
 				}
+
+				return getDay(d);
 			}
 
 			// If matches the `Year` format
