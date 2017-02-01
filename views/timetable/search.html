@@ -29,18 +29,59 @@
 			<p>輸入起迄站 (+時間) (+車種) 即可。「中壢 新竹」「新左營 鳳山 11/7」「嘉義 民雄 週四 莒光號」</p>
 		</div>
 
-		<div class="ui message" ng-if="timeTables">
-			<div class="header">
-				{{ period.humanize }}，
-				<a class="pointer" ng-click="goToStationInfo(sdStations.startStation.Station_Code_4)">{{ sdStations.startStation.Station_Name }}</a> 到
-				<a class="pointer" ng-click="goToStationInfo(sdStations.destStation.Station_Code_4)">{{ sdStations.destStation.Station_Name }}</a>
-				的 {{ trainClassMap.desc || '所有列車' }}<i class="close brown link icon" ng-click="clearFilter()" ng-if="trainClassMap"></i>
+		<!-- Info Segment -->
+		<div class="ui secondary segment" ng-if="timeTables">
+			<div class="ui grid stackable">
+
+				<div class="ten wide column message">
+					<h3 class="ui header">
+
+						{{ period.humanize }}
+
+						<div class="ui sub header">
+							<a class="pointer" ng-click="goToStationInfo(sdStations.startStation.Station_Code_4)">{{ sdStations.startStation.Station_Name }}</a> 到
+							<a class="pointer" ng-click="goToStationInfo(sdStations.destStation.Station_Code_4)">{{ sdStations.destStation.Station_Name }}</a>
+
+							的
+							<span class="ui pointer" ng-click="clearFilter()">
+								{{ trainClassMap.desc || '所有列車' }}
+								<i class="delete red icon" ng-if="trainClassMap"></i>
+							</span>
+
+						</div>
+
+					</h3>
+					<p>
+						共有 {{ timeTables.length }} 班列車
+						<span ng-if="trainClassMap">，顯示 {{ (timeTables | trainClassFilter: trainClassMap.list ).length }} 個結果</span>
+					</p>
+				</div>
+
+				<!-- Fares Table -->
+				<div class="ui six wide column" ng-if="fares">
+					<table class="ui very compact unstackable very basic table">
+						<thead>
+							<tr>
+								<th class="two wide"></th>
+								<th class="two wide">自強</th>
+								<th class="two wide">莒光</th>
+								<th class="two wide">區間</th>
+								<th class="two wide">刷卡</th>
+							</tr>
+						</thead>
+						<tbody>
+							<tr>
+								<td>票價</td>
+								<td>{{ ( "1100" | trainFare: fares) | currency: '$':0 || '' }}</td>
+								<td>{{ ( "1110" | trainFare: fares) | currency: '$':0 || '' }}</td>
+								<td>{{ ( "1120" | trainFare: fares) | currency: '$':0 || '' }}</td>
+								<td>{{ ( "1120" | trainFare: fares) * 0.9 | currency: '$':0 || '' }}</td>
+							</tr>
+						</tbody>
+					</table>
+				</div> <!-- END OF SIX WIDE COLUMN -->
 			</div>
-			<p>
-				共有 {{ timeTables.length }} 班列車
-				<span ng-if="trainClassMap">，顯示 {{ (timeTables | trainClassFilter: trainClassMap.list ).length }} 個結果</span>
-			</p>
-		</div>
+		</div> <!-- END OF SECONDARY SEGMENT -->
 
 		<div class="ui red message" ng-if="success.status == false">
 			<div class="header">{{ success.title }}</div>
