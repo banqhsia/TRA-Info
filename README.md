@@ -13,7 +13,7 @@ No bullshit.
 查詢語法
 
     起站 迄站 [時間] [車種]
-    
+
 
 * **時間、車種為非必要選填**，若無提供則為今天的所有列車
 * 關鍵詞之間以空白分隔
@@ -34,7 +34,7 @@ No bullshit.
 請用全名或車站代碼，並以 **空白** 隔開。車站全名沒有縮寫 (<del>北車</del>、<del>高火</del>)
 
 #### 車種支援
-`莒光號` `自強號` `區間車` `對號` `站票`..... 
+`莒光號` `自強號` `區間車` `對號` `站票`.....
 
 ## 資料來源
 
@@ -44,4 +44,6 @@ No bullshit.
 
 * `Author`: [Benyi] (http://benyi.tw)
 * `Github`:  [https://github.com/banqhsia/tra-info] (https://github.com/banqhsia/tra-info)
+* `Email`: banqhsia _AT_ msn.com
 如果有任何問題，歡迎來信詢問
+本站資料僅供參考，詳細以臺鐵公告及現場狀況為準

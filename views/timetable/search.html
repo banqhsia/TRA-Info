@@ -33,7 +33,7 @@
 		<div class="ui secondary segment" ng-if="timeTables">
 			<div class="ui grid stackable">
 
-				<div class="ten wide column message">
+				<div class="eleven wide column message">
 					<h3 class="ui header">
 
 						{{ period.humanize }}
@@ -58,7 +58,7 @@
 				</div>
 
 				<!-- Fares Table -->
-				<div class="ui six wide column" ng-if="fares">
+				<div class="ui five wide column" ng-if="fares">
 					<table class="ui very compact unstackable very basic table">
 						<thead>
 							<tr>
@@ -66,7 +66,6 @@
 								<th class="two wide">自強</th>
 								<th class="two wide">莒光</th>
 								<th class="two wide">區間</th>
-								<th class="two wide">刷卡</th>
 							</tr>
 						</thead>
 						<tbody>
@@ -75,7 +74,6 @@
 								<td>{{ ( "1100" | trainFare: fares) | currency: '$':0 || '' }}</td>
 								<td>{{ ( "1110" | trainFare: fares) | currency: '$':0 || '' }}</td>
 								<td>{{ ( "1120" | trainFare: fares) | currency: '$':0 || '' }}</td>
-								<td>{{ ( "1120" | trainFare: fares) * 0.9 | currency: '$':0 || '' }}</td>
 							</tr>
 						</tbody>
 					</table>
