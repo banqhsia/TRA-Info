@@ -103,7 +103,14 @@
 					</td>
 
 					<!-- 終點站 -->
-					<td class="center aligned">{{ item.EndingStationName }}</td>
+					<td class="center aligned">
+						<h5 class="ui header">
+							{{ (item.EndingStationID | searchStation).Station_Name }}
+							<div class=" sub header">
+								{{ (item.EndingStationID | searchStation).Station_EName }}
+							</div>
+						</h5>
+					</td>
 
 				</tr>
 			</tbody>
@@ -142,7 +149,10 @@
 						<!-- 箭頭 -->
 						<div class="two wide column"><i class="arrow right icon"></i></div>
 						<!-- 終點站 -->
-						<div class="three wide column">{{ item.EndingStationName }}</div>
+						<div class="seven wide column">
+							{{ (item.EndingStationID | searchStation).Station_Name }}
+							{{ (item.EndingStationID | searchStation).Station_EName }}
+						</div>
 					</div>
 				</div>
 

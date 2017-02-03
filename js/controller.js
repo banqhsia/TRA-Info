@@ -338,6 +338,13 @@ TRAExt
         });
     };
 })
+// search station filter
+// Alias of Data.searchStation service
+.filter('searchStation', function($filter, Data){
+	return function(stationCode){
+		return Data.searchStation(stationCode);
+	}
+})
 
 .service('Data', function($filter) {
 

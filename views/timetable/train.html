@@ -91,8 +91,8 @@
 						<h4 class="ui header">
 							<i class="icon grey">{{ item.StopSequence }}</i>
 							<div class="content pointer" ng-click="goToStationInfo(item.StationID)">
-								{{ item.StationName.Zh_tw }}
-								<div class="sub header">{{ item.StationName.En }}</div>
+								{{ (item.StationID | searchStation).Station_Name }}
+								<div class="sub header">{{ (item.StationID | searchStation).Station_EName }}</div>
 							</div>
 						</h4>
 					</td>

@@ -391,7 +391,7 @@ var stations = [
   {
     "Station_Code_4": 1033,
     "Station_Name": "北湖",
-    "Station_EName": "Beihu(China University of Technology)",
+    "Station_EName": "Beihu",
     "Station_Code_3": 271,
     "WebsiteName": "北湖站",
     "EnglishName": "Beihu",
