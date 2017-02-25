@@ -49,6 +49,12 @@ var trainClass = [
 		"classFare": "成自"
 	},
 	{
+		"classNo": "1103",
+		"classDesc": "自強",
+		"classColor": "red",
+		"classFare": "成自"
+	},
+	{
 		"classNo": "1107",
 		"classDesc": "普悠瑪",
 		"classColor": "pink",
@@ -62,6 +68,12 @@ var trainClass = [
 	},
 	{
 		"classNo": "1110",
+		"classDesc": "莒光",
+		"classColor": "orange",
+		"classFare": "成莒"
+	},
+	{
+		"classNo": "1111",
 		"classDesc": "莒光",
 		"classColor": "orange",
 		"classFare": "成莒"
@@ -129,7 +141,7 @@ var trainClassMap = [
 	{
 		"classDef": ["自強", "自強號", "快快", "快車", "tc"],
 		"classDetail": {
-			"list": [1100, 1101, 1102, 1107, 1108],
+			"list": [1100, 1101, 1102, 1103, 1107, 1108],
 			"desc": "自強號",
 		}
 	},
@@ -164,7 +176,7 @@ var trainClassMap = [
 	{
 		"classDef": ["對號", "對號車", "對號列車", "椅子", "座位", "坐票", "seat"],
 		"classDetail": {
-			"list": [1102, 1107, 1100, 1101, 1102, 1107, 1108, 1110, 1114, 1115],
+			"list": [1102, 1107, 1100, 1101, 1102, 1103, 1107, 1108, 1110, 1111, 1114, 1115],
 			"desc": "對號列車",
 		}
 	},
