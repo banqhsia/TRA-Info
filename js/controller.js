@@ -482,7 +482,7 @@ TRAExt
 
 		var deferred = $q.defer();
 
-		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/OD/'+ original +'/to/'+ destination +'/'+ date +'?$format=JSON')
+		$http.get('https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/OD/'+ original +'/to/'+ destination +'/'+ date +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();
@@ -499,7 +499,7 @@ TRAExt
 
 		var deferred = $q.defer();
 
-		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/'+ train +'/'+ date +'?$format=JSON')
+		$http.get('https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/'+ train +'/'+ date +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();
@@ -516,7 +516,7 @@ TRAExt
 
 		var deferred = $q.defer();
 
-		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/Station/'+ station +'/'+ date +'?$format=JSON')
+		$http.get('https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/Station/'+ station +'/'+ date +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();
@@ -533,7 +533,7 @@ TRAExt
 
 		var deferred = $q.defer();
 
-		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/ODFare/'+ original +'/to/'+ destination +'?$format=JSON')
+		$http.get('https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/ODFare/'+ original +'/to/'+ destination +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();
@@ -550,7 +550,7 @@ TRAExt
 
 		var deferred = $q.defer();
 
-		$http.get('http://ptx.transportdata.tw/MOTC/v2/Rail/TRA/LiveBoard/'+ original +'?$format=JSON')
+		$http.get('https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/LiveBoard/'+ original +'?$format=JSON')
 		.success( function(response) {
 			data = response;
 			deferred.resolve();
