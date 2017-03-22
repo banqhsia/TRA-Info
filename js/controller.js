@@ -281,7 +281,7 @@ TRAExt
 		var r = moment.utc(
 			moment(e,'HH:mm').diff(
 			moment(s,'HH:mm'))
-		).format('H[小時]m[分鐘]').replace(/^0小時/g, '');
+		).format('H[小時]m[分鐘]').replace(/^0小時/g, '');
 		// Handle `Invalid date`. Avoid to display.
 		return ( r == 'Invalid date' ) ? '' : r;
 	}
@@ -407,7 +407,7 @@ TRAExt
 			// If matches the following format (下週一, 週三, 星期六, 禮拜天... etc...)
 			if ( d.match(/(下)?(週|星期|禮拜)(一|二|三|四|五|六|日|天)/) ) {
 
-				// Replace '禮拜' to '星期'
+				// Replace '禮拜' to '星期'
 				d = d.replace('禮拜', '星期');
 
 				// If contains `下` then stands for `NEXT`
