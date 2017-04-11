@@ -162,7 +162,11 @@
 					<!-- 車次 -->
 					<td>
 						<h3 class="ui {{ item.DailyTrainInfo.TrainClassificationID | trainClass: true }} header">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
-							<div class="sub header">{{ item.DailyTrainInfo.TrainNo }}</div>
+							<div class="sub header">
+								{{ item.DailyTrainInfo.TrainNo }}<br>
+								<!-- 終點站 -->
+								{{ ( item.DailyTrainInfo.EndingStationID | searchStation).Station_Name }}
+							</div>
 						</h3>
 					</td>
 
@@ -242,11 +246,19 @@
 		<div class="ui fluid card pointer" ng-hide="( hideDepartured ) && (item.OriginStopTime.DepartureTime | isDepartured: period.date)" ng-repeat="item in timeTables | trainClassFilter: trainClassMap.list" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
 
 			<div class="content">
+
 				<!-- 經由 -->
 				<div class="right floated ui">
 					<a class="ui circular basic {{ item.DailyTrainInfo.TripLine | tripLine: true }} label" ng-if="item.DailyTrainInfo.TripLine">
 						{{ item.DailyTrainInfo.TripLine | tripLine }}
 				   </a>
+				</div>
+
+				<!-- 誤點 -->
+				<div class="right floated ui">
+					<div ng-if="period.today && delay && (item.DailyTrainInfo.TrainNo | isDelay: delay) !== false">
+						<div class="ui circular empty {{ (item.DailyTrainInfo.TrainNo | isDelay: delay) == 0 ? 'green' : 'yellow' }} horizontal medium label"></div>{{ (item.DailyTrainInfo.TrainNo | isDelay: delay) ? (item.DailyTrainInfo.TrainNo | isDelay: delay) : ''}}
+					</div>
 				</div>
 
 				<!-- 車次 -->
@@ -256,12 +268,6 @@
 					</h4>
 				</div>
 
-				<!-- 誤點 -->
-				<div class="meta">
-					<div ng-if="period.today && delay && (item.DailyTrainInfo.TrainNo | isDelay: delay) !== false">
-						<div class="ui circular empty {{ (item.DailyTrainInfo.TrainNo | isDelay: delay) == 0 ? 'green' : 'yellow' }} horizontal medium label"></div>{{ (item.DailyTrainInfo.TrainNo | isDelay: delay) ? (item.DailyTrainInfo.TrainNo | isDelay: delay) : ''}}
-					</div>
-				</div>
 				<div class="description">
 					<div class="ui grid">
 						<!-- 出發時間 -->
