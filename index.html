@@ -1,74 +1,15 @@
 <!DOCTYPE html>
-<html ng-app="TRAExt">
-	<head>
-		<meta charset="utf-8">
-		<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=0">
-		<meta name="og:title" content="臺鐵資訊查詢">
-		<meta name="og:description" content="快速地查詢 明天 後天 某天 的火車時刻表！">
-		<meta property="og:image" content="img/og-image.png">
-		<meta property="og:image:width" content="624">
-		<meta property="og:image:height" content="327">
-		<meta name="author" content="Benyi Hsia">
+<html>
 
-		<title>臺鐵資訊查詢</title>
+<head>
+  <meta charset="utf-8">
+  <title>trainfo</title>
 
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-		<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.7/angular.min.js"></script>
-		<script src="js/semantic.min.js"></script>
-		<script src="js/data.js"></script>
-		<script src="js/angular-ui-router.js"></script>
-		<script src="js/moment.min.js"></script>
-		<script src="js/app.js"></script>
-		<script src="js/controller.js"></script>
+</head>
 
-		<link rel="stylesheet" href="css/semantic.min.css" media="screen" title="no title">
-		<link rel="stylesheet" href="css/style.css" media="screen" title="no title">
+<body>
+  <div id="app"></div>
+  <!-- built files will be auto injected -->
+</body>
 
-		<!-- Apple Web Clip Home Screen Setting -->
-		<link rel="apple-touch-icon" href="img/logo.png"/>
-		<link rel="apple-touch-startup-image" sizes="1080x1920" href="img/splashscreen.png">
-		<meta name="apple-mobile-web-app-capable" content="yes" />
-		<meta name="apple-mobile-web-app-status-bar-style" content="#A3A3A3" />
-
-	</head>
-	<body>
-
-		<div class="ui grid stackable container">
-			<h2 class="row">
-				<div class="ui sixteen wide column">
-
-					<h2 class="ui header">
-						<!-- logo image -->
-						<img class="ui image rounded" src="img/logo.png">
-						<!-- header text -->
-						<div class="content">
-							臺鐵資訊查詢
-							<div class="ui sub header">
-								TRA Information
-							</div>
-						</div>
-					</h2>
-
-				</div>
-			</h2>
-
-			<div class="row">
-				<div class="ui computer tablet only sixteen wide column">
-					<div class="fb-like" data-href="http://benyi.tw/trainfo/" data-layout="standard" data-action="like" data-size="small" data-show-faces="false" data-share="true"></div>
-				</div>
-			</div>
-
-			<div class="row">
-				<div class="ui secondary menu">
-					<a class="item" href="#/timetable">時刻表查詢</a>
-					<a class="item" href="#/station">車站資訊查詢</a>
-					<a class="item" href="#/about">關於</a>
-				</div>
-			</div>
-
-		</div>
-
-		<div class="ui grid stackable container" ui-view></div>
-
-	</body>
 </html>
