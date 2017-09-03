@@ -7,11 +7,9 @@ Vue.use(Router)
 export default new Router({
   mode: 'history',
   linkActiveClass: 'active',
-  routes: [
-    {
+  routes: [{
       path: '/',
-      name: 'Hello',
-      component: Hello
+      redirect: '/timetable'
     },
     {
       path: '/timetable',
@@ -22,7 +20,11 @@ export default new Router({
       path: '/station',
       name: 'Station',
       component: require('../components/station/List.vue').default
-    }
-
+    },
+    {
+      path: '/about',
+      name: 'About',
+      component: require('../components/templates/About.vue').default
+    },
   ]
 })
