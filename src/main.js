@@ -9,6 +9,11 @@ import router from './router'
  */
 require('semantic-ui/dist/semantic.min.css');
 
+/**
+ * Extra Custom Scripts
+ */
+require('./helper.js');
+
 Vue.config.productionTip = false
 
 /* eslint-disable no-new */
