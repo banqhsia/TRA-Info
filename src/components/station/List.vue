@@ -7,7 +7,7 @@
       <div class="ui sixteen wide column">
 
         <div class="ui form">
-          <div class="field">
+          <div class="field" :class="{ error: !station.length }">
             <input type="text" placeholder="車站名稱、代碼" autofocus="" v-model.trim="input.keyword">
           </div>
         </div>
