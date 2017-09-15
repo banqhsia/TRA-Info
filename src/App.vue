@@ -6,7 +6,7 @@
 
           <h2 class="ui header">
             <!-- logo image -->
-            <img class="ui image rounded" src="static/img/logo.png">
+            <img class="ui image rounded" src="/static/img/logo.png">
             <!-- header text -->
             <div class="content">
               臺鐵資訊查詢
@@ -30,9 +30,9 @@
         <div class="ui sixteen wide column">
 
           <div class="ui tabular menu">
-            <router-link class="item" to="timetable">時刻表查詢</router-link>
-            <router-link class="item" to="station">車站資訊查詢</router-link>
-            <router-link class="item" to="about">關於</router-link>
+            <router-link class="item" to="/timetable">時刻表查詢</router-link>
+            <router-link class="item" to="/station">車站資訊查詢</router-link>
+            <router-link class="item" to="/about">關於</router-link>
           </div>
         </div>
       </div>

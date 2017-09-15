@@ -50,8 +50,7 @@
         </h3>
         <p>
           最近更新日期：{{ moment(status.committer.date).format('YYYY年MM月DD日 HH:mm') }} ( {{ moment(status.committer.date).fromNow() }} )
-          <br>
-          更新訊息：{{ status.message }}
+          <br> 更新訊息：{{ status.message }}
 
         </p>
 

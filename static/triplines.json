@@ -1,0 +1,17 @@
+[
+  {
+    "lineNo": "0",
+    "lineDesc": "",
+    "lineColor": ""
+  },
+  {
+    "lineNo": "1",
+    "lineDesc": "山線",
+    "lineColor": "green"
+  },
+  {
+    "lineNo": "2",
+    "lineDesc": "海線",
+    "lineColor": "blue"
+  }
+]

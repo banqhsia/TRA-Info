@@ -14,7 +14,15 @@ require('semantic-ui/dist/semantic.min.css');
 /**
  * Extra Custom Scripts
  */
-require('./helper.js');
+require('./helpers');
+
+
+/**
+ * Mount components
+ */
+Vue.component('Loading', require('./components/snippets/Loading.vue').default);
+
+
 
 /**
  * Moment.js
@@ -33,5 +41,7 @@ new Vue({
   el: '#app',
   router,
   template: '<App/>',
-  components: { App }
+  components: {
+    App
+  }
 })

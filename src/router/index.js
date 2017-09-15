@@ -22,6 +22,11 @@ export default new Router({
       component: require('../components/station/List.vue').default
     },
     {
+      path: '/station/:station/:date?',
+      name: 'Station.view',
+      component: require('../components/station/Station.vue').default
+    },
+    {
       path: '/about',
       name: 'About',
       component: require('../components/templates/About.vue').default

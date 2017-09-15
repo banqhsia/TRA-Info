@@ -48,7 +48,14 @@
           </thead>
           <tbody>
 
-            <tr class="pointer" v-for="station in station" ng-click="goToStationInfo()">
+            <router-link tag="tr" class="pointer" v-for="station in station" :to="
+              {
+                name: 'Station.view',
+                params: {
+                  station: station.Station_Code_4,
+                  date: '2017-09-15'
+                }
+              }" :key="station.$id">
               <td>
                 <h3 class="ui header">{{ station.Station_Name }}
                   <div class="sub header">{{ station.EnglishName }}</div>
@@ -62,7 +69,7 @@
                   {{ station.EnglishAddress }}
                 </div>
               </td>
-            </tr>
+            </router-link>
           </tbody>
         </table>
 
@@ -82,7 +89,7 @@
         input: {
           keyword: ''
         },
-        stations: stations
+        stations: stations,
       }
     },
     computed: {
@@ -91,16 +98,14 @@
        **/
       station: function () {
 
-        let keyword = this.keyword;
-
-        if (!keyword) return this.stations
+        if (!this.keyword) return this.stations
 
         // Define which field to find
         let target = (/(\d)/.test(this.input.keyword)) ? "Station_Code_3" : "Station_Name";
 
         // Find in stations list
-        return this.stations.filter(function (station) {
-          return station[target].toString().includes(keyword)
+        return this.stations.filter((station) => {
+          return station[target].toString().includes(this.keyword)
         });
       },
       keyword: function () {
