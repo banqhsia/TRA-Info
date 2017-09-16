@@ -1,5 +1,6 @@
 import moment from 'moment'
 import stations from '../../static/stations.json'
+import periods from '../../static/periods.json'
 
 export default {
 
@@ -56,9 +57,7 @@ export default {
   /**
    * Search Date
    */
-  searchDate: function (d) {
-
-    d = d || '';
+  searchDate: function (d = '') {
 
     // Year Handling format
     let yearCondition = ['YYYY-M-D', 'YYYY年M月D日', 'YYYY/M/D'];
@@ -114,13 +113,16 @@ export default {
       }
 
       // Match 今天, 明天, 大後天 .. etc.., get the offset against today
-      // try {
-      //   var v = $filter('filter')(period, {
-      //     dateDefine: d || false
-      //   }, true)[0].dateValue;
-      // } catch (e) {
-      //   var v = 0;
-      // }
+      let v = (() => {
+
+        v = periods.find((period) => {
+          return period.dateDefine == d
+        });
+
+        // Find no result, return `add 0 days` (today)
+        return (v) ? v.dateValue : 0;
+
+      })();
 
       return moment().add(v, 'DAYS');
 

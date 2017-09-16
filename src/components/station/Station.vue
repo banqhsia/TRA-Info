@@ -127,9 +127,9 @@
 
               <!-- 誤點 -->
               <td v-if="delay">
-                <div v-if="isDelay(item.TrainNo, delayInfo, true) ">
-                  <div class="ui circular empty horizontal medium label" :class="isDelay(item.TrainNo, delayInfo, true)"></div>
-                  {{ isDelay( item.TrainNo, delayInfo ) }}
+                <div v-if="isDelay(item.TrainNo, delayInfo, true)">
+                  <div class="ui circular empty horizontal medium label delay-indicator" :class="isDelay(item.TrainNo, delayInfo, true)"></div>
+                  <span>{{ isDelay( item.TrainNo, delayInfo ) }}</span>
                 </div>
               </td>
 
@@ -153,7 +153,6 @@
         station: '',
         trainInfo: [],
         delayInfo: [],
-        period: this.searchDate(this.$route.params.date || false),
         direction: undefined,
         hideDepartured: true,
         status: 'loading',

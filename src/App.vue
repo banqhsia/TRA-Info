@@ -113,5 +113,10 @@
   .departure-time {
     font-size: 1.2em;
   }
+  /* Delay indicator (minutes) */
+
+  .delay-indicator {
+    vertical-align: middle !important;
+  }
 
 </style>

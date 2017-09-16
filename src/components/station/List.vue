@@ -53,7 +53,7 @@
                 name: 'Station.view',
                 params: {
                   station: station.Station_Code_4,
-                  date: '2017-09-15'
+                  date: period.date
                 }
               }" :key="station.$id">
               <td>
