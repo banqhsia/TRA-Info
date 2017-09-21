@@ -1,6 +1,7 @@
 import moment from 'moment'
 import stations from '../../static/stations.json'
 import periods from '../../static/periods.json'
+import trainClassMaps from '../../static/trainclassmaps.json'
 
 export default {
 
@@ -9,7 +10,27 @@ export default {
    * return string with `臺`
    */
   taiTransform: function (w) {
-    return w.replace('台', '臺') || '';
+    return w.replace(/台/g, '臺') || '';
+  },
+
+  /* Replace whitespace more than 1, split into array
+   * return keyword Array
+   */
+  strToArray: function (s) {
+    return s.replace(/\s{1,}/ig, ' ').split(' ');
+  },
+
+  /* return the result of searching `trainClassMap`.
+   * undefined is returned if there's no such train class definition
+   */
+  searchTrainClass: function (def = '') {
+
+    for (let i in trainClassMaps) {
+      if (trainClassMaps[i].classDef.indexOf(def.toLowerCase()) >= 0) {
+        return trainClassMaps[i].classDetail;
+      }
+    }
+
   },
 
   /**
@@ -17,7 +38,7 @@ export default {
    * return JSON Object
    * s: station Name/station Code.
    */
-  searchStation: function (s) {
+  searchStation: function (s = '') {
 
     // Test which field will go on
     let testField = () => {
@@ -45,10 +66,12 @@ export default {
     });
 
     // Remove Station Sub Name from the Object.
-    let removeRegex = /(.+)\s?\((.+)\)/
+    if (r) {
+      let removeRegex = /(.+)\s?\((.+)\)/
 
-    r.Station_EName = r.Station_EName.replace(removeRegex, "$1")
-    r.EnglishName = r.EnglishName.replace(removeRegex, "$1")
+      r.Station_EName = r.Station_EName.replace(removeRegex, "$1")
+      r.EnglishName = r.EnglishName.replace(removeRegex, "$1")
+    }
 
     return r;
 

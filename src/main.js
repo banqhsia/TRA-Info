@@ -28,6 +28,8 @@ Vue.component('Loading', require('./components/snippets/Loading.vue').default);
  * Moment.js
  */
 Vue.prototype.moment = moment;
+Vue.prototype._ = require('lodash');
+
 moment.locale('zh_tw');
 
 Vue.config.productionTip = false
