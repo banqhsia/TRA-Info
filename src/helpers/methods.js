@@ -253,8 +253,32 @@ export default {
     return axios.get(
       'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/LiveBoard/' + station + '?$format=JSON'
     )
-  }
+  },
 
+
+  /**
+   * Get daily timetable with Origin and Destination
+   */
+  getDailyTimeTableOD: function (start, dest) {
+
+    return axios.get(
+      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/OD/' +
+      start + '/to/' + dest + '/' + this.period.date + '?$format=JSON'
+    )
+
+  },
+
+  /**
+   * Get the fares between startStation and destStation
+   */
+  getODFare: function (start, dest) {
+
+    return axios.get(
+      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/ODFare/' +
+      start + '/to/' + dest + '?$format=JSON'
+    )
+
+  },
 
 
 }

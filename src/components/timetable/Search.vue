@@ -438,58 +438,25 @@
 
           this.status = 'loading';
 
-          this.getODFare()
-          this.getDailyTimeTableOD();
-
-          // If it's today, send live board reuqest
-          this.getLiveboard(this.sdStations.startStation.Station_Code_4).then(
-            (response) => {
-              this.delayInfo = response.data;
-            }
-          ) && this.period.today;
-
-        } else {
-          this.status = false;
-        }
-
-      },
-
-      /**
-       * Get the fares between startStation and destStation
-       */
-      getODFare: function () {
-
-        axios.get(
-            'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/ODFare/' +
-            this.sdStations.startStation.Station_Code_4 + '/to/' +
-            this.sdStations.destStation.Station_Code_4 +
-            '?$format=JSON'
-          )
-          .then(
+          /**
+           * Get fares between two station.
+           */
+          this.getODFare(
+            this.sdStations.startStation.Station_Code_4,
+            this.sdStations.destStation.Station_Code_4
+          ).then(
             (response) => {
               this.fares = response.data[0].Fares;
-            },
-            (error) => {
-              this.status = false;
             }
           );
-      },
 
-      /**
-       * Get daily timetable with Origin and Destination
-       */
-      getDailyTimeTableOD: function () {
-
-        axios.get(
-            'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/OD/' +
-            this.sdStations.startStation.Station_Code_4 +
-            '/to/' +
-            this.sdStations.destStation.Station_Code_4 +
-            '/' +
-            this.period.date +
-            '?$format=JSON'
-          )
-          .then(
+          /**
+           * Get Daily TimeTable.
+           */
+          this.getDailyTimeTableOD(
+            this.sdStations.startStation.Station_Code_4,
+            this.sdStations.destStation.Station_Code_4
+          ).then(
             (response) => {
               this.timeTables = response.data;
 
@@ -505,8 +472,21 @@
             (error) => {
               this.status = false;
             }
-          );
+          );;
+
+          // If it's today, send live board reuqest
+          this.getLiveboard(this.sdStations.startStation.Station_Code_4).then(
+            (response) => {
+              this.delayInfo = response.data;
+            }
+          ) && this.period.today;
+
+        } else {
+          this.status = false;
+        }
+
       },
+
 
       /**
        * Return the train fare by searching request result
