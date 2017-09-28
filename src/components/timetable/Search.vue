@@ -26,7 +26,7 @@
 
       <div class="ui sixteen wide column">
 
-        <div class="ui green message" v-if="!timeTablesList.length && status != false && status != 'loading'">
+        <div class="ui green message" v-if="!timeTablesList && status != false && status != 'loading'">
           <div class="header">請輸入關鍵字查詢列車時刻</div>
           <p>輸入起迄站 (+時間) (+車種) 即可。「中壢 新竹」「新左營 鳳山 11/7」「嘉義 民雄 週四 莒光號」</p>
         </div>
@@ -37,7 +37,7 @@
         </div>
 
         <!-- Info Segment -->
-        <div class="ui secondary segment" v-if="timeTablesList.length">
+        <div class="ui secondary segment" v-if="timeTablesList">
           <div class="ui grid stackable">
 
             <div class="eleven wide column message">
@@ -87,7 +87,7 @@
                   <tr>
                     <th class="three wide"></th>
                     <th class="three wide">
-                      <h5 class="ui red header">
+                      <h5 class="ui red header pointer" @click="setTrainClassMap('tc')">
                         自強
                         <div class="sub header">
                           T.C.
@@ -95,7 +95,7 @@
                       </h5>
                     </th>
                     <th class="three wide">
-                      <h5 class="ui orange header">
+                      <h5 class="ui orange header pointer" @click="setTrainClassMap('ck')">
                         莒光
                         <div class="sub header">
                           C.K.
@@ -103,7 +103,7 @@
                       </h5>
                     </th>
                     <th class="three wide">
-                      <h5 class="ui header">
+                      <h5 class="ui header pointer" @click="setTrainClassMap('lt')">
                         區間
                         <div class="sub header">
                           L.T.
@@ -115,9 +115,9 @@
                 <tbody>
                   <tr>
                     <td>票價</td>
-                    <td>{{ trainFare('1100') }} </td>
-                    <td>{{ trainFare('1110') }} </td>
-                    <td>{{ trainFare('1120') }} </td>
+                    <td>{{ trainFare(1100) }} </td>
+                    <td>{{ trainFare(1110) }} </td>
+                    <td>{{ trainFare(1120) }} </td>
                   </tr>
                 </tbody>
               </table>
@@ -128,7 +128,7 @@
         <!-- END OF SECONDARY SEGMENT -->
 
         <!-- 隱藏已離站列車 toggle -->
-        <div class="ui toggle checkbox" v-if="period.today && !_.isEmpty(timeTablesList) ">
+        <div class="ui toggle checkbox" v-if="period.today && timeTablesList">
           <input type="checkbox" v-model="hideDepartured">
           <label>隱藏已離站列車</label>
         </div>
@@ -138,7 +138,7 @@
     </div>
 
     <!-- COMPUTER ONLY ROW -->
-    <div class="computer only row" v-if="timeTablesList.length > 0">
+    <div class="computer only row" v-if="timeTablesList">
       <div class="ui sixteen wide column">
 
         <table class="ui selectable striped definition table">
@@ -150,16 +150,38 @@
                   <div class="sub header">Via</div>
                 </h4>
               </th>
+
               <th class="two wide center aligned">
-                <h4 class="ui header">開車時間
-                  <div class="sub header">Departure</div>
+
+                <h4 class="ui header pointer" @click="setOrderBy('OriginStopTime.DepartureTime')">
+                  <i class="icon sort grey" :class="[ orderByClass('OriginStopTime.DepartureTime') ]"></i>
+                  <div class="content">
+                    開車時間
+                    <div class="sub header">Departure</div>
+                  </div>
                 </h4>
               </th>
-              <th class="two wide center aligned"></th>
+
               <th class="two wide center aligned">
-                <h4 class="ui header">抵達時間
-                  <div class="sub header">Arrival</div>
+                <h4 class="ui header pointer" @click="setOrderBy('TravelTime.value')">
+                  <i class="icon sort grey" :class="[ orderByClass('TravelTime.value') ]"></i>
+                  <div class="content">
+                    旅行時間
+                    <div class="sub header">Travel Time</div>
+                  </div>
                 </h4>
+
+              </th>
+              <th class="two wide center aligned">
+
+                <h4 class="ui header pointer" @click="setOrderBy('DestinationStopTime.ArrivalTime')">
+                  <i class="icon sort grey" :class="[ orderByClass('DestinationStopTime.ArrivalTime') ]"></i>
+                  <div class="content">
+                    抵達時間
+                    <div class="sub header">Arrival</div>
+                  </div>
+                </h4>
+
               </th>
               <th class="five wide">
                 <h4 class="ui header">其他
@@ -210,7 +232,7 @@
                 <h5 class="ui trip icon header">
                   <i class="arrow right icon"></i>
                   <div class="sub header">
-                    {{ item.OriginStopTime.DepartureTime | timeDiff(item.DestinationStopTime.ArrivalTime) }}
+                    {{ item.TravelTime.humanize }}
                   </div>
                 </h5>
               </td>
@@ -219,6 +241,7 @@
               <td class="center aligned">{{ item.DestinationStopTime.ArrivalTime }}</td>
 
               <td>
+
                 <div class="ui basic grey horizontal medium label">
                   {{ item.DestinationStopTime.StopSequence - item.OriginStopTime.StopSequence}}站
                 </div>
@@ -235,8 +258,12 @@
                   自行車
                 </div>
 
-                <div class="ui yellow horizontal medium label" v-if="$options.filters.DMULabel(item.DailyTrainInfo.Note.Zh_tw)">
+                <div class="ui yellow horizontal medium label" v-if="DMULabel(item.DailyTrainInfo.Note.Zh_tw)">
                   柴聯
+                </div>
+
+                <div class="ui brown horizontal medium label" v-if="acrossDayLabel(item.DailyTrainInfo.Note.Zh_tw)">
+                  跨日
                 </div>
 
                 {{ item.DailyTrainInfo.Note.Zh_tw | noteFormat }}
@@ -345,7 +372,7 @@
     data() {
       return {
         input: {
-          keyword: '自強 中壢 桃園 明天',
+          keyword: '',
         },
         sdStations: {
           startStation: null,
@@ -358,7 +385,11 @@
         fares: false,
         status: null,
         keywordArray: [],
-        orderByField: 'OriginStopTime.DepartureTime',
+        orderByField: {
+          field: 'OriginStopTime.DepartureTime',
+          order: 'asc',
+        },
+        orderByFieldClass: {}
       }
     },
     methods: {
@@ -387,7 +418,7 @@
         });
 
         // Set trainClassMap filter
-        this.trainClassMap = this.searchTrainClass(this.keywordArray[trainClassIndex]) || {};
+        this.setTrainClassMap(this.keywordArray[trainClassIndex]);
 
         // Remove the train class description from `keywordArray` to prevent impacting others
         (trainClassIndex != -1) && this.keywordArray.splice(trainClassIndex, 1)
@@ -461,6 +492,14 @@
           .then(
             (response) => {
               this.timeTables = response.data;
+
+              /**
+               * Create a field called `TravelTime` for sorting
+               */
+              this.timeTables.forEach((item) => {
+                item.TravelTime = this.timeDiff(item.OriginStopTime.DepartureTime, item.DestinationStopTime.ArrivalTime)
+              })
+
               this.status = true;
             },
             (error) => {
@@ -501,6 +540,40 @@
         this.trainClassMap = {};
       },
 
+      /**
+       * Set TrainClassMap after calling this.searchTrainClass.
+       * Return empty object if find no result.
+       */
+      setTrainClassMap: function (c) {
+        this.trainClassMap = this.searchTrainClass(c) || {};
+      },
+
+      /**
+       * Set Order By
+       */
+      setOrderBy: function (f) {
+
+        // If it's same field, toggle `asc` or `desc`
+        if (f == this.orderByField.field) {
+          this.orderByField.order = (this.orderByField.order == 'asc') ? 'desc' : 'asc'
+        }
+
+        // Otherwise change field
+        this.orderByField.field = f
+
+      },
+
+      /**
+       * Return order by fields' icon class name
+       */
+      orderByClass: function (f) {
+
+        return (f == this.orderByField.field) && (
+          (this.orderByField.order == 'asc') ? 'ascending' : 'descending'
+        )
+
+      }
+
     },
     computed: {
       keyword: function () {
@@ -514,7 +587,11 @@
       },
       timeTablesList: function () {
 
-        let r = this.timeTables || [];
+        // Retrive train result
+        let r = this.timeTables
+
+        // Return false if there's no such result.
+        if (!r) return false;
 
         // return the original array if the list not sets.
         if (!_.isEmpty(this.trainClassMap)) {
@@ -525,14 +602,12 @@
 
         }
 
-
-        //'OriginStopTime.DepartureTime'
-
-        r = _.orderBy(r, this.orderByField)
+        // OrderBy a field
+        r = _.orderBy(r, this.orderByField.field, this.orderByField.order)
 
         return r;
 
-      }
+      },
     }
   }
 

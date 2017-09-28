@@ -203,6 +203,43 @@ export default {
 
   },
 
+  /**
+   * Time subtract, return difference (string)
+   * Use moment.js, and strip `0小時` from the result.
+   */
+  timeDiff: function (s, e) {
+
+    // Create a moment object that contains time difference.
+    let timeObject = moment.utc(
+      moment(e, 'HH:mm').diff(
+        moment(s, 'HH:mm')
+      )
+    )
+
+    let r = {
+      // Sort
+      value: timeObject.format('HH:mm'),
+      // Display
+      humanize: timeObject.format('H[小時]m[分鐘]')
+    }
+
+    // Handle `Invalid date`. Avoid to display.
+    return (timeObject == 'Invalid date') ? '' : r;
+  },
+
+  /**
+   * Return TRUE if the DMU note exists.
+   */
+  DMULabel: function (n) {
+    return /柴聯自強號(，|。)/ig.test(n);
+  },
+
+  /**
+   * Return TRUE if the train is across between 2 days.
+   */
+  acrossDayLabel: function (n) {
+    return /跨日/ig.test(n);
+  },
 
   // *********************************
   //  Requests

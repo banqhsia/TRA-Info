@@ -66,25 +66,4 @@ export default {
     return n.replace('每日行駛。', '').replace(/柴聯自強號(，|。)/ig, '');
   },
 
-  /**
-   * Return TRUE if the DMU note exists.
-   */
-  DMULabel: function (n) {
-    return /柴聯自強號(，|。)/ig.test(n);
-  },
-
-  /**
-   * Time subtract, return difference (string)
-   * Use moment.js, and strip `0小時` from the result.
-   */
-  timeDiff: function (s, e) {
-    let r = moment.utc(
-      moment(e, 'HH:mm').diff(
-        moment(s, 'HH:mm')
-      )
-    ).format('H[小時]m[分鐘]').replace(/^0小時/g, '');
-
-    // Handle `Invalid date`. Avoid to display.
-    return (r == 'Invalid date') ? '' : r;
-  }
 }
