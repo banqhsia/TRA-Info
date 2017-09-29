@@ -5,6 +5,7 @@ import App from './App'
 import router from './router'
 import axios from 'axios';
 import moment from 'moment';
+import fuse from 'fuse.js'
 
 /**
  * Style Files
@@ -35,6 +36,8 @@ moment.locale('zh_tw');
 Vue.config.productionTip = false
 
 
+// Vue.prototype.Fuse = fuse;
+window.Fuse = fuse;
 window.axios = axios;
 
 

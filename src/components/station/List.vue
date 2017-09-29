@@ -100,13 +100,13 @@
 
         if (!this.keyword) return this.stations
 
-        // Define which field to find
-        let target = (/(\d)/.test(this.input.keyword)) ? "Station_Code_3" : "Station_Name";
+        return new Fuse(this.stations, {
+          // Fuse.js Fuzzy searching score
+          threshold: 0.1,
+          // Define which field to find
+          keys: ['Station_Name', 'Station_EName', 'Station_Code_3', 'ChineseAddress', 'Telephone'],
+        }).search(this.input.keyword)
 
-        // Find in stations list
-        return this.stations.filter((station) => {
-          return station[target].toString().includes(this.keyword)
-        });
       },
       keyword: function () {
         return this.taiTransform(this.input.keyword);
