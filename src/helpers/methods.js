@@ -80,7 +80,9 @@ export default {
   /**
    * Search Date
    */
-  searchDate: function (d = '') {
+  searchDate: function (d) {
+
+    d = d || '';
 
     // Year Handling format
     let yearCondition = ['YYYY-M-D', 'YYYY年M月D日', 'YYYY/M/D'];
@@ -220,7 +222,8 @@ export default {
       // Sort
       value: timeObject.format('HH:mm'),
       // Display
-      humanize: timeObject.format('H[小時]m[分鐘]')
+      humanize: timeObject.format('H[小時]m[分鐘]').replace(/^0小時/g, '')
+
     }
 
     // Handle `Invalid date`. Avoid to display.

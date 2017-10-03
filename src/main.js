@@ -6,6 +6,7 @@ import router from './router'
 import axios from 'axios';
 import moment from 'moment';
 import fuse from 'fuse.js'
+import VueLocalStorage from 'vue-ls';
 
 /**
  * Style Files
@@ -29,6 +30,9 @@ Vue.component('Loading', require('./components/snippets/Loading.vue').default);
  * Moment.js
  */
 Vue.prototype.moment = moment;
+/**
+ * Lodash
+ */
 Vue.prototype._ = require('lodash');
 
 moment.locale('zh_tw');
@@ -36,9 +40,10 @@ moment.locale('zh_tw');
 Vue.config.productionTip = false
 
 
-// Vue.prototype.Fuse = fuse;
 window.Fuse = fuse;
 window.axios = axios;
+
+Vue.use(VueLocalStorage);
 
 
 /* eslint-disable no-new */

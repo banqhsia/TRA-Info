@@ -105,7 +105,7 @@
           threshold: 0.1,
           // Define which field to find
           keys: ['Station_Name', 'Station_EName', 'Station_Code_3', 'ChineseAddress', 'Telephone'],
-        }).search(this.input.keyword)
+        }).search(this.keyword)
 
       },
       keyword: function () {

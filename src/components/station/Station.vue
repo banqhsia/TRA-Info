@@ -12,6 +12,7 @@
             <p>{{ station.Station_EName }} Station</p>
             <div class="sub header">
               {{ period.humanize }}，共有 {{ trainInfo.length }} 班列車。
+              <a class="ui label" v-if="!period.today" @click="backToday()"><i class="reply icon"></i>回到今天</a>
             </div>
 
           </h2>
@@ -209,6 +210,16 @@
         this.direction = (d == this.direction) ?
           undefined :
           d;
+      },
+      backToday: function () {
+        this.period = this.searchDate()
+        this.status = 'loading'
+        this.getTrainInfo()
+        this.$router.replace({
+          params: {
+            date: this.period.date
+          }
+        })
       }
     },
     computed: {

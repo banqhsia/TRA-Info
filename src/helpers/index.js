@@ -6,7 +6,7 @@ Vue.mixin({
       /**
        * Get date from Route parameters
        */
-      period: this.searchDate(this.$route.params.date),
+      period: this.searchDate(this.$route.params.date || this.$ls.get('period.date'))
     }
   },
   methods: require('./methods.js').default,

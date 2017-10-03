@@ -154,7 +154,7 @@
               <th class="two wide center aligned">
 
                 <h4 class="ui header pointer" @click="setOrderBy('OriginStopTime.DepartureTime')">
-                  <i class="icon sort grey" :class="[ orderByClass('OriginStopTime.DepartureTime') ]"></i>
+                  <i class="icon sort" :class="[ orderByClass('OriginStopTime.DepartureTime') ]"></i>
                   <div class="content">
                     開車時間
                     <div class="sub header">Departure</div>
@@ -164,7 +164,7 @@
 
               <th class="two wide center aligned">
                 <h4 class="ui header pointer" @click="setOrderBy('TravelTime.value')">
-                  <i class="icon sort grey" :class="[ orderByClass('TravelTime.value') ]"></i>
+                  <i class="icon sort" :class="[ orderByClass('TravelTime.value') ]"></i>
                   <div class="content">
                     旅行時間
                     <div class="sub header">Travel Time</div>
@@ -175,7 +175,7 @@
               <th class="two wide center aligned">
 
                 <h4 class="ui header pointer" @click="setOrderBy('DestinationStopTime.ArrivalTime')">
-                  <i class="icon sort grey" :class="[ orderByClass('DestinationStopTime.ArrivalTime') ]"></i>
+                  <i class="icon sort" :class="[ orderByClass('DestinationStopTime.ArrivalTime') ]"></i>
                   <div class="content">
                     抵達時間
                     <div class="sub header">Arrival</div>
@@ -205,13 +205,23 @@
 
             <tr class="pointer" v-show="(!period.today || !hideDepartured || !isDeparture( item.OriginStopTime.DepartureTime ))" v-for="item in timeTablesList">
 
-              <!-- 車次 -->
+              <!-- 列車資訊 -->
               <td>
-                <h3 class="ui header" :class="[$options.filters.trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">{{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+
+                <!-- 車種 -->
+                <h3 class="ui header" :class="[$options.filters.trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
+                  {{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+
+                  <!-- 車次號碼 -->
+                  <h5 class="ui right floated header">
+                    <div class="sub header">
+                      {{ item.DailyTrainInfo.TrainNo }}
+                    </div>
+                  </h5>
+
                   <div class="sub header">
-                    {{ item.DailyTrainInfo.TrainNo }}<br>
                     <!-- 終點站 -->
-                    {{ searchStation(item.DailyTrainInfo.EndingStationID).Station_Name }}
+                    {{ searchStation(item.DailyTrainInfo.StartingStationID).Station_Name }}<i class="arrow right icon inline-icon"></i>{{searchStation(item.DailyTrainInfo.EndingStationID).Station_Name}}
                   </div>
 
                 </h3>
@@ -243,7 +253,7 @@
               <td>
 
                 <div class="ui basic grey horizontal medium label">
-                  {{ item.DestinationStopTime.StopSequence - item.OriginStopTime.StopSequence}}站
+                  {{ item.DestinationStopTime.StopSequence - item.OriginStopTime.StopSequence }}站
                 </div>
 
                 <div class="ui blue horizontal medium label" v-if="item.DailyTrainInfo.WheelchairFlag">
@@ -372,23 +382,23 @@
     data() {
       return {
         input: {
-          keyword: '',
+          keyword: this.$ls.get('input.keyword', ''),
         },
-        sdStations: {
+        sdStations: this.$ls.get('sdStations', {
           startStation: null,
           destStation: null,
-        },
-        timeTables: false,
+        }),
+        timeTables: this.$ls.get('timeTables', false),
         delayInfo: [],
-        trainClassMap: {},
+        trainClassMap: this.$ls.get('trainClassMap', {}),
         hideDepartured: true,
-        fares: false,
+        fares: this.$ls.get('fares', false),
         status: null,
         keywordArray: [],
-        orderByField: {
+        orderByField: this.$ls.get('orderByField', {
           field: 'OriginStopTime.DepartureTime',
           order: 'asc',
-        },
+        }),
         orderByFieldClass: {}
       }
     },
@@ -427,6 +437,8 @@
 
         // Override `this.peroid`
         this.period = this.searchDate(this.keywordArray[2]);
+        // Set period result to localStorage
+        this.$ls.set('period.date', this.period.date)
 
         this.sdStations = {
           startStation: this.searchStation(this.keywordArray[0]),
@@ -435,6 +447,13 @@
 
         // Check if both startStation and destStation exists
         if (this.sdStations.startStation && this.sdStations.destStation) {
+
+          // Set sdStations, input.keyword to localStorage
+          this.$ls.set('sdStations', this.sdStations);
+          this.$ls.set('input.keyword', this.keyword);
+
+          // Set result to Query params.
+          this.setResultParams();
 
           this.status = 'loading';
 
@@ -447,6 +466,9 @@
           ).then(
             (response) => {
               this.fares = response.data[0].Fares;
+              // Set Fares info to localStorage
+              this.$ls.set('fares', this.fares);
+
             }
           );
 
@@ -466,6 +488,9 @@
               this.timeTables.forEach((item) => {
                 item.TravelTime = this.timeDiff(item.OriginStopTime.DepartureTime, item.DestinationStopTime.ArrivalTime)
               })
+
+              // Set time tables result to localStorage
+              this.$ls.set('timeTables', this.timeTables);
 
               this.status = true;
             },
@@ -509,8 +534,24 @@
        * Empty the search field and set focus
        */
       searchEmpty: function () {
+
         this.input.keyword = null;
         this.$refs.keyword.focus()
+
+        this.timeTables = false;
+        this.fares = false;
+
+        this.orderByField = {
+          field: 'OriginStopTime.DepartureTime',
+          order: 'asc',
+        };
+
+        this.$router.replace({
+          query: null,
+        })
+
+        // Clear all localStorage result
+        this.$ls.clear();
       },
 
       /**
@@ -526,6 +567,8 @@
        */
       setTrainClassMap: function (c) {
         this.trainClassMap = this.searchTrainClass(c) || {};
+        // Set trainClassMap to localStorage
+        this.$ls.set('trainClassMap', this.trainClassMap)
       },
 
       /**
@@ -541,6 +584,25 @@
         // Otherwise change field
         this.orderByField.field = f
 
+        // Set result to Query params.
+        this.setResultParams();
+
+        // Set orderByField to localStorage
+        this.$ls.set('orderByField', this.orderByField);
+
+      },
+
+      /**
+       * Set result to Query params in order to get same query next time.
+       */
+      setResultParams: function () {
+        this.$router.push({
+          query: {
+            k: this.input.keyword,
+            f: this.orderByField.field,
+            o: this.orderByField.order,
+          }
+        })
       },
 
       /**
@@ -549,7 +611,7 @@
       orderByClass: function (f) {
 
         return (f == this.orderByField.field) && (
-          (this.orderByField.order == 'asc') ? 'ascending' : 'descending'
+          (this.orderByField.order == 'asc') ? 'red ascending' : 'red descending'
         )
 
       }
@@ -588,6 +650,22 @@
         return r;
 
       },
+    },
+    mounted() {
+
+      if (this.$route.query.f) {
+        this.orderByField.field = this.$route.query.f
+      }
+
+      if (this.$route.query.o) {
+        this.orderByField.order = this.$route.query.o
+      }
+
+      if (this.$route.query.k) {
+        this.input.keyword = this.$route.query.k;
+        this.search();
+      }
+
     }
   }
 

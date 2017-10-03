@@ -4,7 +4,7 @@
       <h2 class="row">
         <div class="ui sixteen wide column">
 
-          <h2 class="ui header">
+          <router-link tag="h2" class="ui header pointer" to="/">
             <!-- logo image -->
             <img class="ui image rounded" src="/static/img/logo.png">
             <!-- header text -->
@@ -14,7 +14,7 @@
                 TRA Information
               </div>
             </div>
-          </h2>
+          </router-link>
 
         </div>
       </h2>
@@ -117,6 +117,11 @@
 
   .delay-indicator {
     vertical-align: middle !important;
+  }
+  /* Force in-line icon margin-off */
+
+  .inline-icon {
+    margin: 0 !important;
   }
 
 </style>
