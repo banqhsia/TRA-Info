@@ -211,6 +211,9 @@
           undefined :
           d;
       },
+      /**
+       * Back today
+       */
       backToday: function () {
         this.period = this.searchDate()
         this.status = 'loading'
