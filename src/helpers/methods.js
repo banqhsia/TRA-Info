@@ -73,7 +73,7 @@ export default {
       r.EnglishName = r.EnglishName.replace(removeRegex, "$1")
     }
 
-    return r;
+    return r || false;
 
   },
 
@@ -283,5 +283,25 @@ export default {
 
   },
 
+  /**
+   * Get the specific train information by TrainNo
+   */
+  getDailyTimeTable: function (train) {
 
+    return axios.get(
+      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/' +
+      train + '/' + this.period.date + '?$format=JSON'
+    )
+  },
+
+  /**
+   * Send a request to get train info
+   */
+  getTrainInfo: function (station) {
+
+    return axios.get(
+      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/Station/' +
+      station + '/' + this.period.date + '?$format=JSON'
+    );
+  }
 }

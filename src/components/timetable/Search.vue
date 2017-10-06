@@ -65,7 +65,6 @@
                   }">{{sdStations.destStation.Station_Name}}
                   </router-link> 的
 
-
                   <span class="ui pointer" @click="clearFilter()">
                     {{ trainClassMap.desc || '所有列車' }}
                     <i class="delete red icon" v-if="!_.isEmpty(trainClassMap)"></i>
@@ -166,7 +165,7 @@
                 <h4 class="ui header pointer" @click="setOrderBy('TravelTime.value')">
                   <i class="icon sort" :class="[ orderByClass('TravelTime.value') ]"></i>
                   <div class="content">
-                    旅行時間
+                    行車時間
                     <div class="sub header">Travel Time</div>
                   </div>
                 </h4>
@@ -203,7 +202,14 @@
           </thead>
           <tbody>
 
-            <tr class="pointer" v-show="(!period.today || !hideDepartured || !isDeparture( item.OriginStopTime.DepartureTime ))" v-for="item in timeTablesList">
+            <!-- Link; Rendered as <tr> -->
+            <router-link class="pointer" tag="tr" :key="item.DailyTrainInfo.TrainNo" :to="{
+              name: 'Timetable.train',
+              params: {
+                train: item.DailyTrainInfo.TrainNo,
+                date: period.date
+              }
+            }" v-show="(!period.today || !hideDepartured || !isDeparture( item.OriginStopTime.DepartureTime ))" v-for="item in timeTablesList">
 
               <!-- 列車資訊 -->
               <td>
@@ -229,9 +235,9 @@
 
               <!-- 經由 -->
               <td class="center aligned">
-                <a class="ui circular basic label" :class="[$options.filters.tripLine(item.DailyTrainInfo.TripLine, true)]" v-if="item.DailyTrainInfo.TripLine">
+                <div class="ui circular basic label" :class="[$options.filters.tripLine(item.DailyTrainInfo.TripLine, true)]" v-if="item.DailyTrainInfo.TripLine">
                   {{ item.DailyTrainInfo.TripLine | tripLine }}
-                </a>
+                </div>
               </td>
 
               <!-- 出發時間 -->
@@ -296,7 +302,7 @@
                 </p>
               </td>
 
-            </tr>
+            </router-link>
           </tbody>
         </table>
 

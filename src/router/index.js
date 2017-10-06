@@ -17,6 +17,11 @@ export default new Router({
       component: require('../components/timetable/Search.vue').default
     },
     {
+      path: '/timetable/:train/:date?',
+      name: 'Timetable.train',
+      component: require('../components/timetable/Train.vue').default
+    },
+    {
       path: '/station',
       name: 'Station',
       component: require('../components/station/List.vue').default

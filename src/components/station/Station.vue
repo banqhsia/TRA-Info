@@ -86,7 +86,17 @@
 
           </thead>
           <tbody>
-            <tr class="pointer " v-show="(!period.today || !hideDepartured || !isDeparture( item.DepartureTime ))" v-for="item in trainInfoList">
+
+            <!-- Link; Rendered as <tr> -->
+            <router-link tag="tr" class="pointer " :key="item.TrainNo" v-show="(!period.today || !hideDepartured || !isDeparture( item.DepartureTime ))"
+              v-for="item in trainInfoList" :to="{
+                name: 'Timetable.train',
+                params: {
+                  train: item.TrainNo,
+                  date: period.date
+                }
+              }">
+
               <!-- 車次 -->
               <td>
                 <h3 class="ui header" :class="[$options.filters.trainClassZH(item.TrainClassificationName, true)]">
@@ -98,9 +108,9 @@
 
               <!-- 經由 -->
               <td class="center aligned ">
-                <a class="ui circular basic label" :class="[$options.filters.tripLine(item.TripLine, true)]" v-if="item.TripLine">
-                     {{ item.TripLine | tripLine }}
-                  </a>
+                <div class="ui circular basic label" :class="[$options.filters.tripLine(item.TripLine, true)]" v-if="item.TripLine">
+                  {{ item.TripLine | tripLine }}
+                </div>
               </td>
 
               <!-- 出發時間 -->
@@ -134,7 +144,7 @@
                 </div>
               </td>
 
-            </tr>
+            </router-link>
           </tbody>
         </table>
 
@@ -152,7 +162,7 @@
     data() {
       return {
         station: '',
-        trainInfo: [],
+        trainInfo: false,
         delayInfo: [],
         direction: undefined,
         hideDepartured: true,
@@ -161,9 +171,10 @@
     },
     methods: {
       /**
-       * Get a station object
+       * Page initialization
        */
-      getStation: function () {
+      init: function () {
+
         this.station = this.searchStation(this.$route.params.station);
 
         // Station not exists
@@ -171,28 +182,20 @@
           this.$router.push('/station');
         }
 
-        this.getTrainInfo();
-      },
-      /**
-       * Send a request to get train info
-       */
-      getTrainInfo: function () {
-
-        axios.get(
-            'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/Station/' +
-            this.station.Station_Code_4 + '/' +
-            this.period.date +
-            '?$format=JSON'
-          )
-          .then(
-            (response) => {
-              this.trainInfo = response.data;
-              this.status = true;
-            },
-            (error) => {
-              this.status = false;
-            }
-          );
+        /**
+         * Send a request to get train info
+         */
+        this.getTrainInfo(
+          this.station.Station_Code_4
+        ).then(
+          (response) => {
+            this.trainInfo = response.data;
+            this.status = true;
+          },
+          (error) => {
+            this.status = false;
+          }
+        );
 
         // If it's today, send live board reuqest
         this.getLiveboard(this.station.Station_Code_4).then(
@@ -217,7 +220,8 @@
       backToday: function () {
         this.period = this.searchDate()
         this.status = 'loading'
-        this.getTrainInfo()
+        this.trainInfo = false;
+        this.init()
         this.$router.replace({
           params: {
             date: this.period.date
@@ -249,7 +253,7 @@
 
     },
     mounted() {
-      this.getStation();
+      this.init();
     },
   }
 

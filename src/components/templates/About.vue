@@ -48,12 +48,13 @@
         <h3 class="header">
           更新狀態
         </h3>
-        <p>
+        <p v-if="status">
           最近更新日期：{{ moment(status.committer.date).format('YYYY年MM月DD日 HH:mm') }} ( {{ moment(status.committer.date).fromNow() }} )
           <br> 更新訊息：{{ status.message }}
-
         </p>
-
+        <p v-else>
+          取得更新資訊中...
+        </p>
 
       </div>
     </div>
@@ -66,11 +67,7 @@
 
     data() {
       return {
-        status: {
-          committer: {
-            date: ''
-          }
-        },
+        status: false,
       }
     },
     methods: {
