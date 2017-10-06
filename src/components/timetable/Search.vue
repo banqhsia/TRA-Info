@@ -447,8 +447,8 @@
         this.$ls.set('period.date', this.period.date)
 
         this.sdStations = {
-          startStation: this.searchStation(this.keywordArray[0]),
-          destStation: this.searchStation(this.keywordArray[1])
+          startStation: this.searchStation(this.keywordArray[0], true),
+          destStation: this.searchStation(this.keywordArray[1], true)
         }
 
         // Check if both startStation and destStation exists
