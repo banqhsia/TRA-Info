@@ -342,7 +342,7 @@
             </h5>
 
           </div>
-          <div class="item active">
+          <div class="item">
             <h5 class="ui header pointer" @click="setOrderBy('TravelTime.value')">
               <i class="icon mini sort" :class="[ orderByClass('TravelTime.value') ]"></i>
               <div class="content">

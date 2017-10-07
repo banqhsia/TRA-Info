@@ -151,6 +151,79 @@
       </div>
     </div>
 
+
+    <!-- MOBILE TABLET ONLY -->
+    <div class="mobile only row">
+
+      <div class="ui sixteen wide column">
+
+        <!-- Link; Rendered as <div> -->
+        <router-link tag="div" class="ui fluid card pointer" :key="item.TrainNo" v-show="(!period.today || !hideDepartured || !isDeparture( item.DepartureTime ))"
+          v-for="item in trainInfoList" :to="{
+                name: 'Timetable.train',
+                params: {
+                  train: item.TrainNo,
+                  date: period.date
+                }
+              }">
+
+          <div class="content">
+
+            <div class="ui grid">
+
+              <!-- 車次 -->
+              <div class="twelve wide column">
+                <h3 class="ui header" :class="[$options.filters.trainClassZH(item.TrainClassificationName, true)]">
+                  {{ item.TrainClassificationName | trainClassZH }}
+                  <div class="sub header ">{{ item.TrainNo }}</div>
+                </h3>
+              </div>
+
+              <!-- 經由 -->
+              <div class="four wide column">
+
+                <div class="right floated ui">
+                  <div class="ui circular basic label" :class="[$options.filters.tripLine(item.TripLine, true)]" v-if="item.TripLine">
+                    {{ item.TripLine | tripLine }}
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            <div class="description">
+
+              <div class="ui grid">
+                <!-- 出發時間 -->
+                <div class="five wide column departure-time">{{ item.DepartureTime }}</div>
+                <!-- 箭頭 -->
+                <div class="one wide column"><i class="arrow right icon"></i></div>
+                <!-- 終點站 -->
+                <div class="six wide column">
+                  {{ searchStation(item.EndingStationID).Station_Name }} {{ searchStation(item.EndingStationID).Station_EName }}
+                </div>
+                <!-- 誤點 -->
+                <div class="three wide column">
+                  <div class="left floated ui">
+                    <div v-if="isDelay(item.TrainNo, delayInfo, true)">
+                      <div class="ui circular empty horizontal medium label delay-indicator" :class="isDelay(item.TrainNo, delayInfo, true)"></div>
+                      <span>{{ isDelay( item.TrainNo, delayInfo ) }}</span>
+                    </div>
+                  </div>
+                </div>
+
+              </div>
+
+            </div>
+
+          </div>
+        </router-link>
+
+      </div>
+      <!-- END OF 16 WIDE COLUMN -->
+    </div>
+    <!-- END OF MOBILE ONLY ROW  -->
+
   </div>
 
 
