@@ -12,7 +12,7 @@
           <div class="field">
             <div class="ui left action icon input">
               <button class="ui icon button" @click="searchEmpty()"><i class="trash icon"></i></button>
-              <input type="text" ref="keyword" v-model.trim="input.keyword" @keypress.enter="search()" placeholder="中壢 台北 明天 自強號" autofocus>
+              <input type="text" ref="keyword" v-model.trim="input.keyword" @keypress.enter="search()" placeholder="中壢 台北 明天 自強號" :disabled="status == 'loading'">
               <i class="inverted circular search link icon" @click="search()"></i>
             </div>
           </div>
@@ -213,24 +213,33 @@
 
               <!-- 列車資訊 -->
               <td>
+                <div class="ui grid">
+                  <div class="row">
 
-                <!-- 車種 -->
-                <h3 class="ui header" :class="[$options.filters.trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
-                  {{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+                    <!-- 車種 -->
+                    <div class="sixteen wide column">
+                      <h3 class="ui header" :class="[$options.filters.trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
+                        {{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+                        <h5 class="ui right floated header">
+                          <div class="sub header">
+                            {{ item.DailyTrainInfo.TrainNo }}
+                          </div>
+                        </h5>
+                      </h3>
 
-                  <!-- 車次號碼 -->
-                  <h5 class="ui right floated header">
-                    <div class="sub header">
-                      {{ item.DailyTrainInfo.TrainNo }}
                     </div>
-                  </h5>
 
-                  <div class="sub header">
                     <!-- 終點站 -->
-                    {{ searchStation(item.DailyTrainInfo.StartingStationID).Station_Name }}<i class="arrow right icon inline-icon"></i>{{searchStation(item.DailyTrainInfo.EndingStationID).Station_Name}}
-                  </div>
+                    <div class="sixteen wide column">
+                      <h5 class="ui header">
+                        <div class="sub header">
+                          {{ searchStation(item.DailyTrainInfo.StartingStationID).Station_Name }}<i class="arrow right icon inline-icon"></i>{{searchStation(item.DailyTrainInfo.EndingStationID).Station_Name}}
+                        </div>
+                      </h5>
+                    </div>
 
-                </h3>
+                  </div>
+                </div>
               </td>
 
               <!-- 經由 -->
@@ -312,67 +321,163 @@
     <!-- END OF COMPUTER ONLY ROW  -->
 
     <!-- MOBILE TABLET ONLY -->
-    <div class="mobile tablet only row" ng-if="timeTables.length > 0">
+    <div class="mobile tablet only row" v-if="timeTablesList">
 
       <div class="ui sixteen wide column">
-        <!-- ngRepeat: item in timeTables | trainClassFilter: trainClassMap.list -->
-        <div class="ui fluid card pointer" ng-hide="( hideDepartured ) &amp;&amp; (item.OriginStopTime.DepartureTime | isDepartured: period.date)"
-          ng-repeat="item in timeTables | trainClassFilter: trainClassMap.list" ng-click="goToTrainInfo(item.DailyTrainInfo.TrainNo)">
+
+        <div class="ui small three item menu">
+          <div class="item">
+            <h5 class="ui header pointer" @click="setOrderBy('OriginStopTime.DepartureTime')">
+              <i class="icon mini sort" :class="[ orderByClass('OriginStopTime.DepartureTime') ]"></i>
+              <div class="content">
+                開車時間
+                <div class="sub header">Departure</div>
+              </div>
+            </h5>
+
+          </div>
+          <div class="item active">
+            <h5 class="ui header pointer" @click="setOrderBy('TravelTime.value')">
+              <i class="icon mini sort" :class="[ orderByClass('TravelTime.value') ]"></i>
+              <div class="content">
+                行車時間
+                <div class="sub header">Travel Time</div>
+              </div>
+            </h5>
+
+          </div>
+          <div class="item">
+            <h5 class="ui header pointer" @click="setOrderBy('DestinationStopTime.ArrivalTime')">
+              <i class="icon mini sort" :class="[ orderByClass('DestinationStopTime.ArrivalTime') ]"></i>
+              <div class="content">
+                抵達時間
+                <div class="sub header">Arrival</div>
+              </div>
+            </h5>
+          </div>
+
+        </div>
+
+        <!-- Link; Rendered as <div> -->
+        <router-link class="ui fluid card pointer" tag="div" :key="item.DailyTrainInfo.TrainNo" :to="{
+              name: 'Timetable.train',
+              params: {
+                train: item.DailyTrainInfo.TrainNo,
+                date: period.date
+              }
+            }" v-show="(!period.today || !hideDepartured || !isDeparture( item.OriginStopTime.DepartureTime ))" v-for="item in timeTablesList">
 
           <div class="content">
 
-            <!-- 經由 -->
-            <div class="right floated ui">
-              <a class="ui circular basic blue label" ng-if="item.DailyTrainInfo.TripLine">
-                海線
-              </a>
-            </div>
+            <div class="ui grid">
+              <div class="row">
 
-            <!-- 誤點 -->
-            <div class="right floated ui">
-            </div>
+                <!-- 車種 -->
+                <div class="four wide column">
+                  <h3 class="ui header" :class="[$options.filters.trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
+                    {{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+                    <div class="sub header">
+                      {{ item.DailyTrainInfo.TrainNo }}
+                    </div>
+                  </h3>
+                </div>
 
-            <!-- 車次 -->
-            <div>
-              <h4 class="ui orange header">莒光
-                <div class="sub header ng-binding">653</div>
-              </h4>
-            </div>
+                <!-- 起迄站 -->
+                <div class="five wide column">
+                  <h5 class="ui header center aligned">
+                    <div class="sub header">
+                      {{ searchStation(item.DailyTrainInfo.StartingStationID).Station_Name }}<i class="arrow right icon inline-icon"></i>{{searchStation(item.DailyTrainInfo.EndingStationID).Station_Name}}
+                    </div>
+                  </h5>
+                </div>
 
-            <div class="description">
-              <div class="ui grid">
-                <!-- 出發時間 -->
-                <div class="three wide column departure-time ng-binding">11:25</div>
-                <!-- 箭頭 -->
-                <div class="two wide column"><i class="arrow right icon"></i></div>
-                <!-- 抵達 -->
-                <div class="three wide column ng-binding">19:56</div>
-                <!-- 途經 -->
-                <div class="five wide center aligned column ng-binding">8小時31分鐘</div>
-                <!-- 票價 -->
-                <div class="three wide right aligned column">
-                  <p ng-if="fares" class="ng-binding">
-                    $672
-                  </p>
-                  <!-- end ngIf: fares -->
+                <!-- 誤點 -->
+                <div class="three wide column">
+                  <div class="left floated ui" v-if="delay">
+
+                    <div v-if="isDelay(item.DailyTrainInfo.TrainNo , delayInfo, true)">
+                      <div class="ui circular empty horizontal medium label delay-indicator" :class="isDelay(item.DailyTrainInfo.TrainNo , delayInfo, true)"></div>
+                      <span>{{ isDelay( item.DailyTrainInfo.TrainNo , delayInfo ) }}</span>
+                    </div>
+
+                  </div>
+                </div>
+
+                <!-- 經由 -->
+                <div class="four wide column">
+                  <div class="ui right floated">
+
+                    <div class="ui circular basic label" :class="[$options.filters.tripLine(item.DailyTrainInfo.TripLine, true)]" v-if="item.DailyTrainInfo.TripLine">
+                      {{ item.DailyTrainInfo.TripLine | tripLine }}
+                    </div>
+
+                  </div>
                 </div>
 
               </div>
 
             </div>
-          </div>
-          <div class="extra content ng-binding">
 
-            <div class="ui basic grey horizontal medium label ng-binding">
-              41站
+            <div class="description">
+              <div class="ui grid">
+                <!-- 出發時間 -->
+                <div class="three wide column departure-time">
+                  {{ item.OriginStopTime.DepartureTime }}
+                </div>
+
+                <!-- 箭頭 -->
+                <div class="two wide column"><i class="arrow right icon"></i></div>
+
+                <!-- 抵達 -->
+                <div class="three wide column">
+                  {{ item.DestinationStopTime.ArrivalTime }}
+                </div>
+
+                <!-- 途經 -->
+                <div class="five wide center aligned column">
+                  {{ item.TravelTime.humanize }}
+                </div>
+
+                <!-- 票價 -->
+                <div class="three wide right aligned column">
+                  <p v-if="fares">
+                    {{ trainFare(item.DailyTrainInfo.TrainClassificationID) }}
+                  </p>
+                </div>
+              </div>
+
+            </div>
+          </div>
+          <div class="extra content">
+
+            <div class="ui basic grey horizontal medium label">
+              {{ item.DestinationStopTime.StopSequence - item.OriginStopTime.StopSequence }}站
             </div>
 
-            <div class="ui blue horizontal medium label" ng-if="item.DailyTrainInfo.WheelchairFlag">
+            <div class="ui blue horizontal medium label" v-if="item.DailyTrainInfo.WheelchairFlag">
               輪椅
             </div>
 
+            <div class="ui pink horizontal medium label" v-if="item.DailyTrainInfo.BreastFeedingFlag">
+              哺乳室
+            </div>
+
+            <div class="ui green horizontal medium label" v-if="item.DailyTrainInfo.BikeFlag">
+              自行車
+            </div>
+
+            <div class="ui yellow horizontal medium label" v-if="DMULabel(item.DailyTrainInfo.Note.Zh_tw)">
+              柴聯
+            </div>
+
+            <div class="ui brown horizontal medium label" v-if="acrossDayLabel(item.DailyTrainInfo.Note.Zh_tw)">
+              跨日
+            </div>
+
+            {{ item.DailyTrainInfo.Note.Zh_tw | noteFormat }}
+
           </div>
-        </div>
+        </router-link>
 
       </div>
       <!-- END OF 16 WIDE COLUMN -->
@@ -671,6 +776,8 @@
         this.input.keyword = this.$route.query.k;
         this.search();
       }
+
+      this.$refs.keyword.focus()
 
     }
   }

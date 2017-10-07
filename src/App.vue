@@ -80,6 +80,15 @@
     fjs.parentNode.insertBefore(js, fjs);
   }(document, 'script', 'facebook-jssdk'));
 
+  /**
+   * Trun off Mobile Device scale over 1
+   */
+  document.addEventListener('touchmove', function (event) {
+    if (event.scale !== 1) {
+      event.preventDefault();
+    }
+  }, false);
+
   export default {
     name: 'app'
   }
@@ -115,7 +124,8 @@
   }
   /* Delay indicator (minutes) */
 
-  .delay-indicator {
+  .delay-indicator,
+  .vertical-middle {
     vertical-align: middle !important;
   }
   /* Force in-line icon margin-off */
