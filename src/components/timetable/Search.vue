@@ -224,8 +224,8 @@
 
                     <!-- 車種 -->
                     <div class="sixteen wide column">
-                      <h3 class="ui header" :class="[$options.filters.trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
-                        {{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+                      <h3 class="ui header" :class="[trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
+                        {{ trainClass(item.DailyTrainInfo.TrainClassificationID) }}
                         <h5 class="ui right floated header">
                           <div class="sub header">
                             {{ item.DailyTrainInfo.TrainNo }}
@@ -250,8 +250,8 @@
 
               <!-- 經由 -->
               <td class="center aligned">
-                <div class="ui circular basic label" :class="[$options.filters.tripLine(item.DailyTrainInfo.TripLine, true)]" v-if="item.DailyTrainInfo.TripLine">
-                  {{ item.DailyTrainInfo.TripLine | tripLine }}
+                <div class="ui circular basic label" :class="[tripLine(item.DailyTrainInfo.TripLine, true)]" v-if="item.DailyTrainInfo.TripLine">
+                  {{ tripLine(item.DailyTrainInfo.TripLine) }}
                 </div>
               </td>
 
@@ -380,8 +380,8 @@
 
                 <!-- 車種 -->
                 <div class="four wide column">
-                  <h3 class="ui header" :class="[$options.filters.trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
-                    {{ item.DailyTrainInfo.TrainClassificationID | trainClass }}
+                  <h3 class="ui header" :class="[trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
+                    {{ trainClass(item.DailyTrainInfo.TrainClassificationID) }}
                     <div class="sub header">
                       {{ item.DailyTrainInfo.TrainNo }}
                     </div>
@@ -413,8 +413,8 @@
                 <div class="four wide column">
                   <div class="ui right floated">
 
-                    <div class="ui circular basic label" :class="[$options.filters.tripLine(item.DailyTrainInfo.TripLine, true)]" v-if="item.DailyTrainInfo.TripLine">
-                      {{ item.DailyTrainInfo.TripLine | tripLine }}
+                    <div class="ui circular basic label" :class="[tripLine(item.DailyTrainInfo.TripLine, true)]" v-if="item.DailyTrainInfo.TripLine">
+                      {{ tripLine(item.DailyTrainInfo.TripLine) }}
                     </div>
 
                   </div>

@@ -19,8 +19,8 @@
 
       <div class="ui sixteen wide column">
 
-        <div class="ui segment" :class="[$options.filters.trainClass(trainInfo.DailyTrainInfo.TrainClassificationID, true)]">
-          <h2 class="ui header">{{ trainInfo.DailyTrainInfo.TrainNo }} {{ trainInfo.DailyTrainInfo.TrainClassificationID | trainClass }}
+        <div class="ui segment" :class="[trainClass(trainInfo.DailyTrainInfo.TrainClassificationID, true)]">
+          <h2 class="ui header">{{ trainInfo.DailyTrainInfo.TrainNo }} {{ trainClass(trainInfo.DailyTrainInfo.TrainClassificationID) }}
             <div class="sub header">
               {{ period.humanize }}，
 
@@ -45,9 +45,9 @@
             </div>
           </h2>
 
-          <div class="ui circular horizontal basic label" :class="[$options.filters.tripLine(trainInfo.DailyTrainInfo.TripLine, true)]"
+          <div class="ui circular horizontal basic label" :class="[tripLine(trainInfo.DailyTrainInfo.TripLine, true)]"
             v-if="trainInfo.DailyTrainInfo.TripLine">
-            {{ trainInfo.DailyTrainInfo.TripLine | tripLine }}
+            {{ tripLine(trainInfo.DailyTrainInfo.TripLine) }}
           </div>
 
           <div class="ui blue horizontal medium label" v-if="trainInfo.DailyTrainInfo.WheelchairFlag">

@@ -99,17 +99,16 @@
 
               <!-- 車次 -->
               <td>
-                <h3 class="ui header" :class="[$options.filters.trainClassZH(item.TrainClassificationName, true)]">
-                  {{ item.TrainClassificationName | trainClassZH }}
-                  <!-- {{ item.TrainClassificationName || '無' }} -->
+                <h3 class="ui header" :class="[trainClassZH(item.TrainClassificationName, true)]">
+                  {{ trainClassZH(item.TrainClassificationName) }}
                   <div class="sub header ">{{ item.TrainNo }}</div>
                 </h3>
               </td>
 
               <!-- 經由 -->
               <td class="center aligned ">
-                <div class="ui circular basic label" :class="[$options.filters.tripLine(item.TripLine, true)]" v-if="item.TripLine">
-                  {{ item.TripLine | tripLine }}
+                <div class="ui circular basic label" :class="[tripLine(item.TripLine, true)]" v-if="item.TripLine">
+                  {{ tripLine(item.TripLine) }}
                 </div>
               </td>
 
@@ -173,8 +172,8 @@
 
               <!-- 車次 -->
               <div class="twelve wide column">
-                <h3 class="ui header" :class="[$options.filters.trainClassZH(item.TrainClassificationName, true)]">
-                  {{ item.TrainClassificationName | trainClassZH }}
+                <h3 class="ui header" :class="[trainClassZH(item.TrainClassificationName, true)]">
+                  {{ trainClassZH(item.TrainClassificationName) }}
                   <div class="sub header ">{{ item.TrainNo }}</div>
                 </h3>
               </div>
@@ -183,8 +182,8 @@
               <div class="four wide column">
 
                 <div class="right floated ui">
-                  <div class="ui circular basic label" :class="[$options.filters.tripLine(item.TripLine, true)]" v-if="item.TripLine">
-                    {{ item.TripLine | tripLine }}
+                  <div class="ui circular basic label" :class="[tripLine(item.TripLine, true)]" v-if="item.TripLine">
+                    {{ tripLine(item.TripLine) }}
                   </div>
                 </div>
 
