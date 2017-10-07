@@ -4,9 +4,9 @@
       <h2 class="row">
         <div class="ui sixteen wide column">
 
-          <router-link tag="h2" class="ui header pointer" to="/">
+          <router-link tag="h2" class="ui header pointer" :to="{name: 'Timetable'}">
             <!-- logo image -->
-            <img class="ui image rounded" src="/static/img/logo.png">
+            <img class="ui image rounded" src="../static/img/logo.png">
             <!-- header text -->
             <div class="content">
               臺鐵資訊查詢
@@ -30,9 +30,9 @@
         <div class="ui sixteen wide column">
 
           <div class="ui tabular menu">
-            <router-link class="item" to="/timetable">時刻表查詢</router-link>
-            <router-link class="item" to="/station">車站資訊查詢</router-link>
-            <router-link class="item" to="/about">關於</router-link>
+            <router-link class="item" :to="{ name: 'Timetable' } ">時刻表查詢</router-link>
+            <router-link class="item" :to="{ name: 'Station' }">車站資訊查詢</router-link>
+            <router-link class="item" :to="{ name: 'About' }">關於</router-link>
           </div>
         </div>
       </div>

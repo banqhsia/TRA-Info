@@ -15,6 +15,12 @@
 
     </div>
 
+    <div class="ui mobile only sixteen wide column">
+      <router-link tag="button" class="ui fluid icon button" :to="{name: 'Timetable'}">
+        <i class="chevron left icon"></i> 返回
+      </router-link>
+    </div>
+
     <div class="row" v-if="trainInfo">
 
       <div class="ui sixteen wide column">
@@ -31,7 +37,8 @@
                   date: period.date
                 }
               }"><b>{{ searchStation(trainInfo.DailyTrainInfo.StartingStationID ).Station_Name }}</b>
-              </router-link>到<router-link :to="{
+              </router-link>到
+              <router-link :to="{
                 name: 'Station.view',
                 params: {
                   station: trainInfo.DailyTrainInfo.EndingStationID,
@@ -45,8 +52,7 @@
             </div>
           </h2>
 
-          <div class="ui circular horizontal basic label" :class="[tripLine(trainInfo.DailyTrainInfo.TripLine, true)]"
-            v-if="trainInfo.DailyTrainInfo.TripLine">
+          <div class="ui circular horizontal basic label" :class="[tripLine(trainInfo.DailyTrainInfo.TripLine, true)]" v-if="trainInfo.DailyTrainInfo.TripLine">
             {{ tripLine(trainInfo.DailyTrainInfo.TripLine) }}
           </div>
 
