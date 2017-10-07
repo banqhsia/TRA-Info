@@ -28,12 +28,18 @@
 
         <div class="ui green message" v-if="!timeTablesList && status != false && status != 'loading'">
           <div class="header">請輸入關鍵字查詢列車時刻</div>
-          <p>輸入起迄站 (+時間) (+車種) 即可。「中壢 新竹」「新左營 鳳山 11/7」「嘉義 民雄 週四 莒光號」</p>
+          <p>輸入起迄站、時間、車種即可。「中壢 新竹」「鳳山 新左 11/7」「106 108」「嘉義 民雄 星期四 莒光」</p>
         </div>
 
         <div class="ui red message" v-if="status == false && status != 'loading'">
           <div class="header">查無此站或格式錯誤</div>
-          <p>請輸入起迄站(時間)「中壢 新竹」「新左營 鳳山 週四」「高雄 嘉義 1/18 自強號」。可用 1/18、1月18日、1-18、星期四、週四。車站請輸入全名，沒有簡稱 (北車 高火)</p>
+          <p>請輸入起迄站、時間、車種即可。「中壢 新竹」「新左營 鳳山 週四」「高雄 嘉義 1/18 自強號」。可用 1/18、1月18日、1-18、星期四、週四。車站可以進行模糊搜尋「鳳山 新左」「Tapei Xiny」，但沒有簡稱 (北車 高火)。可以輸入車種以過濾「台北 花蓮 傾斜式」「中壢 台北 對號」。
+            <router-link :to="{
+              name: 'About'
+            }">
+              詳細說明
+            </router-link>
+          </p>
         </div>
 
         <!-- Info Segment -->
@@ -514,6 +520,30 @@
       }
     },
     methods: {
+
+      /**
+       * Test if user wants to query by TrainNo
+       */
+      retTrainNo: function () {
+
+        if ((this.keywordArray.length <= 2) && (/^\d{2,4}$/.test(this.keywordArray[0])) && !(/^\d{1,}$/.test(this.keywordArray[
+            1]))) {
+
+          this.period = this.searchDate(this.keywordArray[1]);
+
+          this.$ls.set('input.keyword', this.keyword);
+
+          this.$router.push({
+            name: 'Timetable.train',
+            params: {
+              train: this.keywordArray[0],
+              date: this.period.date
+            }
+          })
+
+        }
+
+      },
       /**
        * Search Handler
        */
@@ -523,6 +553,11 @@
         this.keywordArray = this.strToArray(this.keyword) || false;
 
         if (!this.keyword) return false;
+
+        /**
+         * Retrieve If user wants a certain train.
+         */
+        this.retTrainNo();
 
         /**
          * Search initialization
