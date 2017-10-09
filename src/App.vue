@@ -6,7 +6,7 @@
 
           <router-link tag="h2" class="ui header pointer" :to="{name: 'Timetable'}">
             <!-- logo image -->
-            <img class="ui image rounded" src="../static/img/logo.png">
+            <img class="ui image rounded" src="static/img/logo.png">
             <!-- header text -->
             <div class="content">
               臺鐵資訊查詢
