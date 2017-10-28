@@ -333,7 +333,7 @@ export default {
   getLiveboard: function (station) {
 
     return axios.get(
-      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/LiveBoard/' + station + '?$format=JSON'
+      process.env.API_BASE_URL + '/LiveBoard/' + station
     )
   },
 
@@ -344,8 +344,8 @@ export default {
   getDailyTimeTableOD: function (start, dest) {
 
     return axios.get(
-      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/OD/' +
-      start + '/to/' + dest + '/' + this.period.date + '?$format=JSON'
+      process.env.API_BASE_URL + '/DailyTimetable/OD/' +
+      start + '/to/' + dest + '/' + this.period.date
     )
 
   },
@@ -356,8 +356,8 @@ export default {
   getODFare: function (start, dest) {
 
     return axios.get(
-      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/ODFare/' +
-      start + '/to/' + dest + '?$format=JSON'
+      process.env.API_BASE_URL + '/ODFare/' +
+      start + '/to/' + dest
     )
 
   },
@@ -368,8 +368,8 @@ export default {
   getDailyTimeTable: function (train) {
 
     return axios.get(
-      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/' +
-      train + '/' + this.period.date + '?$format=JSON'
+      process.env.API_BASE_URL + '/DailyTimetable/' +
+      train + '/' + this.period.date
     )
   },
 
@@ -379,8 +379,8 @@ export default {
   getTrainInfo: function (station) {
 
     return axios.get(
-      'https://ptx.transportdata.tw/MOTC/v2/Rail/TRA/DailyTimetable/Station/' +
-      station + '/' + this.period.date + '?$format=JSON'
+      process.env.API_BASE_URL + '/DailyTimetable/Station/' +
+      station + '/' + this.period.date
     );
   }
 }

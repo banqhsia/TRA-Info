@@ -43,6 +43,8 @@ Vue.config.productionTip = false
 window.Fuse = fuse;
 window.axios = axios;
 
+window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
+
 Vue.use(VueLocalStorage);
 
 
