@@ -646,11 +646,15 @@
           );;
 
           // If it's today, send live board reuqest
-          this.getLiveboard(this.sdStations.startStation.Station_Code_4).then(
-            (response) => {
-              this.delayInfo = response.data;
-            }
-          ) && this.period.today;
+          if (this.period.today) {
+
+            this.getLiveboard(this.sdStations.startStation.Station_Code_4).then(
+              (response) => {
+                this.delayInfo = response.data;
+              }
+            )
+
+          }
 
         } else {
           this.status = false;
