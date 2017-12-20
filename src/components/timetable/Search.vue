@@ -224,8 +224,8 @@
 
                     <!-- 車種 -->
                     <div class="sixteen wide column">
-                      <h3 class="ui header" :class="[trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
-                        {{ trainClass(item.DailyTrainInfo.TrainClassificationID) }}
+                      <h3 class="ui header" :class="[trainClass(item.DailyTrainInfo.TrainTypeID, true)]">
+                        {{ trainClass(item.DailyTrainInfo.TrainTypeID) }}
                         <h5 class="ui right floated header">
                           <div class="sub header">
                             {{ item.DailyTrainInfo.TrainNo }}
@@ -312,7 +312,7 @@
               <!-- 票價 -->
               <td>
                 <p v-if="fares">
-                  {{ trainFare(item.DailyTrainInfo.TrainClassificationID) }}
+                  {{ trainFare(item.DailyTrainInfo.TrainTypeID) }}
 
                 </p>
               </td>
@@ -380,8 +380,8 @@
 
                 <!-- 車種 -->
                 <div class="four wide column">
-                  <h3 class="ui header" :class="[trainClass(item.DailyTrainInfo.TrainClassificationID, true)]">
-                    {{ trainClass(item.DailyTrainInfo.TrainClassificationID) }}
+                  <h3 class="ui header" :class="[trainClass(item.DailyTrainInfo.TrainTypeID, true)]">
+                    {{ trainClass(item.DailyTrainInfo.TrainTypeID) }}
                     <div class="sub header">
                       {{ item.DailyTrainInfo.TrainNo }}
                     </div>
@@ -447,7 +447,7 @@
                 <!-- 票價 -->
                 <div class="three wide right aligned column">
                   <p v-if="fares">
-                    {{ trainFare(item.DailyTrainInfo.TrainClassificationID) }}
+                    {{ trainFare(item.DailyTrainInfo.TrainTypeID) }}
                   </p>
                 </div>
               </div>
@@ -789,7 +789,7 @@
         if (!_.isEmpty(this.trainClassMap)) {
 
           r = r.filter((item) => {
-            return this.trainClassMap.list.indexOf(Number(item.DailyTrainInfo.TrainClassificationID)) != -1;
+            return this.trainClassMap.list.indexOf(Number(item.DailyTrainInfo.TrainTypeID)) != -1;
           })
 
         }

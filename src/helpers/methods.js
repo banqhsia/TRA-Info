@@ -279,7 +279,7 @@ export default {
   },
 
   /**
-   * Transform `TrainClassificationID` into train class
+   * Transform `TrainTypeID` into train class
    * wantsColor[Boolean] determine if the call wants color.
    */
   trainClass: function (c = '', wantsColor) {

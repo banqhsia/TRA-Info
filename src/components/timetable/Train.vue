@@ -25,8 +25,8 @@
 
       <div class="ui sixteen wide column">
 
-        <div class="ui segment" :class="[trainClass(trainInfo.DailyTrainInfo.TrainClassificationID, true)]">
-          <h2 class="ui header">{{ trainInfo.DailyTrainInfo.TrainNo }} {{ trainClass(trainInfo.DailyTrainInfo.TrainClassificationID) }}
+        <div class="ui segment" :class="[trainClass(trainInfo.DailyTrainInfo.TrainTypeID, true)]">
+          <h2 class="ui header">{{ trainInfo.DailyTrainInfo.TrainNo }} {{ trainClass(trainInfo.DailyTrainInfo.TrainTypeID) }}
             <div class="sub header">
               {{ period.humanize }}，
 
