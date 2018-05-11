@@ -99,8 +99,8 @@
 
               <!-- 車次 -->
               <td>
-                <h3 class="ui header" :class="[trainClassZH(item.TrainClassificationName, true)]">
-                  {{ trainClassZH(item.TrainClassificationName) }}
+                <h3 class="ui header" :class="[trainClassZH(item.TrainTypeName, true)]">
+                  {{ trainClassZH(item.TrainTypeName) }}
                   <div class="sub header ">{{ item.TrainNo }}</div>
                 </h3>
               </td>
@@ -172,8 +172,8 @@
 
               <!-- 車次 -->
               <div class="twelve wide column">
-                <h3 class="ui header" :class="[trainClassZH(item.TrainClassificationName, true)]">
-                  {{ trainClassZH(item.TrainClassificationName) }}
+                <h3 class="ui header" :class="[trainClassZH(item.TrainTypeName, true)]">
+                  {{ trainClassZH(item.TrainTypeName) }}
                   <div class="sub header ">{{ item.TrainNo }}</div>
                 </h3>
               </div>
