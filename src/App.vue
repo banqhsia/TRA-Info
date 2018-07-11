@@ -21,7 +21,7 @@
 
       <div class="row">
         <div class="ui computer tablet only sixteen wide column">
-          <div class="fb-like" data-href="http://benyi.tw/trainfo/" data-layout="standard" data-action="like" data-size="small" data-show-faces="false"
+          <div class="fb-like" data-href="https://www.facebook.com/TRAInformation/" data-layout="standard" data-action="like" data-size="small" data-show-faces="false"
             data-share="true"></div>
         </div>
       </div>
