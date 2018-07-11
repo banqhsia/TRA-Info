@@ -15,7 +15,7 @@ Vue.mixin({
     /**
      * Control user reload & clear local storage manually
      */
-    let ver = '201712210011';
+    let ver = '201807111859';
     let refresh = this.$ls.get('app.refresh', false);
 
     if ( !refresh || refresh !== ver ) {
