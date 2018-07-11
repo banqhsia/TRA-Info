@@ -24,9 +24,15 @@
 		"classFare": "成自"
 	},
 	{
+        "classNo": "1106",
+        "classDesc": "自強",
+        "classColor": "red",
+        "classFare": "成自"
+    },
+    {
 		"classNo": "1107",
-		"classDesc": "普悠瑪",
-		"classColor": "pink",
+        "classDesc": "普悠瑪",
+        "classColor": "pink",
 		"classFare": "成自"
 	},
 	{
@@ -36,6 +42,48 @@
 		"classFare": "成自"
 	},
 	{
+        "classNo": "1109",
+        "classDesc": "自強",
+        "classColor": "red",
+        "classFare": "成自"
+    },
+    {
+        "classNo": "110A",
+        "classDesc": "自強",
+        "classColor": "red",
+        "classFare": "成自"
+    },
+    {
+        "classNo": "110B",
+        "classDesc": "自強",
+        "classColor": "red",
+        "classFare": "成自"
+    },
+    {
+        "classNo": "110C",
+        "classDesc": "自強",
+        "classColor": "red",
+        "classFare": "成自"
+    },
+    {
+        "classNo": "110D",
+        "classDesc": "自強",
+        "classColor": "red",
+        "classFare": "成自"
+    },
+    {
+        "classNo": "110E",
+        "classDesc": "自強",
+        "classColor": "red",
+        "classFare": "成自"
+    },
+    {
+        "classNo": "110F",
+        "classDesc": "自強",
+        "classColor": "red",
+        "classFare": "成自"
+    },
+    {
 		"classNo": "1110",
 		"classDesc": "莒光",
 		"classColor": "orange",
@@ -73,7 +121,7 @@
 	},
 	{
 		"classNo": "1132",
-		"classDesc": "區間快車",
+        "classDesc": "區間快車",
 		"classColor": "grey",
 		"classFare": "成復"
 	},
