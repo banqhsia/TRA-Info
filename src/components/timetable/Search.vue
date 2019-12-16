@@ -27,23 +27,11 @@
 
     <div class="row">
       <div class="ui sixteen wide column">
-        <div
-          class="ui green message"
-          v-if="!timeTablesList && status != false && status != 'loading'"
-        >
-          <div class="header">請輸入關鍵字查詢列車時刻</div>
-          <p>輸入起迄站、時間、車種即可。「中壢 新竹」「鳳山 新左 11/7」「106 108」「嘉義 民雄 星期四 莒光」</p>
-        </div>
+        <!-- 查詢說明 -->
+        <SearchTips v-if="!trains && status != false && status != 'loading'"></SearchTips>
 
-        <div class="ui red message" v-if="status == false && status != 'loading'">
-          <div class="header">查無此站或格式錯誤</div>
-          <p>
-            請輸入起迄站、時間、車種即可。「中壢 新竹」「新左營 鳳山 週四」「高雄 嘉義 1/18 自強號」。可用 1/18、1月18日、1-18、星期四、週四。車站可以進行模糊搜尋「鳳山 新左」「Tapei Xiny」，但沒有簡稱 (北車 高火)。可以輸入車種以過濾「台北 花蓮 傾斜式」「中壢 台北 對號」。
-            <router-link :to="{
-              name: 'About'
-            }">詳細說明</router-link>
-          </p>
-        </div>
+        <!-- 查詢錯誤 -->
+        <SearchError v-if="status == false && status != 'loading'"></SearchError>
 
         <!-- Info Segment -->
         <div class="ui secondary segment" v-if="timeTablesList">
@@ -202,7 +190,13 @@
               </th>
             </tr>
           </thead>
-          <TrainItem v-for="train in trains" :key="train.TrainInfo.TrainNo" :train="train"></TrainItem>
+          <TrainItem
+            class="pointer"
+            v-for="train in trains"
+            @click.native="toTrainDetail(train)"
+            :key="train.TrainInfo.TrainNo"
+            :train="train"
+          ></TrainItem>
         </table>
       </div>
     </div>
@@ -376,6 +370,9 @@
 <script>
 import trainClasses from "../../../static/trainclasses.json";
 import TrainItem from "./TrainItem.vue";
+import SearchTips from "./SearchTips.vue";
+import SearchError from "./SearchError.vue";
+
 export default {
   data() {
     return {
@@ -399,13 +396,25 @@ export default {
         order: "asc"
       }),
       orderByFieldClass: {},
-      trains: null
+      trains: null,
+      query: null
     };
   },
   components: {
-    TrainItem
+    TrainItem,
+    SearchTips,
+    SearchError
   },
   methods: {
+    toTrainDetail: function(train) {
+      this.$router.push({
+        name: "Timetable.train",
+        params: {
+          train: train.TrainInfo.TrainNo,
+          date: query.date
+        }
+      });
+    },
     /**
      * Test if user wants to query by TrainNo
      */
@@ -423,7 +432,7 @@ export default {
           name: "Timetable.train",
           params: {
             train: this.keywordArray[0],
-            date: this.period.date
+            date: this.query.date
           }
         });
       }
@@ -432,12 +441,15 @@ export default {
      * Search Handler
      */
     search: function() {
+      this.status = "loading";
       /**
        * Get Daily TimeTable.
        */
       this.searchTimetableBetweenOriginAndDestination(this.keyword).then(
         response => {
-          this.trains = response.data;
+          this.trains = response.data.payload;
+          this.query = response.data.query;
+
           this.status = true;
         },
         error => {
