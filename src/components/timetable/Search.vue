@@ -34,87 +34,7 @@
         <SearchError v-if="status == false && status != 'loading'"></SearchError>
 
         <!-- Info Segment -->
-        <div class="ui secondary segment" v-if="timeTablesList">
-          <div class="ui grid stackable">
-            <div class="eleven wide column message">
-              <h3 class="ui header">
-                {{ period.humanize }}
-                <div class="ui sub header">
-                  <router-link
-                    :to="{
-                    name: 'Station.view',
-                    params: {
-                      station: sdStations.startStation.Station_Code_4,
-                      date: period.date
-                    }
-                  }"
-                  >{{sdStations.startStation.Station_Name}}</router-link>到
-                  <router-link
-                    :to="{
-                    name: 'Station.view',
-                    params: {
-                      station: sdStations.destStation.Station_Code_4,
-                      date: period.date
-                    }
-                  }"
-                  >{{sdStations.destStation.Station_Name}}</router-link>的
-                  <span class="ui pointer" @click="clearFilter()">
-                    {{ trainClassMap.desc || '所有列車' }}
-                    <i
-                      class="delete red icon"
-                      v-if="!_.isEmpty(trainClassMap)"
-                    ></i>
-                  </span>
-                </div>
-              </h3>
-              <p>
-                共有 {{ timeTables.length }} 班列車
-                <span
-                  v-if="!_.isEmpty(trainClassMap)"
-                >，顯示 {{ timeTablesList.length }} 個結果</span>
-              </p>
-            </div>
-
-            <!-- Fares Table -->
-            <div class="ui five wide column" v-if="fares">
-              <table class="ui very compact unstackable very basic table">
-                <thead>
-                  <tr>
-                    <th class="three wide"></th>
-                    <th class="three wide">
-                      <h5 class="ui red header pointer" @click="setTrainClassMap('tc')">
-                        自強
-                        <div class="sub header">T.C.</div>
-                      </h5>
-                    </th>
-                    <th class="three wide">
-                      <h5 class="ui orange header pointer" @click="setTrainClassMap('ck')">
-                        莒光
-                        <div class="sub header">C.K.</div>
-                      </h5>
-                    </th>
-                    <th class="three wide">
-                      <h5 class="ui header pointer" @click="setTrainClassMap('lt')">
-                        區間
-                        <div class="sub header">L.T.</div>
-                      </h5>
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr>
-                    <td>票價</td>
-                    <td>{{ trainFare(1100) }}</td>
-                    <td>{{ trainFare(1110) }}</td>
-                    <td>{{ trainFare(1120) }}</td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-            <!-- END OF SIX WIDE COLUMN -->
-          </div>
-        </div>
-        <!-- END OF SECONDARY SEGMENT -->
+        <Briefing v-if="trains" :query="query" :trains="trains" :fares="fares"></Briefing>
 
         <!-- 隱藏已離站列車 toggle -->
         <div class="ui toggle checkbox" v-if="period.today && timeTablesList">
@@ -372,6 +292,7 @@ import trainClasses from "../../../static/trainclasses.json";
 import TrainItem from "./TrainItem.vue";
 import SearchTips from "./SearchTips.vue";
 import SearchError from "./SearchError.vue";
+import Briefing from "./Briefing.vue";
 
 export default {
   data() {
@@ -388,7 +309,7 @@ export default {
       delayInfo: [],
       trainClassMap: this.$ls.get("trainClassMap", {}),
       hideDepartured: true,
-      fares: this.$ls.get("fares", false),
+      fares: null,
       status: null,
       keywordArray: [],
       orderByField: this.$ls.get("orderByField", {
@@ -403,7 +324,8 @@ export default {
   components: {
     TrainItem,
     SearchTips,
-    SearchError
+    SearchError,
+    Briefing
   },
   methods: {
     toTrainDetail: function(train) {
@@ -449,6 +371,7 @@ export default {
         response => {
           this.trains = response.data.payload;
           this.query = response.data.query;
+          this.fares = response.data.fares;
 
           this.status = true;
         },
