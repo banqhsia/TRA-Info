@@ -341,13 +341,10 @@ export default {
   /**
    * Get daily timetable with Origin and Destination
    */
-  getDailyTimeTableOD: function (start, dest) {
-
+  searchTimetableBetweenOriginAndDestination: function (keyword) {
     return axios.get(
-      process.env.API_BASE_URL + '/DailyTimetable/OD/' +
-      start + '/to/' + dest + '/' + this.period.date
+      process.env.API_BASE_URL + 'api/search?keyword=' + keyword
     )
-
   },
 
   /**
