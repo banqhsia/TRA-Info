@@ -37,7 +37,7 @@
         <Briefing v-if="trains" :query="query" :trains="trains" :fares="fares"></Briefing>
 
         <!-- 隱藏已離站列車 toggle -->
-        <div class="ui toggle checkbox" v-if="period.today && trains">
+        <div class="ui toggle checkbox" v-if="query.isToday && trains">
           <input type="checkbox" v-model="hideDepartured" />
           <label>隱藏已離站列車</label>
         </div>
@@ -114,6 +114,8 @@
             @click.native="toTrainDetail(train)"
             :key="train.TrainInfo.TrainNo"
             :train="train"
+            :fares="fares"
+            v-show="(!query.isToday || !hideDepartured || !isDeparture( train.StopTimes[0].DepartureTime ))"
           ></TrainItem>
         </table>
       </div>
@@ -316,7 +318,7 @@ export default {
       }),
       orderByFieldClass: {},
       trainsResponse: null,
-      query: null,
+      query: {},
       timeTablesList: {} // TODO: remove
     };
   },
