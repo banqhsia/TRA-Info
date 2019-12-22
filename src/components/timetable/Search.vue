@@ -37,7 +37,7 @@
         <Briefing v-if="trains" :query="query" :trains="trains" :fares="fares"></Briefing>
 
         <!-- 隱藏已離站列車 toggle -->
-        <div class="ui toggle checkbox" v-if="period.today && timeTablesList">
+        <div class="ui toggle checkbox" v-if="period.today && trains">
           <input type="checkbox" v-model="hideDepartured" />
           <label>隱藏已離站列車</label>
         </div>
@@ -59,8 +59,8 @@
               </th>
 
               <th class="two wide center aligned">
-                <h4 class="ui header pointer" @click="setOrderBy('OriginStopTime.DepartureTime')">
-                  <i class="icon sort" :class="[ orderByClass('OriginStopTime.DepartureTime') ]"></i>
+                <h4 class="ui header pointer" @click="setOrderBy('StopTimes[0].DepartureTime')">
+                  <i class="icon sort" :class="[ orderByClass('StopTimes[0].DepartureTime') ]"></i>
                   <div class="content">
                     開車時間
                     <div class="sub header">Departure</div>
@@ -69,6 +69,7 @@
               </th>
 
               <th class="two wide center aligned">
+                <!-- // TODO: 排序行車時間 -->
                 <h4 class="ui header pointer" @click="setOrderBy('TravelTime.value')">
                   <i class="icon sort" :class="[ orderByClass('TravelTime.value') ]"></i>
                   <div class="content">
@@ -78,11 +79,8 @@
                 </h4>
               </th>
               <th class="two wide center aligned">
-                <h4
-                  class="ui header pointer"
-                  @click="setOrderBy('DestinationStopTime.ArrivalTime')"
-                >
-                  <i class="icon sort" :class="[ orderByClass('DestinationStopTime.ArrivalTime') ]"></i>
+                <h4 class="ui header pointer" @click="setOrderBy('StopTimes[1].ArrivalTime')">
+                  <i class="icon sort" :class="[ orderByClass('StopTimes[1].ArrivalTime') ]"></i>
                   <div class="content">
                     抵達時間
                     <div class="sub header">Arrival</div>
@@ -317,8 +315,9 @@ export default {
         order: "asc"
       }),
       orderByFieldClass: {},
-      trains: null,
-      query: null
+      trainsResponse: null,
+      query: null,
+      timeTablesList: {} // TODO: remove
     };
   },
   components: {
@@ -369,7 +368,7 @@ export default {
        */
       this.searchTimetableBetweenOriginAndDestination(this.keyword).then(
         response => {
-          this.trains = response.data.payload;
+          this.trainsResponse = response.data.payload;
           this.query = response.data.query;
           this.fares = response.data.fares;
 
@@ -494,28 +493,30 @@ export default {
     delay: function() {
       return (!!this.delayInfo.length && this.period.today) || false;
     },
-    timeTablesList: function() {
-      // Retrive train result
-      let r = this.timeTables;
-
+    trains: function() {
       // Return false if there's no such result.
-      if (!r) return false;
+      if (!this.trainsResponse) return false;
 
+      // TODO: fix this implementation
       // return the original array if the list not sets.
-      if (!_.isEmpty(this.trainClassMap)) {
-        r = r.filter(item => {
-          return (
-            this.trainClassMap.list.indexOf(
-              Number(item.DailyTrainInfo.TrainTypeID)
-            ) != -1
-          );
-        });
-      }
+      // if (!_.isEmpty(this.trainClassMap)) {
+      //   r = r.filter(item => {
+      //     return (
+      //       this.trainClassMap.list.indexOf(
+      //         Number(item.DailyTrainInfo.TrainTypeID)
+      //       ) != -1
+      //     );
+      //   });
+      // }
 
       // OrderBy a field
-      r = _.orderBy(r, this.orderByField.field, this.orderByField.order);
+      return _.orderBy(
+        this.trainsResponse,
+        this.orderByField.field,
+        this.orderByField.order
+      );
 
-      return r;
+      // return r;
     }
   },
   mounted() {

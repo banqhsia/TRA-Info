@@ -85,6 +85,11 @@
 
 <script>
 export default {
-  props: ["query", "trains", "fares"]
+  props: ["query", "trains", "fares"],
+  data() {
+    return {
+      trainClassMap: {}
+    }
+  }
 };
 </script>
