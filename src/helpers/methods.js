@@ -316,13 +316,6 @@ export default {
     return /柴聯自強號(，|。)/ig.test(n);
   },
 
-  /**
-   * Return TRUE if the train is across between 2 days.
-   */
-  acrossDayLabel: function (n) {
-    return /跨日/ig.test(n);
-  },
-
   // *********************************
   //  Requests
   // *********************************

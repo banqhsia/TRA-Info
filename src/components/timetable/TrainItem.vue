@@ -18,7 +18,9 @@
             <h5 class="ui header">
               <div class="sub header">
                 {{ train.TrainInfo.StartingStationName.Zh_tw }}
-                <i class="arrow right icon inline-icon"></i>
+                <i
+                  class="arrow right icon inline-icon"
+                ></i>
                 {{ train.TrainInfo.EndingStationName.Zh_tw }}
               </div>
             </h5>
@@ -67,21 +69,35 @@
 
       <div
         class="ui brown horizontal medium label"
-        v-if="acrossDayLabel(train.TrainInfo.Note.Zh_tw)"
+        v-if="overNightLabel(train.TrainInfo.OverNightStationID)"
       >跨日</div>
-      {{ train.TrainInfo.Note | noteFormat }}
+
+      <div>{{ train.TrainInfo.Note | noteFormat }}</div>
     </td>
+    <td>{{ getFare(train.TrainInfo.TrainTypeCode) }}</td>
   </tbody>
 </template>
 
 <script>
 export default {
-  props: ["train"],
+  props: ["train", "fares"],
   data() {
     return {
-      // trains: trains
+      // fares: fares
     };
   },
-  methods: {}
+  methods: {
+    getFare: code => {
+      // TODO: map this
+      // return fares[code]
+    },
+
+    /**
+     * 是否為跨日列車
+     */
+    overNightLabel: function(OverNightStationID) {
+      return OverNightStationID !== "";
+    }
+  }
 };
 </script>
