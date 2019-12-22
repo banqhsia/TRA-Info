@@ -74,7 +74,7 @@
 
       <div>{{ train.TrainInfo.Note | noteFormat }}</div>
     </td>
-    <td>{{ getFare(train.TrainInfo.TrainTypeCode) }}</td>
+    <td>{{ "$ " + getFare(train.TrainInfo.TrainTypeCode) }}</td>
   </tbody>
 </template>
 
@@ -82,14 +82,14 @@
 export default {
   props: ["train", "fares"],
   data() {
-    return {
-      // fares: fares
-    };
+    return {};
   },
   methods: {
-    getFare: code => {
-      // TODO: map this
-      // return fares[code]
+    /**
+     * 取得票價
+     */
+    getFare: function(code) {
+      return this.fares[code].price;
     },
 
     /**
