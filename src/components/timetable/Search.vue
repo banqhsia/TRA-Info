@@ -329,12 +329,15 @@ export default {
     Briefing
   },
   methods: {
+    /**
+     * 導航到列車詳細資訊
+     */
     toTrainDetail: function(train) {
       this.$router.push({
         name: "Timetable.train",
         params: {
           train: train.TrainInfo.TrainNo,
-          date: query.date
+          date: this.query.date
         }
       });
     },
