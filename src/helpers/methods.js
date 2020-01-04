@@ -355,11 +355,15 @@ export default {
   /**
    * Get the specific train information by TrainNo
    */
-  getDailyTimeTable: function (train) {
+  searchTimetableByTrainNo: function (trainNo, date) {
+
+    let query = new URLSearchParams({
+      no: trainNo,
+      date: date,
+    }).toString()
 
     return axios.get(
-      process.env.API_BASE_URL + '/DailyTimetable/' +
-      train + '/' + this.period.date
+      process.env.API_BASE_URL + 'api/train?' + query
     )
   },
 
@@ -372,5 +376,12 @@ export default {
       process.env.API_BASE_URL + '/DailyTimetable/Station/' +
       station + '/' + this.period.date
     );
+  },
+
+  /**
+    * 是否為跨日列車
+    */
+  overNightLabel: function (OverNightStationID) {
+    return OverNightStationID !== "";
   }
 }

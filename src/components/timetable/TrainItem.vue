@@ -90,13 +90,6 @@ export default {
      */
     getFare: function(code) {
       return this.fares[code].price;
-    },
-
-    /**
-     * 是否為跨日列車
-     */
-    overNightLabel: function(OverNightStationID) {
-      return OverNightStationID !== "";
     }
   }
 };
