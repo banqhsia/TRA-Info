@@ -1,6 +1,12 @@
 <template>
   <div class="ui grid stackable container">
-    <Loading v-if="status == 'loading'"></Loading>
+    <Loading v-if="status == 'loading'" />
+
+    <div class="ui three wide column">
+      <router-link tag="button" class="ui fluid icon button left floated" :to="{name: 'Timetable'}">
+        <i class="chevron left icon"></i> 返回查詢
+      </router-link>
+    </div>
 
     <div class="row" v-if="status == false">
       <div class="ui sixteen wide column">
@@ -11,13 +17,7 @@
       </div>
     </div>
 
-    <div class="ui mobile only sixteen wide column">
-      <router-link tag="button" class="ui fluid icon button" :to="{name: 'Timetable'}">
-        <i class="chevron left icon"></i> 返回
-      </router-link>
-    </div>
-
-    <div class="row" v-if="train">
+    <div class="row" v-if="status == true">
       <div class="ui sixteen wide column">
         <div class="ui segment">
           <h2 class="ui header">
@@ -79,7 +79,7 @@
       </div>
     </div>
 
-    <div class="row" v-if="train">
+    <div class="row" v-if="status == true">
       <div class="ui sixteen wide column">
         <table class="ui unstackable basic definition table">
           <thead>
@@ -134,29 +134,34 @@ export default {
   data() {
     return {
       train: null,
-      query: null,
-      status: null
+      query: null
     };
   },
-  methods: {
-    /**
-     * Page initialization
-     */
-    init: function() {
-      // this.status = "loading";
+  computed: {
+    status: function() {
+      if (this.query === null) {
+        return "loading";
+      }
 
+      if (this.query) {
+        return !_.isEmpty(this.train) && this.train.StopTimes.length > 0;
+      }
+
+      return false;
+    }
+  },
+  methods: {
+    getTimetable: function() {
       this.searchTimetableByTrainNo(
         this.$route.params.train,
         this.$route.params.date
       ).then(
         response => {
-          this.train = response.data.payload[0];
           this.query = response.data.query;
-
-          this.status = true;
+          this.train = response.data.payload[0] || {};
         },
         error => {
-          this.status = false;
+          // handle
         }
       );
     },
@@ -175,7 +180,7 @@ export default {
     }
   },
   mounted() {
-    this.init();
+    this.getTimetable();
   }
 };
 </script>
