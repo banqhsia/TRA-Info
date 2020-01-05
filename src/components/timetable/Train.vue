@@ -47,9 +47,6 @@
                 <b>{{ train.TrainInfo.EndingStationName.Zh_tw }}</b>
               </router-link>
 
-              <a class="ui label" v-if="!period.today" @click="backToday()">
-                <i class="reply icon"></i>回到今天
-              </a>
             </div>
           </h2>
 
@@ -72,9 +69,7 @@
           <div
             class="ui brown horizontal medium label"
             v-if="overNightLabel(train.TrainInfo.OverNightStationID)"
-          >跨日</div>
-
-          <div>{{ train.TrainInfo.Note | noteFormat }}</div>
+          >跨日</div> {{ train.TrainInfo.Note | noteFormat }}
         </div>
       </div>
     </div>
@@ -165,19 +160,6 @@ export default {
         }
       );
     },
-    /**
-     * Back today
-     */
-    backToday: function() {
-      this.period = this.searchDate();
-      this.trainInfo = false;
-      this.init();
-      this.$router.replace({
-        params: {
-          date: this.period.date
-        }
-      });
-    }
   },
   mounted() {
     this.getTimetable();
