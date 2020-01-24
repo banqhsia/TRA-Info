@@ -98,7 +98,7 @@
               tag="tr"
               class="pointer"
               :key="item.TrainInfo.TrainNo"
-              v-for="item in trains"
+              v-for="item in trainsRendered"
               :to="{
                 name: 'Timetable.train',
                 params: {
@@ -154,7 +154,6 @@
 
 
 <script>
-
 export default {
   data() {
     return {
@@ -229,7 +228,13 @@ export default {
   },
   computed: {
     trainsRendered: function() {
-      return _.flatten(this.trains)[0];
+      let filtered = _.isUndefined(this.direction)
+        ? this.trains
+        : _.filter(this.trains, {
+            TrainInfo: { Direction: this.direction }
+          });
+
+      return _.orderBy(filtered, "TrainInfo.DepartureTime", "asc");
     },
 
     /**
@@ -237,19 +242,6 @@ export default {
      */
     delay: function() {
       return (!!this.delayInfo.length && this.period.today) || false;
-    },
-
-    /**
-     * Train info search
-     */
-    trainInfoList: function() {
-      if (this.direction == undefined) {
-        return this.trainInfo;
-      }
-
-      return this.trainInfo.filter(train => {
-        return train.Direction == this.direction;
-      });
     }
   },
   mounted() {
