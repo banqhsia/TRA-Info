@@ -3,17 +3,19 @@
     <div class="row">
       <div class="ui sixteen wide column">
         <div class="ui form">
-          <div class="field" :class="{ error: !station.length }">
+          <div class="field" :class="{ error: isEmptyResult }">
             <input type="text" placeholder="車站名稱、代碼" autofocus v-model.trim="input.keyword" />
           </div>
         </div>
       </div>
     </div>
 
+    <Loading v-if="_.isEmpty(stations)" />
+
     <div class="row">
       <div class="ui sixteen wide column">
         <!-- Station Not Found Message -->
-        <div class="ui orange message" v-if="!station.length">查無此車站，請重新輸入車站名稱或車站代碼查詢</div>
+        <div class="ui orange message" v-if="isEmptyResult">查無此車站，請重新輸入車站名稱或車站代碼查詢</div>
 
         <table class="ui definition table" v-else>
           <thead>
@@ -43,7 +45,7 @@
             <router-link
               tag="tr"
               class="pointer"
-              v-for="station in station"
+              v-for="station in stationsRendered"
               :to="
               {
                 name: 'Station.view',
@@ -57,14 +59,10 @@
               <td>
                 <h4 class="ui header">
                   <i class="icon grey">{{ stationClass(station.StationClass) }}</i>
-                  <router-link
-                    class="content pointer"
-                    tag="div"
-                    :to="'/station/'+station.StationID"
-                  >
+                  <div class="content pointer">
                     {{ station.StationName.Zh_tw }}
                     <div class="sub header">{{station.StationName.En }}</div>
-                  </router-link>
+                  </div>
                 </h4>
               </td>
               <td>{{ station.StationID }}</td>
@@ -100,7 +98,10 @@ export default {
     }
   },
   computed: {
-    station: function() {
+    isEmptyResult: function() {
+      return !_.isEmpty(this.stations) && _.isEmpty(this.stationsRendered);
+    },
+    stationsRendered: function() {
       if (_.isEmpty(this.keyword)) {
         return _.orderBy(this.stations, ["StationID"], "asc");
       }
