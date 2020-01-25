@@ -35,6 +35,13 @@ export default {
     }
 
   },
+
+  getStations: function() {
+    return axios.get(
+      process.env.API_BASE_URL + 'api/stations'
+    )
+  },
+
   getStationDetail: function (stationNo, date) {
 
     let toBuild = _.pickBy({
