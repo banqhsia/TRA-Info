@@ -122,9 +122,21 @@ export default {
     }
   },
   mounted() {
+    let stations = this.$ls.get("stations");
+
+    if (!_.isNull(stations)) {
+      return (this.stations = stations);
+    }
+
     this.getStations().then(
       response => {
         this.stations = response.data.payload;
+
+        let expireMs = this.moment()
+          .add(6, "hours")
+          .diff();
+
+        this.$ls.set("stations", this.stations, expireMs);
       },
       error => {
         // this.status = false;
