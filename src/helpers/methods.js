@@ -35,69 +35,18 @@ export default {
     }
 
   },
+  getStationDetail: function (stationNo, date) {
 
-  /**
-   * Search a station
-   * return JSON Object
-   * s: station Name/station Code.
-   * fuzzy: fuzzy search mode.
-   */
-  searchStation: function (s = '', fuzzy = false) {
+    let toBuild = _.pickBy({
+      no: stationNo,
+      date: date,
+    })
 
-    // Return false if `s` is falsy.
-    if (!s) return false;
+    let query = new URLSearchParams(toBuild).toString()
 
-    let r;
-
-    // Use Fuzzy mode when `fuzzy` is true
-    if (fuzzy) {
-
-      r = new Fuse(stations, {
-        // Fuse.js Fuzzy searching score
-        threshold: 0.2,
-        // Define which field to find
-        keys: ['Station_Name', 'Station_EName', 'Station_Code_3', 'Station_Code_4'],
-      }).search(s)[0]
-
-    } else {
-
-      // Test which field will go on
-      let testField = () => {
-
-        // 	Matches `Station_Code_4`. eg. 1008, 1017...
-        if (/^\d{4}$/.test(s)) {
-          s = Number(s);
-          return 'Station_Code_4'
-        }
-
-        // Matches `Station_Code_3`. eg. 2, 4, 26, 100, 108
-        if (/^\d{1,3}$/.test(s)) {
-          s = Number(s);
-          return 'Station_Code_3'
-        }
-
-        // Else: Search `Station_Name`.
-        s = this.taiTransform(s)
-        return 'Station_Name'
-
-      }
-
-      r = stations.find((station) => {
-        return station[testField()] == s || false
-      });
-
-    }
-
-    // Remove Station Sub Name from the Object.
-    if (r) {
-      let removeRegex = /(.+)\s?\((.+)\)/
-
-      r.Station_EName = r.Station_EName.replace(removeRegex, "$1")
-      r.EnglishName = r.EnglishName.replace(removeRegex, "$1")
-    }
-
-    return r || false;
-
+    return axios.get(
+      process.env.API_BASE_URL + 'api/station?' + query
+    )
   },
 
   /**
@@ -368,13 +317,18 @@ export default {
   },
 
   /**
-   * Send a request to get train info
+   * 特定車站的所有列車
    */
-  getTrainInfo: function (station) {
+  getTimetableByStationNo: function (stationNo, date = null) {
+    let toBuild = _.pickBy({
+      no: stationNo,
+      date: date,
+    })
+
+    let query = new URLSearchParams(toBuild).toString()
 
     return axios.get(
-      process.env.API_BASE_URL + '/DailyTimetable/Station/' +
-      station + '/' + this.period.date
+      process.env.API_BASE_URL + 'api/station/timetable?' + query
     );
   },
 
