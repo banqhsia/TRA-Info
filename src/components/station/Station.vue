@@ -1,8 +1,8 @@
 <template>
   <div class="ui grid stackable container">
-    <Loading v-if="status == 'loading'"></Loading>
+    <Loading v-if="_.isNull(station)"></Loading>
 
-    <div class="row">
+    <div class="row" v-if="station">
       <div class="ui sixteen wide column">
         <div class="ui red segment">
           <h2 class="ui header">
@@ -10,8 +10,7 @@
             <p>{{ station.StationName.En }}</p>
             <div class="sub header">
               {{ query.dateHumanize }}
-              <!-- ，共有 {{ trainInfo.length }} 班列車 -->
-              。
+              <span v-if="!_.isEmpty(trains)">，共有 {{ trains.length }} 班列車</span>。
               <a class="ui label" v-if="!period.today" @click="backToday()">
                 <i class="reply icon"></i>回到今天
               </a>
@@ -199,11 +198,6 @@ export default {
         },
         error => {}
       );
-
-      // If it's today, send live board reuqest
-      this.getLiveboard(this.station.Station_Code_4).then(response => {
-        this.delayInfo = response.data;
-      }) && this.period.today;
     },
     /**
      * Switch direction
