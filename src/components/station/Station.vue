@@ -11,7 +11,7 @@
             <div class="sub header">
               {{ query.dateHumanize }}
               <span v-if="!_.isEmpty(trains)">，共有 {{ trains.length }} 班列車</span>。
-              <a class="ui label" v-if="!period.today" @click="backToday()">
+              <a class="ui label" v-if="!query.isToday" @click="backToday()">
                 <i class="reply icon"></i>回到今天
               </a>
             </div>
@@ -29,7 +29,7 @@
           </div>
 
           <!-- 隱藏已離站列車 toggle -->
-          <div class="ui toggle checkbox" v-if="period.today && trainInfo">
+          <div class="ui toggle checkbox" v-if="query.isToday && trainsRendered">
             <input type="checkbox" v-model="hideDepartured" />
             <label>隱藏已離站列車</label>
           </div>
@@ -90,10 +90,8 @@
             </th>
           </thead>
           <tbody>
-            <!-- Link; Rendered as <tr> -->
-            <!-- v-show="(!period.today || !hideDepartured || !isDeparture( item.DepartureTime ))" -->
-
             <router-link
+              v-show="(!query.isToday || !hideDepartured || !isDeparture( item.TrainInfo.DepartureTime ))"
               tag="tr"
               class="pointer"
               :key="item.TrainInfo.TrainNo"
@@ -108,7 +106,7 @@
             >
               <!-- 車次 -->
               <td>
-                <h3 class="ui header">
+                <h3 class="ui header" :class="trainTypeColor(item.TrainInfo.TrainTypeCode)">
                   {{ item.TrainInfo.TrainTypeName.Zh_tw }}
                   <div class="sub header">{{ item.TrainInfo.TrainNo }}</div>
                 </h3>
