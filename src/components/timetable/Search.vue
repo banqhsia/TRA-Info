@@ -377,6 +377,12 @@ export default {
           this.query = response.data.query;
           this.fares = response.data.fares;
 
+          let expireMs = this.moment()
+            .add(1, "minutes")
+            .diff();
+
+          this.$ls.set("search.responses", response.data, expireMs);
+
           this.status = true;
         },
         error => {
@@ -525,6 +531,14 @@ export default {
     }
   },
   mounted() {
+    let responses = this.$ls.get("search.responses");
+
+    if (!_.isNull(responses)) {
+      this.trainsResponse = responses.payload;
+      this.fares = responses.fares;
+      this.query = responses.query;
+    }
+
     if (this.$route.query.f) {
       this.orderByField.field = this.$route.query.f;
     }

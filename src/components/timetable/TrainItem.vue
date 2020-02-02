@@ -1,5 +1,5 @@
 <template>
-  <tbody>
+  <tr>
     <td>
       <div class="ui grid">
         <div class="row">
@@ -75,7 +75,7 @@
       <div>{{ train.TrainInfo.Note | noteFormat }}</div>
     </td>
     <td>{{ "$ " + getFare(train.TrainInfo.TrainTypeCode) }}</td>
-  </tbody>
+  </tr>
 </template>
 
 <script>
