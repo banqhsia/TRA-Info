@@ -5,7 +5,7 @@
         <div class="row">
           <!-- 車種 -->
           <div class="sixteen wide column">
-            <h3 class="ui header">
+            <h3 class="ui header" :class="trainTypeColor(train.TrainInfo.TrainTypeCode)">
               {{ train.TrainInfo.TrainTypeName.Zh_tw }}
               <h5 class="ui right floated header">
                 <div class="sub header">{{ train.TrainInfo.TrainNo }}</div>

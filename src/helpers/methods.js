@@ -36,7 +36,7 @@ export default {
 
   },
 
-  getStations: function() {
+  getStations: function () {
     return axios.get(
       process.env.API_BASE_URL + 'api/stations'
     )
@@ -340,9 +340,24 @@ export default {
   },
 
   /**
-    * 是否為跨日列車
-    */
+   * 是否為跨日列車
+   */
   overNightLabel: function (OverNightStationID) {
     return OverNightStationID !== "";
+  },
+
+  /**
+   * 車種顏色
+   */
+  trainTypeColor: function (typeCode) {
+    let typeColors = {
+      /** 太魯閣 */ "1": "blue",
+      /** 普悠瑪 */ "2": "pink",
+      /** 自強 */ "3": "red",
+      /** 莒光 */ "4": "orange",
+      /** 區間快 */ "10": "grey"
+    };
+
+    return _.get(typeColors, typeCode, "");
   }
 }
