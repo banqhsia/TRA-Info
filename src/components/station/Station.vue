@@ -90,58 +90,22 @@
             </th>
           </thead>
           <tbody>
-            <router-link
-              v-show="(!query.isToday || !hideDepartured || !isDeparture( item.TrainInfo.DepartureTime ))"
-              tag="tr"
-              class="pointer"
-              :key="item.TrainInfo.TrainNo"
-              v-for="item in trainsRendered"
-              :to="{
+            <TrainItem :key="train.TrainInfo.TrainNo" v-for="train in trainsRendered" :train="train" />
+            <!--
+ <router-link
+      v-show="(!query.isToday || !hideDepartured || !isDeparture( item.TrainInfo.DepartureTime ))"
+      tag="tr"
+      class="pointer"
+      :key="item.TrainInfo.TrainNo"
+      v-for="item in trainsRendered"
+      :to="{
                 name: 'Timetable.train',
                 params: {
                   train: item.TrainInfo.TrainNo,
                   date: query.date
                 }
               }"
-            >
-              <!-- 車次 -->
-              <td>
-                <h3 class="ui header" :class="trainTypeColor(item.TrainInfo.TrainTypeCode)">
-                  {{ item.TrainInfo.TrainTypeName.Zh_tw }}
-                  <div class="sub header">{{ item.TrainInfo.TrainNo }}</div>
-                </h3>
-              </td>
-
-              <!-- 經由 -->
-              <td class="center aligned">
-                <div
-                  class="ui circular basic label"
-                  :class="[tripLine(item.TrainInfo.TripLine, true)]"
-                  v-if="item.TrainInfo.TripLine"
-                >{{ tripLine(item.TrainInfo.TripLine) }}</div>
-              </td>
-
-              <!-- 出發時間 -->
-              <td class="center aligned departure-time">{{ item.TrainInfo.DepartureTime }}</td>
-
-              <!-- 途經 -->
-              <td class="center aligned">
-                <h5 class="ui trip icon header">
-                  <i class="arrow right icon"></i>
-                  <div class="sub header">
-                    <!-- Arrow Note -->
-                  </div>
-                </h5>
-              </td>
-
-              <!-- 終點站 -->
-              <td class="center aligned">
-                <h5 class="ui header">
-                  {{ item.TrainInfo.EndingStationName.Zh_tw }}
-                  <div class="sub header">{{ item.TrainInfo.EndingStationName.En }}</div>
-                </h5>
-              </td>
-            </router-link>
+            >-->
           </tbody>
         </table>
       </div>
@@ -151,6 +115,8 @@
 
 
 <script>
+import TrainItem from "./TrainItem.vue";
+
 export default {
   data() {
     return {
@@ -235,6 +201,9 @@ export default {
     delay: function() {
       return (!!this.delayInfo.length && this.period.today) || false;
     }
+  },
+  components: {
+    TrainItem
   },
   mounted() {
     this.init();
