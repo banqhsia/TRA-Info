@@ -51,7 +51,7 @@
                 name: 'Station.view',
                 params: {
                   station: station.StationID,
-                  date: period.date
+                  date: moment().format('YYYY-MM-DD')
                 }
               }"
               :key="station.$id"

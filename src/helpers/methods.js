@@ -254,16 +254,12 @@ export default {
    * Return Trip Lines description
    */
   tripLine: function (l = 0, wantsColor) {
-
-    let testField = () => {
-      return (wantsColor) ? 'lineColor' : 'lineDesc';
+    if (wantsColor) {
+      return _.get(tripLines, l).lineColor;
     }
 
-    return tripLines.find((tripLine) => {
-      return tripLine.lineNo == l || 0
-    })[testField()];
+    return _.get(tripLines, l).lineDesc;
   },
-
 
   /**
    * Return TRUE if the DMU note exists.

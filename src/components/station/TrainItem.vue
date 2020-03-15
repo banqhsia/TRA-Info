@@ -14,7 +14,7 @@
         <div
           class="ui circular basic label"
           :class="[tripLine(train.TrainInfo.TripLine, true)]"
-          v-if="train.TrainInfo.TripLine"
+          v-if="train.TrainInfo.TripLine != 0"
         >{{ tripLine(train.TrainInfo.TripLine) }}</div>
       </td>
 

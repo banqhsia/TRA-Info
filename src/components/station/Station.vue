@@ -43,12 +43,12 @@
           <div
             class="ui button"
             :class=" (direction == 0) ? 'active' : '' "
-            @click="directionSwitch(0)"
+            @click="directionSwitch('0')"
           >順行</div>
           <div
             class="ui button"
             :class=" (direction == 1 ) ? 'active' : ''  "
-            @click="directionSwitch(1) "
+            @click="directionSwitch('1') "
           >逆行</div>
         </div>
       </div>
