@@ -55,8 +55,10 @@
     </div>
 
     <!-- COMPUTER TABLET ONLY -->
-    <div class="computer tablet only row">
+    <div class="computer tablet only row" v-if="station && trainsRendered">
       <div class="ui sixteen wide column">
+        <Loading v-if="_.isEmpty(trainsRendered)"></Loading>
+
         <table class="ui selectable striped definition table">
           <thead>
             <th class="two wide">詳細資料</th>
@@ -82,30 +84,16 @@
                 <div class="sub header">Destination</div>
               </h4>
             </th>
-            <th class="one wide left aligned" v-if="delay">
-              <h4 class="ui header">
-                誤點
-                <div class="sub header">Delay</div>
-              </h4>
-            </th>
           </thead>
           <tbody>
-            <TrainItem :key="train.TrainInfo.TrainNo" v-for="train in trainsRendered" :train="train" />
-            <!--
- <router-link
-      v-show="(!query.isToday || !hideDepartured || !isDeparture( item.TrainInfo.DepartureTime ))"
-      tag="tr"
-      class="pointer"
-      :key="item.TrainInfo.TrainNo"
-      v-for="item in trainsRendered"
-      :to="{
-                name: 'Timetable.train',
-                params: {
-                  train: item.TrainInfo.TrainNo,
-                  date: query.date
-                }
-              }"
-            >-->
+            <TrainItem
+              class="pointer"
+              :key="train.TrainInfo.TrainNo"
+              :train="train"
+              v-for="train in trainsRendered"
+              v-show="(!query.isToday || !hideDepartured || !isDeparture( train.TrainInfo.DepartureTime ))"
+              @click.native="toTrainDetail(train)"
+            />
           </tbody>
         </table>
       </div>
@@ -132,6 +120,18 @@ export default {
     };
   },
   methods: {
+    /**
+     * 導航到列車詳細資訊
+     */
+    toTrainDetail: function(train) {
+      this.$router.push({
+        name: "Timetable.train",
+        params: {
+          train: train.TrainInfo.TrainNo,
+          date: this.query.date
+        }
+      });
+    },
     /**
      * Page initialization
      */
@@ -194,13 +194,6 @@ export default {
 
       return _.orderBy(filtered, "TrainInfo.DepartureTime", "asc");
     },
-
-    /**
-     * Check if it's qualify to show delay information
-     */
-    delay: function() {
-      return (!!this.delayInfo.length && this.period.today) || false;
-    }
   },
   components: {
     TrainItem
