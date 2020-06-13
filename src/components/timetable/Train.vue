@@ -46,7 +46,6 @@
               >
                 <b>{{ train.TrainInfo.EndingStationName.Zh_tw }}</b>
               </router-link>
-
             </div>
           </h2>
 
@@ -69,7 +68,8 @@
           <div
             class="ui brown horizontal medium label"
             v-if="overNightLabel(train.TrainInfo.OverNightStationID)"
-          >跨日</div> {{ train.TrainInfo.Note | noteFormat }}
+          >跨日</div>
+          {{ train.TrainInfo.Note | noteFormat }}
         </div>
       </div>
     </div>
@@ -105,7 +105,17 @@
               <td>
                 <h4 class="ui header">
                   <i class="icon grey">{{ $index+1 }}</i>
-                  <router-link class="content pointer" tag="div" :to="'/station/'+item.StationID">
+                  <router-link
+                    class="content pointer"
+                    tag="div"
+                    :to="{
+                    name: 'Station.view',
+                    params: {
+                      station: item.StationID,
+                      date: query.date
+                    }
+                  }"
+                  >
                     {{ item.StationName.Zh_tw }}
                     <div class="sub header">{{item.StationName.En }}</div>
                   </router-link>
@@ -159,7 +169,7 @@ export default {
           // handle
         }
       );
-    },
+    }
   },
   mounted() {
     this.getTimetable();
