@@ -123,12 +123,12 @@
     <!-- END OF COMPUTER ONLY ROW  -->
 
     <!-- MOBILE TABLET ONLY -->
-    <div class="mobile tablet only row" v-if="timeTablesList">
+    <div class="mobile tablet only row" v-if="trains">
       <div class="ui sixteen wide column">
         <div class="ui small three item menu">
           <div class="item">
-            <h5 class="ui header pointer" @click="setOrderBy('OriginStopTime.DepartureTime')">
-              <i class="icon mini sort" :class="[ orderByClass('OriginStopTime.DepartureTime') ]"></i>
+            <h5 class="ui header pointer" @click="setOrderBy('StopTimes[0].DepartureTime')">
+              <i class="icon mini sort" :class="[ orderByClass('StopTimes[0].DepartureTime') ]"></i>
               <div class="content">
                 開車時間
                 <div class="sub header">Departure</div>
@@ -145,10 +145,10 @@
             </h5>
           </div>
           <div class="item">
-            <h5 class="ui header pointer" @click="setOrderBy('DestinationStopTime.ArrivalTime')">
+            <h5 class="ui header pointer" @click="setOrderBy('StopTimes[1].ArrivalTime')">
               <i
                 class="icon mini sort"
-                :class="[ orderByClass('DestinationStopTime.ArrivalTime') ]"
+                :class="[ orderByClass('StopTimes[1].ArrivalTime') ]"
               ></i>
               <div class="content">
                 抵達時間
@@ -157,129 +157,14 @@
             </h5>
           </div>
         </div>
-
-        <!-- Link; Rendered as <div> -->
-        <router-link
-          class="ui fluid card pointer"
-          tag="div"
-          :key="item.DailyTrainInfo.TrainNo"
-          :to="{
-              name: 'Timetable.train',
-              params: {
-                train: item.DailyTrainInfo.TrainNo,
-                date: period.date
-              }
-            }"
-          v-show="(!period.today || !hideDepartured || !isDeparture( item.OriginStopTime.DepartureTime ))"
-          v-for="item in timeTablesList"
-        >
-          <div class="content">
-            <div class="ui grid">
-              <div class="row">
-                <!-- 車種 -->
-                <div class="four wide column">
-                  <h3
-                    class="ui header"
-                    :class="[trainClass(item.DailyTrainInfo.TrainTypeID, true)]"
-                  >
-                    {{ trainClass(item.DailyTrainInfo.TrainTypeID) }}
-                    <div class="sub header">{{ item.DailyTrainInfo.TrainNo }}</div>
-                  </h3>
-                </div>
-
-                <!-- 起迄站 -->
-                <div class="five wide column">
-                  <h5 class="ui header center aligned">
-                    <div class="sub header">
-                      {{ searchStation(item.DailyTrainInfo.StartingStationID).Station_Name }}
-                      <i
-                        class="arrow right icon inline-icon"
-                      ></i>
-                      {{searchStation(item.DailyTrainInfo.EndingStationID).Station_Name}}
-                    </div>
-                  </h5>
-                </div>
-
-                <!-- 誤點 -->
-                <div class="three wide column">
-                  <div class="left floated ui" v-if="delay">
-                    <div v-if="isDelay(item.DailyTrainInfo.TrainNo , delayInfo, true)">
-                      <div
-                        class="ui circular empty horizontal medium label delay-indicator"
-                        :class="isDelay(item.DailyTrainInfo.TrainNo , delayInfo, true)"
-                      ></div>
-                      <span>{{ isDelay( item.DailyTrainInfo.TrainNo , delayInfo ) }}</span>
-                    </div>
-                  </div>
-                </div>
-
-                <!-- 經由 -->
-                <div class="four wide column">
-                  <div class="ui right floated">
-                    <div
-                      class="ui circular basic label"
-                      :class="[tripLine(item.DailyTrainInfo.TripLine, true)]"
-                      v-if="item.DailyTrainInfo.TripLine"
-                    >{{ tripLine(item.DailyTrainInfo.TripLine) }}</div>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="description">
-              <div class="ui grid">
-                <!-- 出發時間 -->
-                <div
-                  class="three wide column departure-time"
-                >{{ item.OriginStopTime.DepartureTime }}</div>
-
-                <!-- 箭頭 -->
-                <div class="two wide column">
-                  <i class="arrow right icon"></i>
-                </div>
-
-                <!-- 抵達 -->
-                <div class="three wide column">{{ item.DestinationStopTime.ArrivalTime }}</div>
-
-                <!-- 途經 -->
-                <div class="five wide center aligned column">{{ item.TravelTime.humanize }}</div>
-
-                <!-- 票價 -->
-                <div class="three wide right aligned column">
-                  <p v-if="fares">{{ trainFare(item.DailyTrainInfo.TrainTypeID) }}</p>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="extra content">
-            <div
-              class="ui basic grey horizontal medium label"
-            >{{ item.DestinationStopTime.StopSequence - item.OriginStopTime.StopSequence }}站</div>
-
-            <div
-              class="ui blue horizontal medium label"
-              v-if="item.DailyTrainInfo.WheelchairFlag"
-            >輪椅</div>
-
-            <div
-              class="ui pink horizontal medium label"
-              v-if="item.DailyTrainInfo.BreastFeedingFlag"
-            >哺乳室</div>
-
-            <div class="ui green horizontal medium label" v-if="item.DailyTrainInfo.BikeFlag">自行車</div>
-
-            <div
-              class="ui yellow horizontal medium label"
-              v-if="DMULabel(item.DailyTrainInfo.Note.Zh_tw)"
-            >柴聯</div>
-
-            <div
-              class="ui brown horizontal medium label"
-              v-if="acrossDayLabel(item.DailyTrainInfo.Note.Zh_tw)"
-            >跨日</div>
-            {{ item.DailyTrainInfo.Note.Zh_tw | noteFormat }}
-          </div>
-        </router-link>
+        <TrainItemMobile
+          v-for="train in trains"
+          @click.native="toTrainDetail(train)"
+          :key="train.TrainInfo.TrainNo"
+          :train="train"
+          :fares="fares"
+          v-show="(!query.isToday || !hideDepartured || !isDeparture( train.StopTimes[0].DepartureTime ))"
+        ></TrainItemMobile>
       </div>
       <!-- END OF 16 WIDE COLUMN -->
     </div>
@@ -290,6 +175,7 @@
 <script>
 import trainClasses from "../../../static/trainclasses.json";
 import TrainItem from "./TrainItem.vue";
+import TrainItemMobile from "./TrainItemMobile.vue";
 import SearchTips from "./SearchTips.vue";
 import SearchError from "./SearchError.vue";
 import Briefing from "./Briefing.vue";
@@ -324,6 +210,7 @@ export default {
   },
   components: {
     TrainItem,
+    TrainItemMobile,
     SearchTips,
     SearchError,
     Briefing
