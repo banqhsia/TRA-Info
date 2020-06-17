@@ -98,12 +98,29 @@
         </table>
       </div>
     </div>
+
+    <!-- MOBILE TABLET ONLY -->
+    <div class="mobile only row">
+      <div class="ui sixteen wide column">
+        <TrainItemMobile
+          class="pointer"
+          :key="train.TrainInfo.TrainNo"
+          :train="train"
+          v-for="train in trainsRendered"
+          v-show="(!query.isToday || !hideDepartured || !isDeparture( train.TrainInfo.DepartureTime ))"
+          @click.native="toTrainDetail(train)"
+        ></TrainItemMobile>
+      </div>
+      <!-- END OF 16 WIDE COLUMN -->
+    </div>
+    <!-- END OF MOBILE ONLY ROW  -->
   </div>
 </template>
 
 
 <script>
 import TrainItem from "./TrainItem.vue";
+import TrainItemMobile from "./TrainItemMobile.vue";
 
 export default {
   data() {
@@ -193,10 +210,11 @@ export default {
           });
 
       return _.orderBy(filtered, "TrainInfo.DepartureTime", "asc");
-    },
+    }
   },
   components: {
-    TrainItem
+    TrainItem,
+    TrainItemMobile
   },
   mounted() {
     this.init();
