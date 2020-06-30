@@ -163,7 +163,7 @@ export default {
       ).then(
         response => {
           this.query = response.data.query;
-          this.train = response.data.payload[0] || {};
+          this.train = response.data.payload || {};
         },
         error => {
           // handle
