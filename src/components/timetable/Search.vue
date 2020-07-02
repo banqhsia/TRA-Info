@@ -205,7 +205,7 @@ export default {
       orderByFieldClass: {},
       trainsResponse: null,
       query: {},
-      timeTablesList: {} // TODO: remove
+      timeTablesList: {}// TODO: remove
     };
   },
   components: {
@@ -258,7 +258,7 @@ export default {
       /**
        * Get Daily TimeTable.
        */
-      this.searchTimetableBetweenOriginAndDestination(this.keyword).then(
+      this.searchTimetableBetweenOriginAndDestination(this.input.keyword).then(
         response => {
           this.trainsResponse = response.data.payload;
           this.query = response.data.query;
@@ -382,9 +382,6 @@ export default {
     }
   },
   computed: {
-    keyword: function() {
-      return this.taiTransform(this.input.keyword);
-    },
     /**
      * Check if it's qualify to show delay information
      */
