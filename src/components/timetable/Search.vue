@@ -259,6 +259,10 @@ export default {
      * Search Handler
      */
     search: function() {
+      if (_.isNull(this.input.keyword)) {
+        return false;
+      }
+
       this.setResultParams();
 
       this.status = "loading";
