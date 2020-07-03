@@ -191,8 +191,7 @@ export default {
   data() {
     return {
       input: {
-        // keyword: this.$ls.get('input.keyword', ''),
-        keyword: "中壢 台北"
+        keyword: this.$ls.get("input.keyword", null)
       },
       sdStations: this.$ls.get("sdStations", {
         startStation: null,
@@ -260,6 +259,8 @@ export default {
      * Search Handler
      */
     search: function() {
+      this.setResultParams();
+
       this.status = "loading";
       /**
        * Get Daily TimeTable.
@@ -311,8 +312,8 @@ export default {
       this.input.keyword = null;
       this.$refs.keyword.focus();
 
-      this.timeTables = false;
-      this.fares = false;
+      this.trainsResponse = null;
+      this.fares = null;
 
       this.orderByField = {
         field: "OriginStopTime.DepartureTime",
