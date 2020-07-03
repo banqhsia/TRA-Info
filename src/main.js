@@ -7,6 +7,7 @@ import axios from 'axios';
 import moment from 'moment';
 import fuse from 'fuse.js'
 import VueLocalStorage from 'vue-ls';
+import lodashMethods from './helpers/lodashMethods';
 
 /**
  * Style Files
@@ -46,6 +47,8 @@ window.axios = axios;
 window.axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 
 Vue.use(VueLocalStorage);
+
+_.mixin(lodashMethods)
 
 
 /* eslint-disable no-new */
