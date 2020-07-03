@@ -1,0 +1,25 @@
+{
+    "tc": {
+        "nameShownAs": "自強號",
+        "includes": [
+            "1",
+            "2",
+            "3"
+        ]
+    },
+    "ck": {
+        "nameShownAs": "莒光號",
+        "includes": [
+            "4"
+        ]
+    },
+    "lt": {
+        "nameShownAs": "區間車",
+        "includes": [
+            "5",
+            "6",
+            "7",
+            "10"
+        ]
+    }
+}
