@@ -337,6 +337,7 @@ export default {
      */
     clearFilter: function() {
       this.trainClassMap = {};
+      this.$ls.set("trainClassMap", {});
     },
 
     /**
