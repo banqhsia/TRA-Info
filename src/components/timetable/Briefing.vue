@@ -24,19 +24,19 @@
                   }"
             >{{ query.destination.name }}</router-link>&nbsp;的
             <span class="ui pointer" @click="clearFilter()">
-              {{ trainClassMap.desc || '所有列車' }}
+              {{ trainClassMap.nameShownAs || '所有列車' }}
               <i
                 class="delete red icon"
-                v-if="!_.isEmpty(trainClassMap)"
+                v-if="_.isNotEmpty(trainClassMap)"
               ></i>
             </span>
           </div>
         </h3>
         <p>
-          共有 {{ trains.length }} 班列車
+          共有 {{ trainsResponseCount }} 班列車
           <span
-            v-if="!_.isEmpty(trainClassMap)"
-          >，顯示 {{ timeTablesList.length }} 個結果</span>
+            v-if="_.isNotEmpty(trainClassMap)"
+          >，顯示 {{ trains.length }} 個結果</span>
         </p>
       </div>
 
@@ -47,19 +47,19 @@
             <tr>
               <th class="three wide"></th>
               <th class="three wide">
-                <h5 class="ui red header pointer" @click="setTrainClassMap('tc')">
+                <h5 class="ui red header pointer" @click="$emit('trainTypeClicked', 'tc')">
                   自強
                   <div class="sub header">T.C.</div>
                 </h5>
               </th>
               <th class="three wide">
-                <h5 class="ui orange header pointer" @click="setTrainClassMap('ck')">
+                <h5 class="ui orange header pointer" @click="$emit('trainTypeClicked', 'ck')">
                   莒光
                   <div class="sub header">C.K.</div>
-                </h5> 
+                </h5>
               </th>
               <th class="three wide">
-                <h5 class="ui header pointer" @click="setTrainClassMap('lt')">
+                <h5 class="ui header pointer" @click="$emit('trainTypeClicked', 'lt')">
                   區間
                   <div class="sub header">L.T.</div>
                 </h5>
@@ -85,10 +85,10 @@
 
 <script>
 export default {
-  props: ["query", "trains", "fares"],
-  data() {
-    return {
-      trainClassMap: {}
+  props: ["query", "trains", "fares", "trainClassMap", "trainsResponseCount"],
+  methods: {
+    setTrainClassMap: function(f) {
+      this.$emit("trainTypeClicked", f);
     }
   }
 };

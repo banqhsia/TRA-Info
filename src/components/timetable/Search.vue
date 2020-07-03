@@ -34,7 +34,15 @@
         <SearchError v-if="status == false && status != 'loading'"></SearchError>
 
         <!-- Info Segment -->
-        <Briefing v-if="trains" :query="query" :trains="trains" :fares="fares"></Briefing>
+        <Briefing
+          v-on:trainTypeClicked="setTrainClassMap"
+          v-if="trains"
+          :query="query"
+          :trains="trains"
+          :fares="fares"
+          :trainClassMap="trainClassMap"
+          :trainsResponseCount="trainsResponse.length"
+        ></Briefing>
 
         <!-- 隱藏已離站列車 toggle -->
         <div class="ui toggle checkbox" v-if="query.isToday && trains">
@@ -146,10 +154,7 @@
           </div>
           <div class="item">
             <h5 class="ui header pointer" @click="setOrderBy('StopTimes[1].ArrivalTime')">
-              <i
-                class="icon mini sort"
-                :class="[ orderByClass('StopTimes[1].ArrivalTime') ]"
-              ></i>
+              <i class="icon mini sort" :class="[ orderByClass('StopTimes[1].ArrivalTime') ]"></i>
               <div class="content">
                 抵達時間
                 <div class="sub header">Arrival</div>
@@ -174,6 +179,7 @@
 
 <script>
 import trainClasses from "../../../static/trainclasses.json";
+import trainTypeMaps from "../../../static/trainTypeMaps.json";
 import TrainItem from "./TrainItem.vue";
 import TrainItemMobile from "./TrainItemMobile.vue";
 import SearchTips from "./SearchTips.vue";
@@ -205,7 +211,7 @@ export default {
       orderByFieldClass: {},
       trainsResponse: null,
       query: {},
-      timeTablesList: {}// TODO: remove
+      timeTablesList: {} // TODO: remove
     };
   },
   components: {
@@ -333,7 +339,10 @@ export default {
      * Return empty object if find no result.
      */
     setTrainClassMap: function(c) {
-      this.trainClassMap = this.searchTrainClass(c) || {};
+      // 加入 description (如 tc: 自強號)
+      this.trainClassMap = _.chain(trainTypeMaps)
+        .get(c)
+        .value();
       // Set trainClassMap to localStorage
       this.$ls.set("trainClassMap", this.trainClassMap);
     },
@@ -389,29 +398,24 @@ export default {
       return (!!this.delayInfo.length && this.period.today) || false;
     },
     trains: function() {
-      // Return false if there's no such result.
-      if (!this.trainsResponse) return false;
+      let trains = this.lcollect(this.trainsResponse);
 
-      // TODO: fix this implementation
-      // return the original array if the list not sets.
-      // if (!_.isEmpty(this.trainClassMap)) {
-      //   r = r.filter(item => {
-      //     return (
-      //       this.trainClassMap.list.indexOf(
-      //         Number(item.DailyTrainInfo.TrainTypeID)
-      //       ) != -1
-      //     );
-      //   });
-      // }
+      if (trains.isNull().value()) {
+        return false;
+      }
 
-      // OrderBy a field
-      return _.orderBy(
-        this.trainsResponse,
-        this.orderByField.field,
-        this.orderByField.order
-      );
+      if (_.isNotEmpty(this.trainClassMap)) {
+        trains = trains.filter(train => {
+          return _.includes(
+            this.trainClassMap.includes,
+            _.get(train, "TrainInfo.TrainTypeCode", 0)
+          );
+        });
+      }
 
-      // return r;
+      return trains
+        .orderBy(this.orderByField.field, this.orderByField.order)
+        .value();
     }
   },
   mounted() {
