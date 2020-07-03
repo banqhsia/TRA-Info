@@ -36,6 +36,7 @@
         <!-- Info Segment -->
         <Briefing
           v-on:trainTypeClicked="setTrainClassMap"
+          v-on:trainClassMapCrossClicked="clearFilter"
           v-if="trains"
           :query="query"
           :trains="trains"
@@ -210,8 +211,7 @@ export default {
       }),
       orderByFieldClass: {},
       trainsResponse: null,
-      query: {},
-      timeTablesList: {} // TODO: remove
+      query: {}
     };
   },
   components: {

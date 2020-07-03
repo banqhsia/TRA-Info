@@ -23,7 +23,7 @@
                     }
                   }"
             >{{ query.destination.name }}</router-link>&nbsp;的
-            <span class="ui pointer" @click="clearFilter()">
+            <span class="ui pointer" @click="$emit('trainClassMapCrossClicked')">
               {{ trainClassMap.nameShownAs || '所有列車' }}
               <i
                 class="delete red icon"
@@ -85,11 +85,6 @@
 
 <script>
 export default {
-  props: ["query", "trains", "fares", "trainClassMap", "trainsResponseCount"],
-  methods: {
-    setTrainClassMap: function(f) {
-      this.$emit("trainTypeClicked", f);
-    }
-  }
+  props: ["query", "trains", "fares", "trainClassMap", "trainsResponseCount"]
 };
 </script>
