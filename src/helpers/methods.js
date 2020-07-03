@@ -7,6 +7,9 @@ import trainClasses from '../../static/trainclasses.json'
 
 
 export default {
+  lcollect: function(items) {
+    return _.chain(items);
+  },
 
   /**
    * Transform `台` into `臺` in order to search the station.
@@ -21,19 +24,6 @@ export default {
    */
   strToArray: function (s) {
     return s.replace(/\s{1,}/ig, ' ').split(' ');
-  },
-
-  /* return the result of searching `trainClassMap`.
-   * undefined is returned if there's no such train class definition
-   */
-  searchTrainClass: function (def = '') {
-
-    for (let i in trainClassMaps) {
-      if (trainClassMaps[i].classDef.indexOf(def.toLowerCase()) >= 0) {
-        return trainClassMaps[i].classDetail;
-      }
-    }
-
   },
 
   getStations: function () {
