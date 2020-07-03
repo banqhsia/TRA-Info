@@ -15,7 +15,7 @@
                 ref="keyword"
                 v-model.trim="input.keyword"
                 @keypress.enter="search()"
-                placeholder="中壢 台北 明天 自強號"
+                placeholder="中壢 台北 明天"
                 :disabled="status == 'loading'"
               />
               <i class="inverted circular search link icon" @click="search()"></i>
