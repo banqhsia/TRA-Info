@@ -21,5 +21,33 @@
             "7",
             "10"
         ]
+    },
+    "trk": {
+        "nameShownAs": "太魯閣號",
+        "includes": [
+            "1"
+        ]
+    },
+    "pym": {
+        "nameShownAs": "普悠瑪號",
+        "includes": [
+            "2"
+        ]
+    },
+    "tilting": {
+        "nameShownAs": "傾斜式列車",
+        "includes": [
+            "1",
+            "2"
+        ]
+    },
+    "reserved": {
+        "nameShownAs": "對號列車",
+        "includes": [
+            "1",
+            "2",
+            "3",
+            "4"
+        ]
     }
 }

@@ -275,6 +275,12 @@ export default {
           this.query = response.data.query;
           this.fares = response.data.fares;
 
+          this.clearFilter();
+
+          if (_.isNotNull(response.data.query.trainType)) {
+            this.setTrainClassMap(response.data.query.trainType);
+          }
+
           let expireMs = this.moment()
             .add(1, "minutes")
             .diff();
