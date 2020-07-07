@@ -21,6 +21,12 @@
               <i class="inverted circular search link icon" @click="search()"></i>
             </div>
           </div>
+
+          <History
+            v-if="_.isNotEmpty(history)"
+            :history="history"
+            v-on:historyLabelClicked="search"
+          />
         </div>
       </div>
     </div>
@@ -186,6 +192,7 @@ import TrainItemMobile from "./TrainItemMobile.vue";
 import SearchTips from "./SearchTips.vue";
 import SearchError from "./SearchError.vue";
 import Briefing from "./Briefing.vue";
+import History from "./History.vue";
 
 export default {
   data() {
@@ -210,7 +217,8 @@ export default {
       }),
       orderByFieldClass: {},
       trainsResponse: null,
-      query: {}
+      query: {},
+      history: this.$ls.get("input.history", [])
     };
   },
   components: {
@@ -218,7 +226,8 @@ export default {
     TrainItemMobile,
     SearchTips,
     SearchError,
-    Briefing
+    Briefing,
+    History
   },
   methods: {
     /**
@@ -258,7 +267,11 @@ export default {
     /**
      * Search Handler
      */
-    search: function() {
+    search: function(keyword = null) {
+      if (_.isNotNull(keyword)) {
+        this.input.keyword = keyword;
+      }
+
       if (_.isNull(this.input.keyword)) {
         return false;
       }
@@ -286,6 +299,7 @@ export default {
             .diff();
 
           this.$ls.set("search.responses", response.data, expireMs);
+          this.pushHistory(this.input.keyword);
 
           this.status = true;
         },
@@ -295,6 +309,21 @@ export default {
           this.status = false;
         }
       );
+    },
+    pushHistory: function(keyword) {
+      let history = this.history;
+
+      history = _.reverse(history);
+      history.push(keyword);
+
+      let result = _.chain(history)
+        .reverse()
+        .uniq()
+        .take(5)
+        .value();
+
+      this.history = result;
+      this.$ls.set("input.history", result);
     },
 
     /**
