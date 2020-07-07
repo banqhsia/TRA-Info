@@ -15,7 +15,7 @@
                 ref="keyword"
                 v-model.trim="input.keyword"
                 @keypress.enter="search()"
-                placeholder="中壢 台北 明天"
+                placeholder="中壢 台北 明天 自強號"
                 :disabled="status == 'loading'"
               />
               <i class="inverted circular search link icon" @click="search()"></i>
@@ -299,6 +299,8 @@ export default {
             .diff();
 
           this.$ls.set("search.responses", response.data, expireMs);
+          this.$ls.set("input.keyword", this.input.keyword, expireMs);
+
           this.pushHistory(this.input.keyword);
 
           this.status = true;
