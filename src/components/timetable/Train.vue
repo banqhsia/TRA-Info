@@ -19,7 +19,7 @@
 
     <div class="row" v-if="status == true">
       <div class="ui sixteen wide column">
-        <div class="ui segment">
+        <div class="ui segment" :class="trainTypeColor(train.TrainInfo.TrainTypeCode)">
           <h2 class="ui header">
             {{ train.TrainInfo.TrainNo }} {{ train.TrainInfo.TrainTypeName.Zh_tw }}
             <div class="sub header">
