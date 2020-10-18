@@ -212,7 +212,7 @@ export default {
       status: null,
       keywordArray: [],
       orderByField: this.$ls.get("orderByField", {
-        field: "OriginStopTime.DepartureTime",
+        field: "StopTimes[0].DepartureTime",
         order: "asc"
       }),
       orderByFieldClass: {},
