@@ -10,7 +10,7 @@
     "build": "node build/build.js"
   },
   "dependencies": {
-    "axios": "^0.19.2",
+    "axios": "^0.21.1",
     "croud-vue-semantic": "^1.2.1",
     "jquery": "^3.5.1",
     "moment": "^2.18.1",
